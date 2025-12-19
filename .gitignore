@@ -1,2 +1,6 @@
-/__pycache__/
+data/
+__pycache__/
 *.pyc
+venv/lib
+venv/lib64
+pyvenv.cfg
