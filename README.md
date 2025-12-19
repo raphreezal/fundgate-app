@@ -1,1 +1,0 @@
-# fundgate-app
