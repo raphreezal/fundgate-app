@@ -1,7 +1,4 @@
-from modules.data_store import baca_data#import datanya dari data store sebagai baca data/irfan
-
-def menu_laporan(user_sedang_login):
-    from modules.data_store import baca_data
+from modules.data_store import baca_data #import datanya dari data store sebagai baca data/irfan
 
 def menu_laporan(user_sedang_login):
     print(f"\n=== LAPORAN (Mode: {user_sedang_login['role']}) ===")
@@ -24,5 +21,3 @@ def menu_laporan(user_sedang_login):
     print(tabel_pengajuan.to_string())
     
     input("\nTekan Enter untuk kembali ke menu sebelumnya...")
-
-    return None
