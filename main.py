@@ -1,7 +1,5 @@
-
 from modules.data_store import siapkan_folder_dan_file
 from modules.auth import proses_login
-
 from modules.staff_ops import menu_kepala_divisi
 from modules.manager_ops import menu_manajer
 from modules.admin_ops import menu_admin
@@ -18,21 +16,34 @@ def main():
     while True:
         # 2. minta login /kei
         print("\nSilakan Login Terlebih Dahulu")
-        input_user = input("Username : ")
-        input_pass = input("Password : ")
+        
+        # validasi username / najwa 
+        while True:
+            input_user = input("Username : ").strip()
+            if not input_user:
+                print("Username tidak boleh kosong!")
+            else:
+                break
+        
+        # validasi password / najwa
+        while True:
+            input_pass = input("Password : ").strip()
+            if not input_pass:
+                print("Password tidak boleh kosong!")
+            else:
+                break
         
         # panggil fungsi buatan Najwa /kei
         # disini
         data_user = proses_login(input_user, input_pass)
 
-        data_user = []
         if data_user is None:
             print("Gagal! Username atau Password salah.")
         else:
             # kalau berhasil login, cek rolenya siapa /kei
             nama = data_user['username']
             peran = data_user['role']
-            print(f"Login Sukses! Halo, {nama} ({peran})")
+            print(f"\nLogin Sukses! Halo, {nama} ({peran})")
             
             # 3. arahin ke menu sesuai peran (Role) /kei
             if peran == "kepala_divisi":
