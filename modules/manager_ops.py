@@ -3,14 +3,20 @@ from modules.data_store import baca_data, simpan_data
 
 def menu_manajer(user_sedang_login):
     while True:
-        print("\n======== MENU ========")
-        print("1. Cek Pengajuan Dana")
+        print("\n======== KELOLA KEUANGAN ========")
+        print("1. Cek & Proses Pengajuan Dana")
+        print("2. Lihat Saldo & Limit")
+        print("3. Set Limit Pengajuan")
         print("0. Logout")
 
         pilihan = input("Pilih menu: ")
 
         if pilihan == "1":
             proses_persetujuan_dana()
+        # elif pilihan == "2":
+        #     tampilkan_keuangan()  #belum dibikin codenya
+        # elif pilihan == "3":
+        #     set_limit_pengajuan() #belum dibikin codenya
         elif pilihan == "0":
             print("Log out berhasil. Sampai jumpa!")
             break
