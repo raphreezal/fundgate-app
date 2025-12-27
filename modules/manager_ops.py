@@ -3,21 +3,27 @@ from modules.data_store import baca_data, simpan_data
 
 def menu_manajer(user_sedang_login):
     while True:
-        print("\n======== MENU ========")
-        print("1. Cek Pengajuan Dana")
-        print("0. Logout")
+        print("\n======== KELOLA KEUANGAN ========")
+        print("1. Cek & Proses Pengajuan Dana")
+        print("2. Lihat Saldo & Limit")
+        print("3. Set Limit Pengajuan")
+        print("0. Kembali")
 
         pilihan = input("Pilih menu: ")
 
         if pilihan == "1":
             proses_persetujuan_dana()
+        elif pilihan == "2":
+            lihat_saldo_dan_limit()
+        elif pilihan == "3":
+            set_limit_pengajuan()
         elif pilihan == "0":
             print("Log out berhasil. Sampai jumpa!")
             break
         else:
             print("Pilihan tidak valid!")
 
-
+# 1. Fitur Persetujuan dan Penolakan Pengajuan Dana    /farah
 def proses_persetujuan_dana():
     tabel_pengajuan = baca_data("pengajuan")
 
@@ -31,14 +37,14 @@ def proses_persetujuan_dana():
     print("\n-------- DAFTAR PENGAJUAN --------")
     print(
         data_pending[
-            ["id", "divisi", "nominal", "kategori"]
+            ["kode", "divisi", "kategori", "nominal"]
         ].to_string(index=False)
     )
 
     id_target = input("\nMasukkan Kode Pengajuan: ")
 
     # Kode pengajuan       /farah
-    if id_target not in data_pending["id"].values:
+    if id_target not in data_pending["kode"].values:
         print("Kode tidak ditemukan di pengajuan atau sudah diproses.")
         return
     # Keputusan pengajuan  /farah
@@ -63,7 +69,7 @@ def proses_persetujuan_dana():
 
     # Update status pengajuan   /farah
     tabel_pengajuan.loc[
-        tabel_pengajuan['id'] == id_target,
+        tabel_pengajuan['kode'] == id_target,
         'status'
     ] = status_baru
 
@@ -71,3 +77,37 @@ def proses_persetujuan_dana():
 
     print(f"\nPengajuan {id_target} berhasil diproses.")
     print(f"Status pengajuan terbaru: {status_baru}")
+
+# 2. Fitur Lihat Saldo dan Limit    /farah
+def lihat_saldo_dan_limit():
+    data_keuangan = baca_data("keuangan")
+
+    saldo = data_keuangan.loc[0, "saldo"]
+    limit = data_keuangan.loc[0, "limit_pengajuan"]
+
+    print("\n===== INFORMASI KEUANGAN =====")
+    print(f"Saldo perusahaan : Rp{saldo}")
+    print(f"Limit pengajuan  : Rp{limit}")
+
+
+# 3. Fitur Set Limit Pengajuan Dana    /farah
+def set_limit_pengajuan():
+    data_keuangan = baca_data("keuangan")
+
+    print("\n===== SET LIMIT PENGAJUAN =====")
+    print(f"Limit saat ini : Rp{data_keuangan.loc[0, 'limit_pengajuan']}")
+
+    try:
+        limit_baru = int(input("Masukkan limit baru: "))
+    except ValueError:
+        print("Input harus berupa angka.")
+        return
+
+    if limit_baru <= 0:
+        print("Limit harus lebih dari 0.")
+        return
+
+    data_keuangan.loc[0, "limit_pengajuan"] = limit_baru
+    simpan_data("keuangan", data_keuangan)
+
+    print("Limit pengajuan berhasil diperbarui.")

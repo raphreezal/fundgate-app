@@ -10,6 +10,7 @@ FOLDER_DATA = "data/"
 KOLOM_USER = ["id", "username", "password", "role", "divisi"]
 KOLOM_PENGAJUAN = ["id", "tanggal", "pemohon", "divisi", "kategori", "nominal", "status"]
 KOLOM_ANGGARAN = ["kategori", "total_anggaran"]
+KOLOM_KEUANGAN = ["saldo", "limit_pengajuan"]
 
 def siapkan_folder_dan_file():
     """
@@ -60,6 +61,19 @@ def siapkan_folder_dan_file():
     if os.path.exists(path_anggaran) == False:
         df_anggaran = pd.DataFrame(columns=KOLOM_ANGGARAN)
         df_anggaran.to_csv(path_anggaran, index=False)
+    
+    # ===============================
+    # CEK keuangan.csv
+    # ===============================
+    path_keuangan = FOLDER_DATA + "keuangan.csv"
+    if os.path.exists(path_keuangan) == False:
+        data_awal = [{
+            "saldo": 100000000,
+            "limit_pengajuan": 5000000
+        }]
+        df_keuangan = pd.DataFrame(data_awal)
+        df_keuangan.to_csv(path_keuangan, index=False)
+
 
 
 # ===============================
