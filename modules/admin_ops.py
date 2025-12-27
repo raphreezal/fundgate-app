@@ -48,7 +48,7 @@ def tambah_user_baru():
 
     # Role pakai penomoran (list)
     daftar_role = [
-        "kepala direktur",
+        "kepala divisi",
         "auditor",
         "direktur"
     ]
@@ -105,7 +105,7 @@ def edit_user():
     username = input("Username baru: ")
     password = input("Password baru: ")
 
-    daftar_role = ["kepala direktur", "auditor", "direktur"]
+    daftar_role = ["kepala divisi", "auditor", "direktur"]
     print("\nPilih Role:")
     for i, role in enumerate(daftar_role, start=1):
         print(f"{i}. {role}")
