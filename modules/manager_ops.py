@@ -13,8 +13,8 @@ def menu_manajer(user_sedang_login):
 
         if pilihan == "1":
             proses_persetujuan_dana()
-        # elif pilihan == "2":
-        #     tampilkan_keuangan()  #belum dibikin codenya
+        elif pilihan == "2":
+            lihat_saldo_dan_limit()
         elif pilihan == "3":
             set_limit_pengajuan()
         elif pilihan == "0":
@@ -77,6 +77,18 @@ def proses_persetujuan_dana():
 
     print(f"\nPengajuan {id_target} berhasil diproses.")
     print(f"Status pengajuan terbaru: {status_baru}")
+
+# 2. Fitur Lihat Saldo dan Limit    /farah
+def lihat_saldo_dan_limit():
+    data_keuangan = baca_data("keuangan")
+
+    saldo = data_keuangan.loc[0, "saldo"]
+    limit = data_keuangan.loc[0, "limit_pengajuan"]
+
+    print("\n===== INFORMASI KEUANGAN =====")
+    print(f"Saldo perusahaan : Rp{saldo}")
+    print(f"Limit pengajuan  : Rp{limit}")
+
 
 # 3. Fitur Set Limit Pengajuan Dana    /farah
 def set_limit_pengajuan():
