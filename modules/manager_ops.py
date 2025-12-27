@@ -94,20 +94,20 @@ def lihat_saldo_dan_limit():
 def set_limit_pengajuan():
     data_keuangan = baca_data("keuangan")
 
-    limit_lama = data_keuangan.loc[0, "limit_pengajuan"]
-    print(f"\nLimit pengajuan saat ini: Rp{limit_lama:,}")
+    print("\n===== SET LIMIT PENGAJUAN =====")
+    print(f"Limit saat ini : Rp{data_keuangan.loc[0, 'limit_pengajuan']}")
 
-    while True:
-        try:
-            limit_baru = int(input("Masukkan limit pengajuan baru: Rp"))
-            if limit_baru <= 0:
-                print("Limit harus lebih dari 0.")
-                continue
-            break
-        except ValueError:
-            print("Input harus berupa angka.")
+    try:
+        limit_baru = int(input("Masukkan limit baru: "))
+    except ValueError:
+        print("Input harus berupa angka.")
+        return
+
+    if limit_baru <= 0:
+        print("Limit harus lebih dari 0.")
+        return
 
     data_keuangan.loc[0, "limit_pengajuan"] = limit_baru
     simpan_data("keuangan", data_keuangan)
 
-    print(f"Limit pengajuan berhasil diubah menjadi Rp{limit_baru:,}")
+    print("Limit pengajuan berhasil diperbarui.")
