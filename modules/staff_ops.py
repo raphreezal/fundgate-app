@@ -20,6 +20,8 @@ def menu_kepala_divisi(user_sedang_login):
         else:
             print("Pilihan tidak ada.")
 
+            # MERUBAH FORM PENGAJUAN
+
 def form_tambah_pengajuan(user):
     print("\n--- FORM PENGAJUAN DANA ---")
     kategori_input = input("Untuk keperluan apa? : ")
