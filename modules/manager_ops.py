@@ -69,7 +69,7 @@ def proses_persetujuan_dana():
 
     # Update status pengajuan   /farah
     tabel_pengajuan.loc[
-        tabel_pengajuan["id"] == int(id_target),
+        tabel_pengajuan["id"] == (id_target),
         "status"
     ] = status_baru
 
