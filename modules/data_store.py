@@ -88,3 +88,9 @@ def simpan_data(nama_file, data_frame_baru):
     """Menyimpan tabel Pandas kembali ke file CSV"""
     lokasi_lengkap = FOLDER_DATA + nama_file + ".csv"
     data_frame_baru.to_csv(lokasi_lengkap, index=False)
+
+# ==========================================
+# FUNGSI BANTUAN (UTILITY)
+# ==========================================
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
