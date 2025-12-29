@@ -21,3 +21,4 @@ def menu_laporan(user_sedang_login):
     print(tabel_pengajuan.to_string())
     
     input("\nTekan Enter untuk kembali ke menu sebelumnya...")
+    

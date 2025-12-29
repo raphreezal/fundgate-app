@@ -104,6 +104,7 @@ def set_limit_pengajuan():
         return
 
     if limit_baru <= 0:
+
         print("Limit harus lebih dari 0.")
         return
 
