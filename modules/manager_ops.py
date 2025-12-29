@@ -44,7 +44,7 @@ def proses_persetujuan_dana():
     id_target = input("\nMasukkan ID Pengajuan: ")
 
     # Kode pengajuan       /farah
-    if (id_target) not in data_pending["id"].values:
+    if id_target not in data_pending["id"].values:
         print("ID tidak ditemukan di pengajuan atau sudah diproses.")
         return
     # Keputusan pengajuan  /farah
@@ -53,7 +53,7 @@ def proses_persetujuan_dana():
         print("2. Tolak")
         print("0. Batal")
 
-        keputusan = input("Pilih: ")
+        keputusan = input("Pilih: ").strip()
 
         if keputusan == "1":
             status_baru = "Disetujui"
