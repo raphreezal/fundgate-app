@@ -44,7 +44,7 @@ def proses_persetujuan_dana():
     id_target = input("\nMasukkan ID Pengajuan: ")
 
     # Kode pengajuan       /farah
-    if (id_target) not in data_pending["id"].values:
+    if int(id_target) not in data_pending["id"].values:
         print("ID tidak ditemukan di pengajuan atau sudah diproses.")
         return
     # Keputusan pengajuan  /farah
@@ -69,7 +69,7 @@ def proses_persetujuan_dana():
 
     # Update status pengajuan   /farah
     tabel_pengajuan.loc[
-        tabel_pengajuan["id"] == id_target,
+        tabel_pengajuan["id"] == int(id_target),
         "status"
     ] = status_baru
 
