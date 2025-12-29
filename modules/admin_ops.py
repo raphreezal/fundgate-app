@@ -1,5 +1,8 @@
 import pandas as pd
 from modules.data_store import baca_data, simpan_data
+# import validasi / najwa
+from modules.auth import validasi_password
+
 
 # ===============================
 # MENU ADMIN
@@ -44,7 +47,15 @@ def lihat_user():
 def tambah_user_baru():
     print("\n--- TAMBAH USER ---")
     username = input("Username baru: ")
-    password = input("Password: ")
+    # nambah validasi pw saat regis akun / najwa
+    while True:
+        password = input("Password: ")
+        valid, pesan = validasi_password(password)
+        if not valid:
+            print(pesan)
+        else:
+            break
+
 
     # Role pakai penomoran (list)
     daftar_role = [
@@ -103,7 +114,15 @@ def edit_user():
     index = tabel[tabel["id"] == id_edit].index[0]
 
     username = input("Username baru: ")
-    password = input("Password baru: ")
+    # nambah validasi pw saat edit akun / najwa
+    while True:
+        password = input("Password baru: ")
+        valid, pesan = validasi_password(password)
+        if not valid:
+            print(pesan)
+        else:
+            break
+
 
     daftar_role = ["kepala_divisi", "auditor", "direktur"]
     print("\nPilih Role:")
