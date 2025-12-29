@@ -1,4 +1,4 @@
 Library python yang perlu di install:
-- pandas
-- tabulate
-- openpyxl
+- pandas (pip install pandas)
+- tabulate (pip install tabulate)
+- openpyxl (pip install openpyxl)
