@@ -37,15 +37,15 @@ def proses_persetujuan_dana():
     print("\n-------- DAFTAR PENGAJUAN --------")
     print(
         data_pending[
-            ["kode", "divisi", "kategori", "nominal"]
+            ["id", "divisi", "kategori", "nominal"]
         ].to_string(index=False)
     )
 
-    id_target = input("\nMasukkan Kode Pengajuan: ")
+    id_target = input("\nMasukkan ID Pengajuan: ")
 
     # Kode pengajuan       /farah
-    if id_target not in data_pending["kode"].values:
-        print("Kode tidak ditemukan di pengajuan atau sudah diproses.")
+    if int(id_target) not in data_pending["id"].values:
+        print("ID tidak ditemukan di pengajuan atau sudah diproses.")
         return
     # Keputusan pengajuan  /farah
     while True:
@@ -69,8 +69,8 @@ def proses_persetujuan_dana():
 
     # Update status pengajuan   /farah
     tabel_pengajuan.loc[
-        tabel_pengajuan['kode'] == id_target,
-        'status'
+        tabel_pengajuan["id"] == int(id_target),
+        "status"
     ] = status_baru
 
     simpan_data("pengajuan", tabel_pengajuan)
