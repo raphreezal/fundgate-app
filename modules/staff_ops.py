@@ -22,6 +22,7 @@ def menu_kepala_divisi(user_sedang_login):
 
             # MERUBAH FORM PENGAJUAN
             # nanti bakal aku tambahin codingan disini
+            # nanti bakal aku fix
 
 def form_tambah_pengajuan(user):
     print("\n--- FORM PENGAJUAN DANA ---")
