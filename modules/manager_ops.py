@@ -78,12 +78,11 @@ def proses_persetujuan_dana():
             else:
                 print(f"GAGAL: Saldo perusahaan tidak cukup! (Kurang Rp{nominal_pengajuan - saldo_perusahaan})")
                 return # Keluar fungsi
-
+        
+        # rev nambah alasan penolakan / najwa
         elif keputusan == "2":
             status_baru = "Ditolak"
-            alasan = input("Masukkan alasan penolakan: ")
-            print(f"Dicatat dengan alasan: {alasan}")
-            # Opsional: Bisa simpan alasan ke kolom baru di CSV jika mau
+            catatan = input("Alasan penolakan: ")
             break
         elif keputusan == "0":
             print("Proses dibatalkan.")
@@ -91,8 +90,10 @@ def proses_persetujuan_dana():
         else:
             print("Pilihan salah.")
 
-    # Update status pengajuan   /farah
+   # update status pengajuan   /najwa
     tabel_pengajuan.loc[tabel_pengajuan["id"] == id_target, "status"] = status_baru
+    tabel_pengajuan.loc[tabel_pengajuan["id"] == id_target, "catatan_manajer"] = catatan
+
     simpan_data("pengajuan", tabel_pengajuan)
 
     print(f"\nSukses! Pengajuan {id_target} telah {status_baru}.")
