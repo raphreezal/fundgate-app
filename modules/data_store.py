@@ -12,6 +12,7 @@ KOLOM_USER = ["id", "username", "password", "role", "divisi"]
 KOLOM_PENGAJUAN = ["id", "tanggal", "pemohon", "divisi", "kategori", "nominal", "status"]
 KOLOM_ANGGARAN = ["kategori", "total_anggaran"]
 KOLOM_KEUANGAN = ["saldo", "limit_pengajuan"]
+KOLOM_RINCIAN_PENGAJUAN = ["id_pengajuan", "tipe", "nama_item", "jumlah", "harga_satuan", "subtotal"]
 
 def siapkan_folder_dan_file():
     """
@@ -54,6 +55,14 @@ def siapkan_folder_dan_file():
     if os.path.exists(path_pengajuan) == False:
         df_pengajuan = pd.DataFrame(columns=KOLOM_PENGAJUAN)
         df_pengajuan.to_csv(path_pengajuan, index=False)
+
+    # ===============================
+    # CEK rincian_pengajuan.csv
+    # ===============================
+    path_rincian = FOLDER_DATA + "rincian_pengajuan.csv"
+    if os.path.exists(path_rincian) == False:
+        df_rincian = pd.DataFrame(columns=KOLOM_RINCIAN_PENGAJUAN)
+        df_rincian.to_csv(path_rincian, index=False)
 
     # ===============================
     # CEK anggaran.csv
@@ -169,3 +178,9 @@ def tampilkan_interaktif(df, judul="DATA"):
             break
         else:
             print("Pilihan tidak valid.")
+
+def tabel_rapih(df, judul="DATA"):
+    df_tampil = df.copy()
+    print(f"\n=== {judul} ===")
+    # mengembalikan string tabel yang rapi dari DataFrame /kei
+    print(tabulate(df_tampil, headers='keys', tablefmt='psql', showindex=False))
