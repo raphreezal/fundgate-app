@@ -184,3 +184,6 @@ def tabel_rapih(df, judul="DATA"):
     print(f"\n=== {judul} ===")
     # mengembalikan string tabel yang rapi dari DataFrame /kei
     print(tabulate(df_tampil, headers='keys', tablefmt='psql', showindex=False))
+
+def format_rupiah(angka):
+    return f"Rp{angka:,.0f}".replace(",", ".")
