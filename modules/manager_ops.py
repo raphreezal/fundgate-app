@@ -1,4 +1,4 @@
-from modules.data_store import baca_data, simpan_data, clear_screen
+from modules.data_store import baca_data, simpan_data, clear_screen, format_rupiah
 
 def menu_manajer(user_sedang_login):
     while True:
@@ -143,17 +143,18 @@ def lihat_saldo_dan_limit():
     limit = data_keuangan.loc[0, "limit_pengajuan"]
 
     print("\n======== INFORMASI KEUANGAN ========")
-    print(f"Saldo perusahaan : Rp{saldo}")
-    print(f"Limit pengajuan  : Rp{limit}")
-
+    print(f"Saldo perusahaan : {format_rupiah(saldo):>15}")
+    print(f"Limit pengajuan  : {format_rupiah(limit):>15}")
 
 # 3. Fitur Set Limit Pengajuan Dana    /farah
 def set_limit_pengajuan():
     while True:
         data_keuangan = baca_data("keuangan")
+        limit = data_keuangan.loc[0, "limit_pengajuan"]
 
-        print("\n======== SET LIMIT PENGAJUAN ========")
-        print(f"Limit saat ini :       Rp{data_keuangan.loc[0, 'limit_pengajuan']}")
+        print("======== SET LIMIT PENGAJUAN ========")
+        print(f"Limit saat ini : {format_rupiah(limit):>15}")
+
         print("\n1. Set nominal limit baru")
         print("0. Batal / Kembali")
 
