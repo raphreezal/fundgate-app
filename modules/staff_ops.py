@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from modules.data_store import baca_data, simpan_data
+from modules.data_store import baca_data, simpan_data, tampilkan_interaktif
 
 # ===============================
 # MENU KEPALA DIVISI
@@ -145,6 +145,8 @@ def lihat_detail_pengajuan(rincian):
     if detail.empty:
         print("Detail tidak ditemukan.")
     else:
+        # Tampilkan kolom yang penting aja biar gak kepanjangan /mars
+        tampilkan_interaktif(data_milik_saya, judul="RIWAYAT PENGAJUAN SAYA")
         print(detail[["tipe","nama_item","jumlah","harga_satuan","subtotal"]])
 
 
