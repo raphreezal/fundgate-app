@@ -55,11 +55,15 @@ def menu_laporan(user_sedang_login):
         elif pilihan == "3":
             # Group by tahun dan Bulan (biar Jan 2024 beda sama Jan 2025) /kei
             rekap = df.groupby(['tahun', 'bulan_angka', 'bulan'])['total'].sum().reset_index()
+            # Mengubah penulisan nominal format Indonesia (ada titik)  /farah
+            rekap['total'] = rekap['total'].map(lambda x: f"{int(x):,}".replace(",", "."))
             # Sort dulu berdasarkan tahun dan bulan angka biar urut /kei
             rekap = rekap.sort_values(by=['tahun', 'bulan_angka'])
             
             # tampilkan kolom yg perlu aja /kei
             view_rekap = rekap[['tahun', 'bulan', 'total']]
+            # Mengubah penulisan nominal format Indonesia (ada titik)  /farah
+            view_rekap['total'] = view_rekap['total'].map(lambda x: f"{int(x):,}".replace(",", "."))
             tampilkan_interaktif(view_rekap, judul="TOTAL PENGELUARAN PER BULAN")
             
         elif pilihan == "4":
