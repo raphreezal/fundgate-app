@@ -12,17 +12,12 @@ def menu_manajer(user_sedang_login):
         pilihan = input("Pilih menu: ")
 
         if pilihan == "1":
-            # Clear screen dulu sebelum nampilin menu selanjutnya   /farah
-            clear_screen()
             proses_persetujuan_dana()
         elif pilihan == "2":
-            clear_screen()
             lihat_saldo_dan_limit()
         elif pilihan == "3":
-            clear_screen()
             set_limit_pengajuan()
         elif pilihan == "0":
-            print("Log out berhasil. Sampai jumpa!")
             break
         else:
             print("Pilihan tidak valid! Silakan pilih menu yang tersedia.")
