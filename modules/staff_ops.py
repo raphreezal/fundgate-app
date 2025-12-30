@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from modules.data_store import baca_data, simpan_data
+from modules.data_store import baca_data, simpan_data, tampilkan_interaktif
 
 def menu_kepala_divisi(user_sedang_login):
     while True:
@@ -68,4 +68,4 @@ def lihat_status_saya(user):
         print("Belum ada riwayat pengajuan.")
     else:
         # Tampilkan kolom yang penting aja biar gak kepanjangan /mars
-        print(data_milik_saya[['id', 'tanggal', 'nominal', 'status']].to_string(index=False))
+        tampilkan_interaktif(data_milik_saya, judul="RIWAYAT PENGAJUAN SAYA")
