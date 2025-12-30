@@ -178,3 +178,9 @@ def tampilkan_interaktif(df, judul="DATA"):
             break
         else:
             print("Pilihan tidak valid.")
+
+def tabel_rapih(df, judul="DATA"):
+    df_tampil = df.copy()
+    print(f"\n=== {judul} ===")
+    # mengembalikan string tabel yang rapi dari DataFrame /kei
+    print(tabulate(df_tampil, headers='keys', tablefmt='psql', showindex=False))
