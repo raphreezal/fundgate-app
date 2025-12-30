@@ -1,4 +1,4 @@
-from modules.data_store import baca_data, simpan_data, clear_screen
+from modules.data_store import baca_data, simpan_data, clear_screen, format_rupiah
 
 def menu_manajer(user_sedang_login):
     while True:
@@ -143,30 +143,43 @@ def lihat_saldo_dan_limit():
     limit = data_keuangan.loc[0, "limit_pengajuan"]
 
     print("\n======== INFORMASI KEUANGAN ========")
-    print(f"Saldo perusahaan : Rp{saldo}")
-    print(f"Limit pengajuan  : Rp{limit}")
-
+    print(f"Saldo perusahaan : {format_rupiah(saldo):>15}")
+    print(f"Limit pengajuan  : {format_rupiah(limit):>15}")
 
 # 3. Fitur Set Limit Pengajuan Dana    /farah
 def set_limit_pengajuan():
-    clear_screen()
-    data_keuangan = baca_data("keuangan")
+    while True:
+        data_keuangan = baca_data("keuangan")
+        limit = data_keuangan.loc[0, "limit_pengajuan"]
 
-    print("\n======== SET LIMIT PENGAJUAN ========")
-    print(f"Limit saat ini : Rp{data_keuangan.loc[0, 'limit_pengajuan']}")
+        print("======== SET LIMIT PENGAJUAN ========")
+        print(f"Limit saat ini : {format_rupiah(limit):>15}")
 
-    try:
-        limit_baru = int(input("Masukkan limit baru: "))
-    except ValueError:
-        print("Input harus berupa angka.")
-        return
+        print("\n1. Set nominal limit baru")
+        print("0. Batal / Kembali")
 
-    if limit_baru <= 0:
+        pilihan = input("Pilih menu: ")
 
-        print("Limit harus lebih dari 0.")
-        return
+        if pilihan == "1":
+            while True:
+                try:
+                    limit_baru = int(input("\nMasukkan limit baru: "))
+                except ValueError:
+                    print("❌ Input harus berupa angka. Coba lagi! ")
+                    continue
 
-    data_keuangan.loc[0, "limit_pengajuan"] = limit_baru
-    simpan_data("keuangan", data_keuangan)
+                if limit_baru <= 0:
+                    print("❌ Limit harus lebih dari 0. Coba lagi!")
+                    continue
 
-    print("Limit pengajuan berhasil diperbarui.")
+                data_keuangan.loc[0, "limit_pengajuan"] = limit_baru
+                simpan_data("keuangan", data_keuangan)
+
+                print("\n✅ Limit pengajuan berhasil diperbarui.")
+                return
+
+        elif pilihan == "0":
+            return
+
+        else:
+            print("\n❌ Pilihan tidak valid! Silakan pilih menu yang tersedia.")
