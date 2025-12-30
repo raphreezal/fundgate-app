@@ -149,24 +149,36 @@ def lihat_saldo_dan_limit():
 
 # 3. Fitur Set Limit Pengajuan Dana    /farah
 def set_limit_pengajuan():
-    clear_screen()
-    data_keuangan = baca_data("keuangan")
+    while True:
+        data_keuangan = baca_data("keuangan")
 
-    print("\n======== SET LIMIT PENGAJUAN ========")
-    print(f"Limit saat ini : Rp{data_keuangan.loc[0, 'limit_pengajuan']}")
+        print("\n======== SET LIMIT PENGAJUAN ========")
+        print(f"Limit saat ini :       Rp{data_keuangan.loc[0, 'limit_pengajuan']}")
+        print("\n1. Set nominal limit baru")
+        print("0. Batal / Kembali")
 
-    try:
-        limit_baru = int(input("Masukkan limit baru: "))
-    except ValueError:
-        print("Input harus berupa angka.")
-        return
+        pilihan = input("Pilih menu: ")
 
-    if limit_baru <= 0:
+        if pilihan == "1":
+            while True:
+                try:
+                    limit_baru = int(input("\nMasukkan limit baru: "))
+                except ValueError:
+                    print("❌ Input harus berupa angka. Coba lagi! ")
+                    continue
 
-        print("Limit harus lebih dari 0.")
-        return
+                if limit_baru <= 0:
+                    print("❌ Limit harus lebih dari 0. Coba lagi!")
+                    continue
 
-    data_keuangan.loc[0, "limit_pengajuan"] = limit_baru
-    simpan_data("keuangan", data_keuangan)
+                data_keuangan.loc[0, "limit_pengajuan"] = limit_baru
+                simpan_data("keuangan", data_keuangan)
 
-    print("Limit pengajuan berhasil diperbarui.")
+                print("\n✅ Limit pengajuan berhasil diperbarui.")
+                return
+
+        elif pilihan == "0":
+            return
+
+        else:
+            print("\n❌ Pilihan tidak valid! Silakan pilih menu yang tersedia.")
