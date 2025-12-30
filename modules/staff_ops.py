@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from modules.data_store import baca_data, simpan_data
+from modules.data_store import baca_data, simpan_data, tampilkan_interaktif, tabel_rapih, clear_screen
 
 # ===============================
 # MENU KEPALA DIVISI
@@ -108,6 +108,7 @@ def buat_pengajuan_dana(user):
 # RIWAYAT + MENU AKSI
 # ===============================
 def riwayat_pengajuan(user):
+    clear_screen()
     pengajuan = baca_data("pengajuan")
     rincian = baca_data("rincian_pengajuan")
 
@@ -117,8 +118,9 @@ def riwayat_pengajuan(user):
         print("Belum ada pengajuan.")
         return
 
-    print("\n=== RIWAYAT PENGAJUAN ===")
-    print(data[["id_pengajuan", "tanggal", "total", "status"]].to_string(index=False))
+    # print("\n=== RIWAYAT PENGAJUAN ===")
+    # print(data[["id_pengajuan", "tanggal", "total", "status"]].to_string(index=False))
+    tabel_rapih(data[["id_pengajuan","jenis_pengajuan", "tanggal", "total", "status"]], "RIWAYAT PENGAJUAN")
 
     print("\n1. Lihat Detail")
     print("2. Edit Pengajuan")
@@ -145,7 +147,8 @@ def lihat_detail_pengajuan(rincian):
     if detail.empty:
         print("Detail tidak ditemukan.")
     else:
-        print(detail[["tipe","nama_item","jumlah","harga_satuan","subtotal"]])
+        # print(detail[["tipe","nama_item","jumlah","harga_satuan","subtotal"]])
+        tampilkan_interaktif(detail[["tipe","nama_item","jumlah","harga_satuan","subtotal"]], "Detail Pengajuan")
 
 
 # ===============================
