@@ -57,9 +57,12 @@ def proses_persetujuan_dana():
 
         if keputusan == "1":
             status_baru = "Disetujui"
+            catatan = "-"
             break
-        elif keputusan == "2":
+        # rev nambah alasan penolakan / najwa
+        if keputusan == "2":
             status_baru = "Ditolak"
+            catatan = input("Alasan penolakan: ")
             break
         elif keputusan == "0":
             print("Proses persetujuan dibatalkan.")
@@ -72,6 +75,10 @@ def proses_persetujuan_dana():
         tabel_pengajuan["id"] == (id_target),
         "status"
     ] = status_baru
+
+    # update status pengajuan   /najwa
+    tabel_pengajuan.loc[tabel_pengajuan["id"] == id_target, "status"] = status_baru
+    tabel_pengajuan.loc[tabel_pengajuan["id"] == id_target, "catatan_manajer"] = catatan
 
     simpan_data("pengajuan", tabel_pengajuan)
 
