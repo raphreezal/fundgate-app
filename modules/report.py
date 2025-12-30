@@ -50,22 +50,22 @@ def menu_laporan(user_sedang_login):
             
         elif pilihan == "2":
             # Group by divisi /kei
-            rekap = df.groupby(['divisi'])['nominal'].sum().reset_index()
+            rekap = df.groupby(['divisi'])['total'].sum().reset_index()
             tampilkan_interaktif(rekap, judul="TOTAL PENGELUARAN PER DIVISI")
             
         elif pilihan == "3":
             # Group by tahun dan Bulan (biar Jan 2024 beda sama Jan 2025) /kei
-            rekap = df.groupby(['tahun', 'bulan_angka', 'bulan'])['nominal'].sum().reset_index()
+            rekap = df.groupby(['tahun', 'bulan_angka', 'bulan'])['total'].sum().reset_index()
             # Sort dulu berdasarkan tahun dan bulan angka biar urut /kei
             rekap = rekap.sort_values(by=['tahun', 'bulan_angka'])
             
             # tampilkan kolom yg perlu aja /kei
-            view_rekap = rekap[['tahun', 'bulan', 'nominal']]
+            view_rekap = rekap[['tahun', 'bulan', 'total']]
             tampilkan_interaktif(view_rekap, judul="TOTAL PENGELUARAN PER BULAN")
             
         elif pilihan == "4":
             # Group by tahun /kei
-            rekap = df.groupby(['tahun'])['nominal'].sum().reset_index()
+            rekap = df.groupby(['tahun'])['total'].sum().reset_index()
             tampilkan_interaktif(rekap, judul="TOTAL PENGELUARAN TAHUNAN")
             
         elif pilihan == "0":
