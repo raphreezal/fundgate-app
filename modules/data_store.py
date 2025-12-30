@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+from tabulate import tabulate # pastikan pip install tabulate /kei
 
 # tentuin nama folder tempat menyimpan file
 FOLDER_DATA = "data/"
@@ -94,3 +95,77 @@ def simpan_data(nama_file, data_frame_baru):
 # ==========================================
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
+
+def tampilkan_interaktif(df, judul="DATA"):
+    # fungsi untuk menampilkan data dengan fitur /kei
+    # SORTING dan SEARCHING bawaan /kei
+    df_tampil = df.copy() # copy biar data asli gak rusak /kei
+    
+    while True:
+        clear_screen()
+        print(f"\n=== {judul} ===")
+        
+        # cek kalau data kosong /kei
+        if df_tampil.empty:
+            print("Tidak ada data yang ditemukan.")
+        else:
+            # tampilkan tabel rapi /kei
+            print(tabulate(df_tampil, headers='keys', tablefmt='psql', showindex=False))
+        
+        print("\n[MENU INTERAKTIF]")
+        print("1. Sort (Urutkan Data)")
+        print("2. Search (Cari Data)")
+        print("3. Reset (Kembalikan Awal)")
+        print("0. Kembali")
+        
+        aksi = input("Pilih aksi: ")
+        
+        if aksi == "1":
+            # --- FITUR SORTING --- /kei
+            cols = list(df_tampil.columns)
+            print("\nKolom tersedia:", ", ".join(cols))
+            kolom = input("Urutkan berdasarkan kolom apa? : ")
+            
+            if kolom in cols:
+                urutan = input("Ascending (a) atau Descending (d)? : ").lower()
+                is_asc = True if urutan == 'a' else False
+                
+                # Proses sorting
+                df_tampil = df_tampil.sort_values(by=kolom, ascending=is_asc)
+            else:
+                input("Nama kolom salah! Enter untuk lanjut...")
+
+        elif aksi == "2":
+            # FITUR SEARCHING /kei
+            kata_kunci = input("Cari kata apa? : ").lower()
+            
+            # 1. siapkan wadah kosong (anggap semua baris belum ketemu / False) /kei
+            baris_yang_cocok = pd.Series(False, index=df_tampil.index)
+
+            # 2. xek satu per satu kolom /kei
+            for nama_kolom in df_tampil.columns:
+                # ambil isi kolom, jadikan teks, dan huruf kecilkan /kei
+                isi_kolom = df_tampil[nama_kolom].astype(str).str.lower()
+                
+                # cek apakah kata kunci ada di dalam kolom ini? /kei
+                ada_gak = isi_kolom.str.contains(kata_kunci)
+                
+                # 3. gabungkan hasil pencarian /kei
+                # kalo ketemu di kolom ini atau (|) kolom sebelumnya, tandai sebagai true /kei
+                baris_yang_cocok = baris_yang_cocok | ada_gak
+
+            # 4. ambil cuma baris yang cocok tadi /kei
+            df_tampil = df_tampil[baris_yang_cocok]
+            
+            print(f"Ketemu {len(df_tampil)} data.")
+            input("Tekan Enter untuk melihat hasil...")
+
+        elif aksi == "3":
+            # reset ke data awal /kei
+            df_tampil = df.copy()
+            print("Data di-reset.")
+
+        elif aksi == "0":
+            break
+        else:
+            print("Pilihan tidak valid.")

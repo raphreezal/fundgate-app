@@ -1,8 +1,7 @@
 import pandas as pd
-from modules.data_store import baca_data, simpan_data
-# import validasi / najwa
-from modules.auth import validasi_password
-
+from modules.data_store import baca_data, simpan_data, clear_screen
+from modules.auth import validasi_password # import validasi / najwa
+from modules.data_store import tampilkan_interaktif
 
 # ===============================
 # MENU ADMIN
@@ -39,7 +38,11 @@ def lihat_user():
     if tabel.empty:
         print("Data user masih kosong.")
     else:
-        print(tabel.to_string(index=False))
+        # Tampilkan tabel dengan tabulate agar rapih /kei
+        # clear_screen()
+        # print("\n--- DAFTAR USER ---")
+        # print(tabulate(tabel, headers='keys', tablefmt='psql', showindex=False))
+        tampilkan_interaktif(tabel, judul="DAFTAR USER")    
 
 # ===============================
 # CREATE
