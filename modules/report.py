@@ -1,6 +1,5 @@
 import os
 from modules.data_store import baca_data,clear_screen, tampilkan_interaktif #import datanya dari data store sebagai baca data/irfan
-from tabulate import tabulate #pastikan sudah pip install tabulate /kei
 import pandas as pd #pastikan sudah pip install pandas /kei
 
 
@@ -46,7 +45,7 @@ def menu_laporan(user_sedang_login):
             # tampilkan semua data mentah tapi interaktif /kei
             # mengapus kolom bantuan biar kgk penuh /kei 
             view_df = df.drop(columns=['tahun', 'bulan', 'bulan_angka'], errors='ignore')
-            tampilkan_interaktif(view_df, judul="SEMUA DATA PENGAJUAN")
+            tampilkan_interaktif(view_df[["id_pengajuan","tanggal","jenis_pengajuan","nama_kepala_divisi","divisi","total", "status", "catatan_manajer"]], judul="SEMUA DATA PENGAJUAN")
             
         elif pilihan == "2":
             # Group by divisi /kei
