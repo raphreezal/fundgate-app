@@ -2,7 +2,6 @@ from modules.data_store import baca_data, simpan_data, clear_screen
 
 def menu_manajer(user_sedang_login):
     while True:
-        clear_screen()
         print("\n======== KELOLA KEUANGAN ========")
         print("1. Cek & Proses Pengajuan Dana")
         print("2. Lihat Saldo & Limit")
@@ -40,7 +39,7 @@ def proses_persetujuan_dana():
         return
     
     # Pengajuan ada        /farah
-    print("\n-------- DAFTAR PENGAJUAN --------")
+    print("\n======== DAFTAR PENGAJUAN ========")
 
     # tampilkan kolom ID, divisi, nominal biar jelas /kei
     print(data_pending[["id_pengajuan", "divisi", "jenis_pengajuan", "total", "status"]].to_string(index=False))
@@ -57,7 +56,7 @@ def proses_persetujuan_dana():
         tabel_pengajuan["id_pengajuan"] == id_target
     ].iloc[0]
 
-    print("\n--- INFORMASI PENGAJUAN ---")
+    print("\n======== INFORMASI PENGAJUAN ========")
     print(f"ID Pengajuan    : {data_pilih['id_pengajuan']}")
     print(f"Divisi          : {data_pilih['divisi']}")
     print(f"Jenis Pengajuan : {data_pilih['jenis_pengajuan']}")
@@ -66,7 +65,7 @@ def proses_persetujuan_dana():
     # nampilin rincian barang / najwa
     detail = tabel_rincian[tabel_rincian["id_pengajuan"] == id_target]
 
-    print("\n--- RINCIAN BARANG / JASA ---")
+    print("\n======== RINCIAN BARANG / JASA ========")
     if detail.empty:
         print("Tidak ada rincian barang.")
     else:
@@ -137,21 +136,23 @@ def proses_persetujuan_dana():
 
 # 2. Fitur Lihat Saldo dan Limit    /farah
 def lihat_saldo_dan_limit():
+    clear_screen()
     data_keuangan = baca_data("keuangan")
 
     saldo = data_keuangan.loc[0, "saldo"]
     limit = data_keuangan.loc[0, "limit_pengajuan"]
 
-    print("\n===== INFORMASI KEUANGAN =====")
+    print("\n======== INFORMASI KEUANGAN ========")
     print(f"Saldo perusahaan : Rp{saldo}")
     print(f"Limit pengajuan  : Rp{limit}")
 
 
 # 3. Fitur Set Limit Pengajuan Dana    /farah
 def set_limit_pengajuan():
+    clear_screen()
     data_keuangan = baca_data("keuangan")
 
-    print("\n===== SET LIMIT PENGAJUAN =====")
+    print("\n======== SET LIMIT PENGAJUAN ========")
     print(f"Limit saat ini : Rp{data_keuangan.loc[0, 'limit_pengajuan']}")
 
     try:
