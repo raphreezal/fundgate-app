@@ -67,8 +67,18 @@ def proses_persetujuan_dana():
         keputusan = input("Pilih tindakan: ")
         
         if keputusan == "1":
-            status_baru = "Disetujui"
-            break
+            # --- LOGIKA POTONG SALDO ---
+            if saldo_perusahaan >= nominal_pengajuan:
+                status_baru = "Disetujui"
+                # Kurangi saldo
+                data_keuangan.loc[0, "saldo"] = saldo_perusahaan - nominal_pengajuan
+                simpan_data("keuangan", data_keuangan) # Simpan saldo baru
+                print("Saldo berhasil dikurangi.")
+                break
+            else:
+                print(f"GAGAL: Saldo perusahaan tidak cukup! (Kurang Rp{nominal_pengajuan - saldo_perusahaan})")
+                return # Keluar fungsi
+        
         # rev nambah alasan penolakan / najwa
         elif keputusan == "2":
             status_baru = "Ditolak"
