@@ -65,6 +65,8 @@ def menu_laporan(user_sedang_login):
         elif pilihan == "4":
             # Group by tahun /kei
             rekap = df.groupby(['tahun'])['total'].sum().reset_index()
+            # Mengubah nominal scientific jadi yang bisa dibaca  /farah
+            rekap['total'] = rekap['total'].map(lambda x: f"{int(x):,}".replace(",", "."))
             tampilkan_interaktif(rekap, judul="TOTAL PENGELUARAN TAHUNAN")
             
         elif pilihan == "0":
