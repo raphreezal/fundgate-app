@@ -37,20 +37,36 @@ def buat_pengajuan_dana(user):
     else:
         jenis_pengajuan = ["Operasional", "Inventaris"][int(pilih)-1]
 
+    if(jenis_pengajuan == "Operasional"):
+        id_pengajuan = "OPT-" + datetime.now().strftime("%H%M%S") + str(random.randint(0,99))
+    elif (jenis_pengajuan == "Inventaris"):
+        id_pengajuan = "INV-" + datetime.now().strftime("%H%M%S") + str(random.randint(0,99))
+    else:
+        id_pengajuan = "LNS-" + datetime.now().strftime("%H%M%S") + str(random.randint(0,99))
+
+    tanggal = datetime.now().strftime("%Y-%m-%d")
+
     rincian_list = []
     total = 0
 
     while True:
-        print("\nInput Rincian:")
-        print("1. Barang")
-        print("2. Jasa")
-        tipe = "Barang" if input("Pilih: ") == "1" else "Jasa"
-
-        if(tipe == "Barang"):
-            id_pengajuan = "BAR-" + datetime.now().strftime("%H%M%S") + str(random.randint(100,999))
-        else:
-            id_pengajuan = "JAS-" + datetime.now().strftime("%H%M%S") + str(random.randint(100,999))
-        tanggal = datetime.now().strftime("%Y-%m-%d")
+        while True:
+            print("\nInput Rincian:")
+            print("1. Barang")
+            print("2. Jasa")
+            print("0. Cancel")
+            tipe = input("\nPilih tipe (0/1/2): ")
+            if tipe == "1":
+                tipe = "Barang"
+                break
+            elif tipe == "2":
+                tipe = "Jasa"
+                break
+            elif tipe == "0":
+                clear_screen()
+                return
+            else:
+                print("Pilihan tidak valid.")
 
         nama = input("Nama: ")
         jumlah = int(input("Jumlah: "))
@@ -59,7 +75,10 @@ def buat_pengajuan_dana(user):
 
         total += subtotal
 
+        id_rincian = "RIN-" + datetime.now().strftime("%H%M%S") + str(random.randint(0,99))
+
         rincian_list.append({
+            "id_rincian": id_rincian,
             "id_pengajuan": id_pengajuan,
             "tipe": tipe,
             "nama_item": nama,
@@ -119,8 +138,8 @@ def riwayat_pengajuan(user):
     # print(data[["id_pengajuan", "tanggal", "total", "status"]].to_string(index=False))
 
     data_view = data.copy()
-    data_view.loc[:, "total"] = data_view["total"].map(format_rupiah)
-    tabel_rapih(data_view[["id_pengajuan","jenis_pengajuan", "tanggal", "total", "status"]], "RIWAYAT PENGAJUAN")
+    data_view["total"] = data_view["total"].map(format_rupiah)
+    tabel_rapih(data_view[["id_pengajuan","tanggal", "jenis_pengajuan", "total", "status"]], "RIWAYAT PENGAJUAN")
 
     print("\n1. Lihat Detail")
     print("2. Edit Pengajuan")
@@ -168,7 +187,23 @@ def edit_pengajuan(user, pengajuan, rincian):
     rincian_baru = []
 
     while True:
-        tipe = "Barang" if input("1. Barang | 2. Jasa: ") == "1" else "Jasa"
+        print("\nInput Rincian:")
+        print("1. Barang")
+        print("2. Jasa")
+        print("0. Cancel")
+        tipe = input("\nPilih tipe (0/1/2): ")
+        if tipe == "1":
+            tipe = "Barang"
+            break
+        elif tipe == "2":
+            tipe = "Jasa"
+            break
+        elif tipe == "0":
+            clear_screen()
+            return
+        else:
+            print("Pilihan tidak valid.")
+
         nama = input("Nama: ")
         jumlah = int(input("Jumlah: "))
         harga = int(input("Harga satuan: "))
