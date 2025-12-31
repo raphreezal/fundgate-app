@@ -21,29 +21,47 @@ def menu_kepala_divisi(user_sedang_login):
             print("\n======= Logout Berhasil! =======")
             break
         else:
-            print("======= Pilihan tidak ada. =======")
+            print("⚠️  Pilihan tidak valid. Silakan pilih menu yang tersedia!")
 
 def buat_pengajuan_dana(user):
     print("\n=== FORM PENGAJUAN DANA ===")
-
     print("Jenis Pengajuan:")
     print("1. Operasional")
     print("2. Inventaris")
     print("3. Lainnya")
-    pilih = input("Pilih: ")
+    print("0. Batal")
 
-    if pilih == "3":
-        jenis_pengajuan = input("Masukkan jenis pengajuan: ")
-    else:
-        jenis_pengajuan = ["Operasional", "Inventaris"][int(pilih)-1]
+    while True:
+        pilih = input("Pilih: ").strip()
 
-    # generate ID pengajuan
+        if pilih == "0":
+            print("====== Pengajuan dibatalkan ======")
+            return
+
+        elif pilih == "1":
+            jenis_pengajuan = "Operasional"
+            break
+
+        elif pilih == "2":
+            jenis_pengajuan = "Inventaris"
+            break
+
+        elif pilih == "3":
+            jenis_pengajuan = input("Masukkan jenis pengajuan: ").strip()
+            if jenis_pengajuan == "":
+                print("⚠️  Jenis pengajuan tidak boleh kosong.")
+                continue
+            break
+
+        else:
+            print("⚠️  Pilihan tidak valid. Silakan pilih menu yang tersedia!")
+
     if jenis_pengajuan == "Operasional":
-        id_pengajuan = "OPT-" + datetime.now().strftime("%H%M%S") + str(random.randint(0,99))
+        id_pengajuan = "OPT-" + datetime.now().strftime("%H%M%S") + str(random.randint(0, 99))
     elif jenis_pengajuan == "Inventaris":
-        id_pengajuan = "INV-" + datetime.now().strftime("%H%M%S") + str(random.randint(0,99))
+        id_pengajuan = "INV-" + datetime.now().strftime("%H%M%S") + str(random.randint(0, 99))
     else:
-        id_pengajuan = "LNS-" + datetime.now().strftime("%H%M%S") + str(random.randint(0,99))
+        id_pengajuan = "LNS-" + datetime.now().strftime("%H%M%S") + str(random.randint(0, 99))
 
     tanggal = datetime.now().strftime("%Y-%m-%d")
 
@@ -56,7 +74,7 @@ def buat_pengajuan_dana(user):
             print("\nInput Rincian:")
             print("1. Barang")
             print("2. Jasa")
-            print("0. Cancel")
+            print("0. Batal")
             tipe = input("Pilih tipe (0/1/2): ")
 
             if tipe == "1":
@@ -69,7 +87,7 @@ def buat_pengajuan_dana(user):
                 clear_screen()
                 return
             else:
-                print("⚠️ Pilihan tidak valid. Silakan pilih menu yang tersedia!")
+                print("⚠️  Pilihan tidak valid. Silakan pilih menu yang tersedia!")
 
         nama = input("Nama: ")
         jumlah = int(input("Jumlah: "))
@@ -123,7 +141,7 @@ def buat_pengajuan_dana(user):
                 print("\n======= Pengajuan dibatalkan =======")
                 return
             else:
-                print("⚠️ Pilihan tidak valid. Silakan pilih menu yang tersedia!")
+                print("⚠️  Pilihan tidak valid. Silakan pilih menu yang tersedia!")
     else:
         if input("\nKonfirmasi pengajuan? (y/n): ").lower() != "y":
             return
@@ -161,6 +179,7 @@ def buat_pengajuan_dana(user):
 # riwayat
 def riwayat_pengajuan(user):
     clear_screen()
+
     pengajuan = baca_data("pengajuan")
     rincian = baca_data("rincian_pengajuan")
 
@@ -170,39 +189,51 @@ def riwayat_pengajuan(user):
         print("Belum ada pengajuan.")
         return
 
-    # print("\n=== RIWAYAT PENGAJUAN ===")
-    # print(data[["id_pengajuan", "tanggal", "total", "status"]].to_string(index=False))
-
     data_view = data.copy()
     data_view["total"] = data_view["total"].map(format_rupiah)
-    tabel_rapih(data_view[["id_pengajuan","tanggal", "jenis_pengajuan", "total", "status"]], "RIWAYAT PENGAJUAN")
+
+    tabel_rapih(
+        data_view[["id_pengajuan", "tanggal", "jenis_pengajuan", "total", "status"]],
+        "RIWAYAT PENGAJUAN"
+    )
 
     print("\n1. Lihat Detail")
     print("2. Edit Pengajuan")
     print("3. Hapus Pengajuan")
     print("0. Kembali")
 
-    pilih = input("Pilih: ")
+    while True:
+        pilih = input("\nPilih: ")
 
-    if pilih == "1":
-        lihat_detail_pengajuan(rincian)
-    elif pilih == "2":
-        edit_pengajuan(user, pengajuan, rincian)
-    elif pilih == "3":
-        hapus_pengajuan(user, pengajuan, rincian)
-
+        if pilih == "1":
+            lihat_detail_pengajuan(rincian)
+        elif pilih == "2":
+            edit_pengajuan(user, pengajuan, rincian)
+        elif pilih == "3":
+            hapus_pengajuan(user, pengajuan, rincian)
+        elif pilih == "0":
+            break
+        else:
+            print("⚠️  Pilihan tidak valid. Silakan pilih menu yang tersedia!")
 
 # detail
 def lihat_detail_pengajuan(rincian):
-    idp = input("Masukkan ID Pengajuan: ")
-    detail = rincian[rincian["id_pengajuan"] == idp]
+    while True:
+        idp = input("Masukkan ID Pengajuan (0 untuk kembali): ")
+        # biar bisa back    /farah
+        if idp == "0":
+            return
 
-    if detail.empty:
-        print("Detail tidak ditemukan.")
-    else:
-        # print(detail[["tipe","nama_item","jumlah","harga_satuan","subtotal"]])
-        tampilkan_interaktif(detail[["tipe","nama_item","jumlah","harga_satuan","subtotal"]], "Detail Pengajuan")
+        detail = rincian[rincian["id_pengajuan"] == idp]
 
+        if detail.empty:
+            print("⚠️  Detail tidak ditemukan. Coba lagi!")
+        else:
+            tampilkan_interaktif(
+                detail[["tipe", "nama_item", "jumlah", "harga_satuan", "subtotal"]],
+                "Detail Pengajuan"
+            )
+            return
 
 # edit form (jika status masih menunggu) / najwa
 def edit_pengajuan(user, pengajuan, rincian):
