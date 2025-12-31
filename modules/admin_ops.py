@@ -1,7 +1,7 @@
 import pandas as pd
-from modules.data_store import baca_data, simpan_data, clear_screen
+from modules.utility import baca_data, simpan_data, clear_screen
 from modules.auth import validasi_password # import validasi / najwa
-from modules.data_store import tampilkan_interaktif
+from modules.utility import tampilkan_interaktif
 
 # ===============================
 # MENU ADMIN

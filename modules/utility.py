@@ -64,13 +64,13 @@ def siapkan_folder_dan_file():
         df_rincian = pd.DataFrame(columns=KOLOM_RINCIAN_PENGAJUAN)
         df_rincian.to_csv(path_rincian, index=False)
 
-    # ===============================
-    # CEK anggaran.csv
-    # ===============================
-    path_anggaran = FOLDER_DATA + "anggaran.csv"
-    if os.path.exists(path_anggaran) == False:
-        df_anggaran = pd.DataFrame(columns=KOLOM_ANGGARAN)
-        df_anggaran.to_csv(path_anggaran, index=False)
+    # # ===============================
+    # # CEK anggaran.csv
+    # # ===============================
+    # path_anggaran = FOLDER_DATA + "anggaran.csv"
+    # if os.path.exists(path_anggaran) == False:
+    #     df_anggaran = pd.DataFrame(columns=KOLOM_ANGGARAN)
+    #     df_anggaran.to_csv(path_anggaran, index=False)
     
     # ===============================
     # CEK keuangan.csv
@@ -186,4 +186,4 @@ def tabel_rapih(df, judul="DATA"):
     print(tabulate(df_tampil, headers='keys', tablefmt='psql', showindex=False))
 
 def format_rupiah(angka):
-    return f"Rp{angka:,.0f}".replace(",", ".")
+    return f"Rp {int(angka):,}".replace(",", ".")
