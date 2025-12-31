@@ -53,29 +53,36 @@ def main():
             
             elif peran == "manajer_keuangan":
                 # manajer punya akses spesial ke menu admin juga /kei
-                while True:
-                    print("\n--- MENU UTAMA MANAJER ---")
-                    print("1. Kelola Keuangan")
-                    print("2. Kelola User (Admin)")
-                    print("3. Lihat Laporan")
-                    print("0. Logout")
-                    opsi = input("Pilih: ")
-                    
-                    if opsi == "1": 
-                        menu_manajer(data_user)
-                    elif opsi == "2": 
-                        menu_admin(data_user)
-                    elif opsi == "3": 
-                        menu_laporan(data_user)
-                    elif opsi == "0": 
-                        break
-            
-            elif peran == "direktur" or peran == "auditor":
-                menu_laporan(data_user)
-                
-            else:
-                print("Role tidak dikenali.")
+                print("\n==== MENU UTAMA MANAJER ====")
+                print("1. Kelola Keuangan")
+                print("2. Kelola User")
+                print("3. Lihat Laporan")
+                print("0. Logout")
 
+                while True:
+                    opsi = input("Pilih: ").strip()
+
+                    if opsi == "1":
+                        menu_manajer(data_user)
+
+                    elif opsi == "2":
+                        menu_admin(data_user)
+
+                    elif opsi == "3":
+                        menu_laporan(data_user)
+
+                    elif opsi == "0":
+                        break
+
+                    else:
+                        print("⚠️  Pilihan tidak valid! Silakan input ulang.")
+
+            elif peran in ("direktur", "auditor"):
+                menu_laporan(data_user)
+
+            else:
+                print("⚠️ Role tidak dikenali.")
+        
             # kalau loop menu selesai (user pilih logout), tanya mau keluar aplikasi gak? /kei
             lagi = input("\nApakah ada user lain yang mau login? (y/n): ")
             if lagi.lower() != 'y':
