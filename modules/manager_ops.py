@@ -19,7 +19,7 @@ def menu_manajer(user_sedang_login):
         elif pilihan == "0":
             break
         else:
-            print("Pilihan tidak valid! Silakan pilih menu yang tersedia.")
+            print("⚠️  Pilihan tidak valid! Silakan pilih menu yang tersedia.")
 
 # 1. Fitur Persetujuan dan Penolakan Pengajuan Dana    /farah
 def proses_persetujuan_dana():
@@ -49,7 +49,7 @@ def proses_persetujuan_dana():
 
     # Kode pengajuan       /farah
     if id_target not in data_pending["id_pengajuan"].values:
-        print("ID tidak ditemukan atau status bukan Menunggu.")
+        print("⚠️  ID tidak ditemukan atau status bukan Menunggu!")
         return
     
     # info detail pengajuan / najwa
@@ -113,7 +113,7 @@ def proses_persetujuan_dana():
                 break
             else:
                 kurang = total_pengajuan - saldo_perusahaan
-                print(f"GAGAL: Saldo perusahaan tidak cukup! (Kurang {format_rupiah(kurang)})")
+                print(f"⚠️ GAGAL: Saldo perusahaan tidak cukup! (Kurang {format_rupiah(kurang)})")
                 return
         
         # rev nambah alasan penolakan / najwa
@@ -172,11 +172,11 @@ def set_limit_pengajuan():
                     print("\ncontoh: 1000000 / 1_000_000 untuk 1 juta")
                     limit_baru = int(input("\nMasukkan limit baru: "))
                 except ValueError:
-                    print("❌ Input harus berupa angka. Coba lagi! ")
+                    print("⚠️  Input harus berupa angka. Coba lagi! ")
                     continue
 
                 if limit_baru <= 0:
-                    print("❌ Limit harus lebih dari 0. Coba lagi!")
+                    print("⚠️  Limit harus lebih dari 0. Coba lagi!")
                     continue
 
                 data_keuangan.loc[0, "limit_pengajuan"] = limit_baru
@@ -189,4 +189,4 @@ def set_limit_pengajuan():
             return
 
         else:
-            print("\n❌ Pilihan tidak valid! Silakan pilih menu yang tersedia.")
+            print("\n⚠️  Pilihan tidak valid! Silakan pilih menu yang tersedia.")
