@@ -12,7 +12,7 @@ KOLOM_USER = ["id", "username", "password", "role", "divisi"]
 KOLOM_PENGAJUAN = ["id", "tanggal", "pemohon", "divisi", "kategori", "nominal", "status"]
 KOLOM_ANGGARAN = ["kategori", "total_anggaran"]
 KOLOM_KEUANGAN = ["saldo", "limit_pengajuan"]
-KOLOM_RINCIAN_PENGAJUAN = ["id_pengajuan", "tipe", "nama_item", "jumlah", "harga_satuan", "subtotal"]
+KOLOM_RINCIAN_PENGAJUAN = ["id_rincian","id_pengajuan", "tipe", "nama_item", "jumlah", "harga_satuan", "subtotal"]
 
 def siapkan_folder_dan_file():
     """

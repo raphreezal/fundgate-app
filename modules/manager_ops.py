@@ -39,7 +39,7 @@ def proses_persetujuan_dana():
         return
     
     # Pengajuan ada        /farah
-    data_pending.loc[:, "total"] = data_pending["total"].map(format_rupiah) # format rupiah biar enak diliat /kei
+    data_pending["total"] = data_pending["total"].map(format_rupiah) # format rupiah biar enak diliat /kei
     tabel_rapih(
         data_pending[["id_pengajuan", "divisi", "jenis_pengajuan", "total", "status"]],
         judul="DAFTAR PENGAJUAN" # judul tabel /kei
@@ -71,9 +71,9 @@ def proses_persetujuan_dana():
         print("Tidak ada rincian barang.")
     else:
         detail_view = detail.copy()
-        detail_view.loc[:, "harga_satuan"] = detail_view["harga_satuan"].map(format_rupiah)
-        detail_view.loc[:, "subtotal"] = detail_view["subtotal"].map(format_rupiah)
-        
+        detail_view["harga_satuan"] = detail_view["harga_satuan"].map(format_rupiah)
+        detail_view["subtotal"] = detail_view["subtotal"].map(format_rupiah)
+
         tabel_rapih(detail_view[["nama_item", "jumlah", "harga_satuan", "subtotal"]])
 
         # print(
@@ -88,6 +88,8 @@ def proses_persetujuan_dana():
     # ambil info nominal pengajuan tersebut /kei
     # rev / najwa
     total_pengajuan = data_pilih["total"] # ambil nominal sebelum di format /kei
+    
+    
 
     print(f"\nTotal Pengajuan           : {format_rupiah(total_pengajuan)}") 
     print(f"Saldo Perusahaan Saat Ini : {format_rupiah(saldo_perusahaan)}")
@@ -167,6 +169,7 @@ def set_limit_pengajuan():
         if pilihan == "1":
             while True:
                 try:
+                    print("\ncontoh: 1000000 / 1_000_000 untuk 1 juta")
                     limit_baru = int(input("\nMasukkan limit baru: "))
                 except ValueError:
                     print("❌ Input harus berupa angka. Coba lagi! ")
