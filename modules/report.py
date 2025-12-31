@@ -25,7 +25,7 @@ def menu_laporan(user_sedang_login):
         df = siapkan_data_laporan()
         
         clear_screen()
-        print(f"\n=== DASHBOARD DIREKTUR/AUDITOR ===")
+        print(f"\n=== DASHBOARD LAPORAN ===")
         print(f"User: {user_sedang_login['username']} | Role: {user_sedang_login['role']}")
         print("-" * 40)
         print("1. Laporan Detail (Semua Data)")

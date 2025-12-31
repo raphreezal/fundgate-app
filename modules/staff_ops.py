@@ -86,11 +86,15 @@ def buat_pengajuan_dana(user):
             "harga_satuan": harga,
             "subtotal": subtotal
         })
+        
+        tabel_rapih(rincian_list, "LIST BARANG")
 
         if input("Tambah lagi? (y/n): ").lower() != "y":
             break
-
-    print(f"\nTOTAL PENGAJUAN: Rp{total}")
+        
+    clear_screen()
+    tabel_rapih(rincian_list)
+    print(f"\nTOTAL PENGAJUAN: {format_rupiah(total)}")
     if input("Konfirmasi pengajuan? (y/n): ").lower() != "y":
         return
 

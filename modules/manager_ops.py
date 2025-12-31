@@ -88,6 +88,8 @@ def proses_persetujuan_dana():
     # ambil info nominal pengajuan tersebut /kei
     # rev / najwa
     total_pengajuan = data_pilih["total"] # ambil nominal sebelum di format /kei
+    
+    
 
     print(f"\nTotal Pengajuan           : {format_rupiah(total_pengajuan)}") 
     print(f"Saldo Perusahaan Saat Ini : {format_rupiah(saldo_perusahaan)}")
