@@ -21,7 +21,7 @@ def menu_kepala_divisi(user_sedang_login):
             print("\n======= Logout Berhasil! =======")
             break
         else:
-            print("======= Pilihan tidak ada. =======")
+            print("⚠️ Pilihan tidak valid. Silakan pilih menu yang tersedia!")
 
 def buat_pengajuan_dana(user):
     print("\n=== FORM PENGAJUAN DANA ===")
@@ -194,15 +194,22 @@ def riwayat_pengajuan(user):
 
 # detail
 def lihat_detail_pengajuan(rincian):
-    idp = input("Masukkan ID Pengajuan: ")
-    detail = rincian[rincian["id_pengajuan"] == idp]
+    while True:
+        idp = input("\nMasukkan ID Pengajuan (0 untuk kembali): ")
+        # biar bisa back    /farah
+        if idp == "0":
+            return
 
-    if detail.empty:
-        print("Detail tidak ditemukan.")
-    else:
-        # print(detail[["tipe","nama_item","jumlah","harga_satuan","subtotal"]])
-        tampilkan_interaktif(detail[["tipe","nama_item","jumlah","harga_satuan","subtotal"]], "Detail Pengajuan")
+        detail = rincian[rincian["id_pengajuan"] == idp]
 
+        if detail.empty:
+            print("⚠️  Detail tidak ditemukan. Coba lagi!")
+        else:
+            tampilkan_interaktif(
+                detail[["tipe", "nama_item", "jumlah", "harga_satuan", "subtotal"]],
+                "Detail Pengajuan"
+            )
+            return
 
 # edit form (jika status masih menunggu) / najwa
 def edit_pengajuan(user, pengajuan, rincian):
