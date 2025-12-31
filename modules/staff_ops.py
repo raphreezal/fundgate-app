@@ -4,25 +4,6 @@ from modules.utility import baca_data, format_rupiah, simpan_data, tampilkan_int
 import random
 
 # menu kepala divisi rev / najwa
-def menu_kepala_divisi(user_sedang_login):
-    while True:
-        print(f"\n=== MENU KEPALA DIVISI: {user_sedang_login['divisi']} ===")
-        print("1. Buat Pengajuan Dana")
-        print("2. Riwayat Pengajuan Dana")
-        print("0. Logout")
-
-        pilihan = input("Pilih menu (0-2): ")
-
-        if pilihan == "1":
-            buat_pengajuan_dana(user_sedang_login)
-        elif pilihan == "2":
-            riwayat_pengajuan(user_sedang_login)
-        elif pilihan == "0":
-            print("\n======= Logout Berhasil! =======")
-            break
-        else:
-            print("======= Pilihan tidak ada. =======")
-
 def buat_pengajuan_dana(user):
     print("\n=== FORM PENGAJUAN DANA ===")
 
@@ -37,9 +18,10 @@ def buat_pengajuan_dana(user):
     else:
         jenis_pengajuan = ["Operasional", "Inventaris"][int(pilih)-1]
 
-    if(jenis_pengajuan == "Operasional"):
+    # generate ID pengajuan
+    if jenis_pengajuan == "Operasional":
         id_pengajuan = "OPT-" + datetime.now().strftime("%H%M%S") + str(random.randint(0,99))
-    elif (jenis_pengajuan == "Inventaris"):
+    elif jenis_pengajuan == "Inventaris":
         id_pengajuan = "INV-" + datetime.now().strftime("%H%M%S") + str(random.randint(0,99))
     else:
         id_pengajuan = "LNS-" + datetime.now().strftime("%H%M%S") + str(random.randint(0,99))
@@ -49,13 +31,15 @@ def buat_pengajuan_dana(user):
     rincian_list = []
     total = 0
 
+    # Form pengajuan    /farah
     while True:
         while True:
             print("\nInput Rincian:")
             print("1. Barang")
             print("2. Jasa")
             print("0. Cancel")
-            tipe = input("\nPilih tipe (0/1/2): ")
+            tipe = input("Pilih tipe (0/1/2): ")
+
             if tipe == "1":
                 tipe = "Barang"
                 break
@@ -66,13 +50,12 @@ def buat_pengajuan_dana(user):
                 clear_screen()
                 return
             else:
-                print("Pilihan tidak valid.")
+                print("⚠️ Pilihan tidak valid. Silakan pilih menu yang tersedia!")
 
         nama = input("Nama: ")
         jumlah = int(input("Jumlah: "))
         harga = int(input("Harga satuan: "))
         subtotal = jumlah * harga
-
         total += subtotal
 
         id_rincian = "RIN-" + datetime.now().strftime("%H%M%S") + str(random.randint(0,99))
@@ -86,18 +69,47 @@ def buat_pengajuan_dana(user):
             "harga_satuan": harga,
             "subtotal": subtotal
         })
-        
-        tabel_rapih(rincian_list, "LIST BARANG")
+
+        tabel_rapih(rincian_list, "LIST RINCIAN")
 
         if input("Tambah lagi? (y/n): ").lower() != "y":
             break
-        
-    clear_screen()
-    tabel_rapih(rincian_list)
-    print(f"\nTOTAL PENGAJUAN: {format_rupiah(total)}")
-    if input("Konfirmasi pengajuan? (y/n): ").lower() != "y":
-        return
 
+    # Ngecek limit
+    data_keuangan = baca_data("keuangan")
+    limit_pengajuan = data_keuangan.loc[0, "limit_pengajuan"]
+
+    clear_screen()
+    tabel_rapih(rincian_list, "RINGKASAN PENGAJUAN")
+
+    print(f"\nTOTAL PENGAJUAN : {format_rupiah(total)}")
+    print(f"LIMIT PENGAJUAN : {format_rupiah(limit_pengajuan)}")
+
+    status_pengajuan = "Menunggu"
+    catatan_manajer = ""
+
+    # Nominal pengajuan lebih dari limit    /farah
+    if total > limit_pengajuan:
+        print("\n⚠️  Nominal pengajuan melebihi limit!")
+        print("1. Ajukan sebagai Dana Darurat")
+        print("2. Batalkan Pengajuan")
+
+        while True:
+            opsi = input("Pilih opsi (1/2): ")
+            if opsi == "1":
+                status_pengajuan = "Menunggu (Darurat)"
+                catatan_manajer = "Pengajuan dana darurat (melebihi limit)"
+                break
+            elif opsi == "2":
+                print("\n======= Pengajuan dibatalkan =======")
+                return
+            else:
+                print("⚠️ Pilihan tidak valid. Silakan pilih menu yang tersedia!")
+    else:
+        if input("\nKonfirmasi pengajuan? (y/n): ").lower() != "y":
+            return
+    
+    # Simpan data pengajuan     /farah
     data_pengajuan = {
         "id_pengajuan": id_pengajuan,
         "tanggal": tanggal,
@@ -105,9 +117,9 @@ def buat_pengajuan_dana(user):
         "nama_kepala_divisi": user["username"],
         "divisi": user["divisi"],
         "jenis_pengajuan": jenis_pengajuan,
-        "status": "Menunggu",
+        "status": status_pengajuan,
         "total": total,
-        "catatan_manajer": ""
+        "catatan_manajer": catatan_manajer
     }
 
     df_pengajuan = pd.concat([
@@ -123,7 +135,8 @@ def buat_pengajuan_dana(user):
     simpan_data("pengajuan", df_pengajuan)
     simpan_data("rincian_pengajuan", df_rincian)
 
-    print("======= Pengajuan berhasil dibuat! =======")
+    print("\n======= Pengajuan berhasil dibuat! =======")
+
 
 
 # riwayat
