@@ -1,5 +1,5 @@
 import os
-from modules.data_store import baca_data,clear_screen, tampilkan_interaktif #import datanya dari data store sebagai baca data/irfan
+from modules.utility import baca_data,clear_screen, format_rupiah, tampilkan_interaktif 
 import pandas as pd #pastikan sudah pip install pandas /kei
 
 
@@ -45,32 +45,35 @@ def menu_laporan(user_sedang_login):
             # tampilkan semua data mentah tapi interaktif /kei
             # mengapus kolom bantuan biar kgk penuh /kei 
             view_df = df.drop(columns=['tahun', 'bulan', 'bulan_angka'], errors='ignore')
+            view_df['total'] = view_df['total'].map(format_rupiah)
             tampilkan_interaktif(view_df[["id_pengajuan","tanggal","jenis_pengajuan","nama_kepala_divisi","divisi","total", "status", "catatan_manajer"]], judul="SEMUA DATA PENGAJUAN")
             
         elif pilihan == "2":
             # Group by divisi /kei
             rekap = df.groupby(['divisi'])['total'].sum().reset_index()
+            rekap['total'] = rekap['total'].map(format_rupiah)
             tampilkan_interaktif(rekap, judul="TOTAL PENGELUARAN PER DIVISI")
             
         elif pilihan == "3":
             # Group by tahun dan Bulan (biar Jan 2024 beda sama Jan 2025) /kei
             rekap = df.groupby(['tahun', 'bulan_angka', 'bulan'])['total'].sum().reset_index()
-            # Mengubah penulisan nominal format Indonesia (ada titik)  /farah
-            rekap['total'] = rekap['total'].map(lambda x: f"{int(x):,}".replace(",", "."))
             # Sort dulu berdasarkan tahun dan bulan angka biar urut /kei
             rekap = rekap.sort_values(by=['tahun', 'bulan_angka'])
             
             # tampilkan kolom yg perlu aja /kei
-            view_rekap = rekap[['tahun', 'bulan', 'total']]
+            view_rekap = rekap[['tahun', 'bulan', 'total']].copy()
             # Mengubah penulisan nominal format Indonesia (ada titik)  /farah
-            view_rekap['total'] = view_rekap['total'].map(lambda x: f"{int(x):,}".replace(",", "."))
-            tampilkan_interaktif(view_rekap, judul="TOTAL PENGELUARAN PER BULAN")
+            #perbaiikan format rupiah /kei
+            view_rekap.loc[:, 'total'] = view_rekap['total'].map(format_rupiah)
             
+            tampilkan_interaktif(view_rekap, judul="TOTAL PENGELUARAN PER BULAN")
+
         elif pilihan == "4":
             # Group by tahun /kei
             rekap = df.groupby(['tahun'])['total'].sum().reset_index()
             # Mengubah nominal scientific jadi yang bisa dibaca  /farah
-            rekap['total'] = rekap['total'].map(lambda x: f"{int(x):,}".replace(",", "."))
+            # perbaikan format rupiah /kei
+            rekap['total'] = rekap['total'].map(format_rupiah)
             tampilkan_interaktif(rekap, judul="TOTAL PENGELUARAN TAHUNAN")
             
         elif pilihan == "0":
