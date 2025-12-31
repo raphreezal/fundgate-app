@@ -2,15 +2,13 @@ import pandas as pd
 from datetime import datetime
 from modules.utility import baca_data, simpan_data, tampilkan_interaktif, tabel_rapih, clear_screen
 
-# ===============================
-# MENU KEPALA DIVISI
-# ===============================
+# menu kepala divisi rev / najwa
 def menu_kepala_divisi(user_sedang_login):
     while True:
         print(f"\n=== MENU KEPALA DIVISI: {user_sedang_login['divisi']} ===")
         print("1. Buat Pengajuan Dana")
         print("2. Riwayat Pengajuan Dana")
-        print("0. Kembali")
+        print("0. Logout")
 
         pilihan = input("Pilih menu (0-2): ")
 
@@ -19,14 +17,11 @@ def menu_kepala_divisi(user_sedang_login):
         elif pilihan == "2":
             riwayat_pengajuan(user_sedang_login)
         elif pilihan == "0":
+            print("\n======= Logout Berhasil! =======")
             break
         else:
-            print("Pilihan tidak ada.")
+            print("======= Pilihan tidak ada. =======")
 
-
-# ===============================
-# CREATE PENGAJUAN
-# ===============================
 def buat_pengajuan_dana(user):
     print("\n=== FORM PENGAJUAN DANA ===")
 
@@ -41,7 +36,7 @@ def buat_pengajuan_dana(user):
     else:
         jenis_pengajuan = ["Operasional", "Inventaris"][int(pilih)-1]
 
-    id_pengajuan = "REQ-" + datetime.now().strftime("%Y%m%d%H%M%S")
+    id_pengajuan = "FG-" + datetime.now().strftime("%Y%m%d%H%M%S")
     tanggal = datetime.now().strftime("%Y-%m-%d")
 
     rincian_list = []
@@ -101,12 +96,10 @@ def buat_pengajuan_dana(user):
     simpan_data("pengajuan", df_pengajuan)
     simpan_data("rincian_pengajuan", df_rincian)
 
-    print("✅ Pengajuan berhasil dibuat.")
+    print("======= Pengajuan berhasil dibuat! =======")
 
 
-# ===============================
-# RIWAYAT + MENU AKSI
-# ===============================
+# riwayat
 def riwayat_pengajuan(user):
     clear_screen()
     pengajuan = baca_data("pengajuan")
@@ -137,9 +130,7 @@ def riwayat_pengajuan(user):
         hapus_pengajuan(user, pengajuan, rincian)
 
 
-# ===============================
-# VIEW DETAIL
-# ===============================
+# detail
 def lihat_detail_pengajuan(rincian):
     idp = input("Masukkan ID Pengajuan: ")
     detail = rincian[rincian["id_pengajuan"] == idp]
@@ -151,9 +142,7 @@ def lihat_detail_pengajuan(rincian):
         tampilkan_interaktif(detail[["tipe","nama_item","jumlah","harga_satuan","subtotal"]], "Detail Pengajuan")
 
 
-# ===============================
-# EDIT (HANYA STATUS MENUNGGU)
-# ===============================
+# edit form (jika status masih menunggu) / najwa
 def edit_pengajuan(user, pengajuan, rincian):
     idp = input("ID pengajuan yang diedit: ")
 
@@ -163,7 +152,7 @@ def edit_pengajuan(user, pengajuan, rincian):
         return
 
     if data.iloc[0]["status"] != "Menunggu":
-        print("❌ Pengajuan sudah diproses.")
+        print("======= Tidak dapat diedit. Pengajuan sudah diproses. =======")
         return
 
     rincian = rincian[rincian["id_pengajuan"] != idp]
@@ -200,12 +189,10 @@ def edit_pengajuan(user, pengajuan, rincian):
     simpan_data("pengajuan", pengajuan)
     simpan_data("rincian_pengajuan", rincian)
 
-    print("✅ Pengajuan berhasil diedit.")
+    print("======= Pengajuan berhasil diedit! =======")
 
 
-# ===============================
-# DELETE
-# ===============================
+# hapus form (jika status masih menunggu) / najwa
 def hapus_pengajuan(user, pengajuan, rincian):
     idp = input("ID pengajuan yang dihapus: ")
 
@@ -215,7 +202,7 @@ def hapus_pengajuan(user, pengajuan, rincian):
         return
 
     if data.iloc[0]["status"] != "Menunggu":
-        print("❌ Tidak bisa dihapus.")
+        print("======= Tidak dapat dihapus. =======")
         return
 
     pengajuan = pengajuan[pengajuan["id_pengajuan"] != idp]
@@ -224,4 +211,4 @@ def hapus_pengajuan(user, pengajuan, rincian):
     simpan_data("pengajuan", pengajuan)
     simpan_data("rincian_pengajuan", rincian)
 
-    print("🗑️ Pengajuan berhasil dihapus.")
+    print("======= Pengajuan berhasil dihapus! =======")
