@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from modules.data_store import baca_data, simpan_data, tampilkan_interaktif, tabel_rapih, clear_screen
+from modules.utility import baca_data, simpan_data, tampilkan_interaktif, tabel_rapih, clear_screen
 
 # menu kepala divisi rev / najwa
 def menu_kepala_divisi(user_sedang_login):

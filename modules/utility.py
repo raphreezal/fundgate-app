@@ -64,13 +64,13 @@ def siapkan_folder_dan_file():
         df_rincian = pd.DataFrame(columns=KOLOM_RINCIAN_PENGAJUAN)
         df_rincian.to_csv(path_rincian, index=False)
 
-    # ===============================
-    # CEK anggaran.csv
-    # ===============================
-    path_anggaran = FOLDER_DATA + "anggaran.csv"
-    if os.path.exists(path_anggaran) == False:
-        df_anggaran = pd.DataFrame(columns=KOLOM_ANGGARAN)
-        df_anggaran.to_csv(path_anggaran, index=False)
+    # # ===============================
+    # # CEK anggaran.csv
+    # # ===============================
+    # path_anggaran = FOLDER_DATA + "anggaran.csv"
+    # if os.path.exists(path_anggaran) == False:
+    #     df_anggaran = pd.DataFrame(columns=KOLOM_ANGGARAN)
+    #     df_anggaran.to_csv(path_anggaran, index=False)
     
     # ===============================
     # CEK keuangan.csv
@@ -179,11 +179,12 @@ def tampilkan_interaktif(df, judul="DATA"):
         else:
             print("Pilihan tidak valid.")
 
-def tabel_rapih(df, judul="DATA"):
+def tabel_rapih(df, judul="DATA", judul_cetak=True):
     df_tampil = df.copy()
-    print(f"\n=== {judul} ===")
+    if judul_cetak:
+        print(f"\n=== {judul} ===")
     # mengembalikan string tabel yang rapi dari DataFrame /kei
     print(tabulate(df_tampil, headers='keys', tablefmt='psql', showindex=False))
 
 def format_rupiah(angka):
-    return f"Rp{angka:,.0f}".replace(",", ".")
+    return f"Rp {int(angka):,}".replace(",", ".")

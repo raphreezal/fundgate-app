@@ -1,5 +1,5 @@
 import re
-from modules.data_store import baca_data
+from modules.utility import baca_data
 
 # validasi password / najwa
 def validasi_password(password):

@@ -1,3 +1,4 @@
 id,username,password,role,divisi
 1,admin,123,manajer_keuangan,Finance
 2,yanto,Yanto123#,kepala_divisi,pemasaran
+3,kei,kei,kepala_divisi,IT
