@@ -161,6 +161,7 @@ def buat_pengajuan_dana(user):
 # riwayat
 def riwayat_pengajuan(user):
     clear_screen()
+
     pengajuan = baca_data("pengajuan")
     rincian = baca_data("rincian_pengajuan")
 
@@ -170,32 +171,37 @@ def riwayat_pengajuan(user):
         print("Belum ada pengajuan.")
         return
 
-    # print("\n=== RIWAYAT PENGAJUAN ===")
-    # print(data[["id_pengajuan", "tanggal", "total", "status"]].to_string(index=False))
-
     data_view = data.copy()
     data_view["total"] = data_view["total"].map(format_rupiah)
-    tabel_rapih(data_view[["id_pengajuan","tanggal", "jenis_pengajuan", "total", "status"]], "RIWAYAT PENGAJUAN")
+
+    tabel_rapih(
+        data_view[["id_pengajuan", "tanggal", "jenis_pengajuan", "total", "status"]],
+        "RIWAYAT PENGAJUAN"
+    )
 
     print("\n1. Lihat Detail")
     print("2. Edit Pengajuan")
     print("3. Hapus Pengajuan")
     print("0. Kembali")
 
-    pilih = input("Pilih: ")
+    while True:
+        pilih = input("\nPilih: ")
 
-    if pilih == "1":
-        lihat_detail_pengajuan(rincian)
-    elif pilih == "2":
-        edit_pengajuan(user, pengajuan, rincian)
-    elif pilih == "3":
-        hapus_pengajuan(user, pengajuan, rincian)
-
+        if pilih == "1":
+            lihat_detail_pengajuan(rincian)
+        elif pilih == "2":
+            edit_pengajuan(user, pengajuan, rincian)
+        elif pilih == "3":
+            hapus_pengajuan(user, pengajuan, rincian)
+        elif pilih == "0":
+            break
+        else:
+            print("⚠️  Pilihan tidak valid. Silakan pilih menu yang tersedia!")
 
 # detail
 def lihat_detail_pengajuan(rincian):
     while True:
-        idp = input("\nMasukkan ID Pengajuan (0 untuk kembali): ")
+        idp = input("Masukkan ID Pengajuan (0 untuk kembali): ")
         # biar bisa back    /farah
         if idp == "0":
             return
