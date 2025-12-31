@@ -1,4 +1,4 @@
-from modules.data_store import baca_data, simpan_data
+from modules.data_store import baca_data, simpan_data, clear_screen, format_rupiah
 
 def menu_manajer(user_sedang_login):
     while True:
@@ -17,10 +17,9 @@ def menu_manajer(user_sedang_login):
         elif pilihan == "3":
             set_limit_pengajuan()
         elif pilihan == "0":
-            print("Log out berhasil. Sampai jumpa!")
             break
         else:
-            print("Pilihan tidak valid!")
+            print("Pilihan tidak valid! Silakan pilih menu yang tersedia.")
 
 # 1. Fitur Persetujuan dan Penolakan Pengajuan Dana    /farah
 def proses_persetujuan_dana():
@@ -40,7 +39,7 @@ def proses_persetujuan_dana():
         return
     
     # Pengajuan ada        /farah
-    print("\n-------- DAFTAR PENGAJUAN --------")
+    print("\n======== DAFTAR PENGAJUAN ========")
 
     # tampilkan kolom ID, divisi, nominal biar jelas /kei
     print(data_pending[["id_pengajuan", "divisi", "jenis_pengajuan", "total", "status"]].to_string(index=False))
@@ -57,7 +56,7 @@ def proses_persetujuan_dana():
         tabel_pengajuan["id_pengajuan"] == id_target
     ].iloc[0]
 
-    print("\n--- INFORMASI PENGAJUAN ---")
+    print("\n======== INFORMASI PENGAJUAN ========")
     print(f"ID Pengajuan    : {data_pilih['id_pengajuan']}")
     print(f"Divisi          : {data_pilih['divisi']}")
     print(f"Jenis Pengajuan : {data_pilih['jenis_pengajuan']}")
@@ -66,7 +65,7 @@ def proses_persetujuan_dana():
     # nampilin rincian barang / najwa
     detail = tabel_rincian[tabel_rincian["id_pengajuan"] == id_target]
 
-    print("\n--- RINCIAN BARANG / JASA ---")
+    print("\n======== RINCIAN BARANG / JASA ========")
     if detail.empty:
         print("Tidak ada rincian barang.")
     else:
@@ -137,35 +136,50 @@ def proses_persetujuan_dana():
 
 # 2. Fitur Lihat Saldo dan Limit    /farah
 def lihat_saldo_dan_limit():
+    clear_screen()
     data_keuangan = baca_data("keuangan")
 
     saldo = data_keuangan.loc[0, "saldo"]
     limit = data_keuangan.loc[0, "limit_pengajuan"]
 
-    print("\n===== INFORMASI KEUANGAN =====")
-    print(f"Saldo perusahaan : Rp{saldo}")
-    print(f"Limit pengajuan  : Rp{limit}")
-
+    print("\n======== INFORMASI KEUANGAN ========")
+    print(f"Saldo perusahaan : {format_rupiah(saldo):>15}")
+    print(f"Limit pengajuan  : {format_rupiah(limit):>15}")
 
 # 3. Fitur Set Limit Pengajuan Dana    /farah
 def set_limit_pengajuan():
-    data_keuangan = baca_data("keuangan")
+    while True:
+        data_keuangan = baca_data("keuangan")
+        limit = data_keuangan.loc[0, "limit_pengajuan"]
 
-    print("\n===== SET LIMIT PENGAJUAN =====")
-    print(f"Limit saat ini : Rp{data_keuangan.loc[0, 'limit_pengajuan']}")
+        print("======== SET LIMIT PENGAJUAN ========")
+        print(f"Limit saat ini : {format_rupiah(limit):>15}")
 
-    try:
-        limit_baru = int(input("Masukkan limit baru: "))
-    except ValueError:
-        print("Input harus berupa angka.")
-        return
+        print("\n1. Set nominal limit baru")
+        print("0. Batal / Kembali")
 
-    if limit_baru <= 0:
+        pilihan = input("Pilih menu: ")
 
-        print("Limit harus lebih dari 0.")
-        return
+        if pilihan == "1":
+            while True:
+                try:
+                    limit_baru = int(input("\nMasukkan limit baru: "))
+                except ValueError:
+                    print("❌ Input harus berupa angka. Coba lagi! ")
+                    continue
 
-    data_keuangan.loc[0, "limit_pengajuan"] = limit_baru
-    simpan_data("keuangan", data_keuangan)
+                if limit_baru <= 0:
+                    print("❌ Limit harus lebih dari 0. Coba lagi!")
+                    continue
 
-    print("Limit pengajuan berhasil diperbarui.")
+                data_keuangan.loc[0, "limit_pengajuan"] = limit_baru
+                simpan_data("keuangan", data_keuangan)
+
+                print("\n✅ Limit pengajuan berhasil diperbarui.")
+                return
+
+        elif pilihan == "0":
+            return
+
+        else:
+            print("\n❌ Pilihan tidak valid! Silakan pilih menu yang tersedia.")
