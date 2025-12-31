@@ -4,6 +4,25 @@ from modules.utility import baca_data, format_rupiah, simpan_data, tampilkan_int
 import random
 
 # menu kepala divisi rev / najwa
+def menu_kepala_divisi(user_sedang_login):
+    while True:
+        print(f"\n=== MENU KEPALA DIVISI: {user_sedang_login['divisi']} ===")
+        print("1. Buat Pengajuan Dana")
+        print("2. Riwayat Pengajuan Dana")
+        print("0. Logout")
+
+        pilihan = input("Pilih menu (0-2): ")
+
+        if pilihan == "1":
+            buat_pengajuan_dana(user_sedang_login)
+        elif pilihan == "2":
+            riwayat_pengajuan(user_sedang_login)
+        elif pilihan == "0":
+            print("\n======= Logout Berhasil! =======")
+            break
+        else:
+            print("======= Pilihan tidak ada. =======")
+
 def buat_pengajuan_dana(user):
     print("\n=== FORM PENGAJUAN DANA ===")
 
