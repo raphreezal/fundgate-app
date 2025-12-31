@@ -132,9 +132,18 @@ def tampilkan_interaktif(df, judul="DATA"):
         if aksi == "1":
             # --- FITUR SORTING --- /kei
             cols = list(df_tampil.columns)
-            print("\nKolom tersedia:", ", ".join(cols))
-            kolom = input("Urutkan berdasarkan kolom apa? : ")
+            print("\nKolom tersedia:")
+            for i, c in enumerate(cols):
+                print(f"{i}. {c}")
+                
+            i_kolom = input("Urutkan berdasarkan kolom apa? : ")
             
+            if i_kolom.isdigit() and 0 <= int(i_kolom) < len(cols):
+                kolom = cols[int(i_kolom)]
+            else:
+                input("Nomor kolom salah! Enter untuk lanjut...")
+                continue
+
             if kolom in cols:
                 urutan = input("Ascending (a) atau Descending (d)? : ").lower()
                 is_asc = True if urutan == 'a' else False
