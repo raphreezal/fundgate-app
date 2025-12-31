@@ -1,6 +1,7 @@
 import pandas as pd
 from datetime import datetime
-from modules.utility import baca_data, simpan_data, tampilkan_interaktif, tabel_rapih, clear_screen
+from modules.utility import baca_data, format_rupiah, simpan_data, tampilkan_interaktif, tabel_rapih, clear_screen
+import random
 
 # ===============================
 # MENU KEPALA DIVISI
@@ -41,9 +42,6 @@ def buat_pengajuan_dana(user):
     else:
         jenis_pengajuan = ["Operasional", "Inventaris"][int(pilih)-1]
 
-    id_pengajuan = "REQ-" + datetime.now().strftime("%Y%m%d%H%M%S")
-    tanggal = datetime.now().strftime("%Y-%m-%d")
-
     rincian_list = []
     total = 0
 
@@ -52,6 +50,12 @@ def buat_pengajuan_dana(user):
         print("1. Barang")
         print("2. Jasa")
         tipe = "Barang" if input("Pilih: ") == "1" else "Jasa"
+
+        if(tipe == "Barang"):
+            id_pengajuan = "BAR-" + datetime.now().strftime("%H%M%S") + str(random.randint(100,999))
+        else:
+            id_pengajuan = "JAS-" + datetime.now().strftime("%H%M%S") + str(random.randint(100,999))
+        tanggal = datetime.now().strftime("%Y-%m-%d")
 
         nama = input("Nama: ")
         jumlah = int(input("Jumlah: "))
@@ -120,7 +124,10 @@ def riwayat_pengajuan(user):
 
     # print("\n=== RIWAYAT PENGAJUAN ===")
     # print(data[["id_pengajuan", "tanggal", "total", "status"]].to_string(index=False))
-    tabel_rapih(data[["id_pengajuan","jenis_pengajuan", "tanggal", "total", "status"]], "RIWAYAT PENGAJUAN")
+
+    data_view = data.copy()
+    data_view.loc[:, "total"] = data_view["total"].map(format_rupiah)
+    tabel_rapih(data_view[["id_pengajuan","jenis_pengajuan", "tanggal", "total", "status"]], "RIWAYAT PENGAJUAN")
 
     print("\n1. Lihat Detail")
     print("2. Edit Pengajuan")
