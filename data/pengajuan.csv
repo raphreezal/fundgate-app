@@ -1,3 +1,4 @@
 id_pengajuan,tanggal,id_kepala_divisi,nama_kepala_divisi,divisi,jenis_pengajuan,status,total,catatan_manajer
 REQ-20251230122456,2025-12-30,2,yanto,pemasaran,Operasional,Disetujui,16250000,-
 REQ-20251230124951,2025-12-30,2,yanto,pemasaran,Operasional,Ditolak,40000,boros
+FG-20251230224636,2025-12-30,2,yanto,pemasaran,Operasional,Menunggu,58000,

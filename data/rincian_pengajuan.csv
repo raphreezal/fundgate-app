@@ -2,3 +2,5 @@ id_pengajuan,tipe,nama_item,jumlah,harga_satuan,subtotal
 REQ-20251230122456,Barang,Laptop,2,8000000,16000000
 REQ-20251230122456,Jasa,service pc,5,50000,250000
 REQ-20251230124951,Barang,teh,4,10000,40000
+FG-20251230224636,Jasa,kucing,2,20000,40000
+FG-20251230224636,Jasa,ayam,3,6000,18000
