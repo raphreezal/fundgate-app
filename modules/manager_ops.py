@@ -44,7 +44,7 @@ def proses_persetujuan_dana():
             return
     
         # Pengajuan ada        /farah
-        data_pending["total"] = data_pending["total"].map(format_rupiah) # format rupiah biar enak diliat /kei
+        data_pending["total"] = data_pending["total"].map(format_rupiah)
         tabel_rapih(
             data_pending[["id_pengajuan", "divisi", "jenis_pengajuan", "total", "status"]],
             judul="DAFTAR PENGAJUAN" # judul tabel /kei
@@ -65,49 +65,40 @@ def proses_persetujuan_dana():
             continue
 
         # info detail pengajuan / najwa
-        clear_screen()
         data_pilih = tabel_pengajuan.loc[
             tabel_pengajuan["id_pengajuan"] == id_target
         ].iloc[0]
 
-        print("\n======== INFORMASI PENGAJUAN ========")
-        print(f"ID Pengajuan    : {data_pilih['id_pengajuan']}")
-        print(f"Divisi          : {data_pilih['divisi']}")
-        print(f"Jenis Pengajuan : {data_pilih['jenis_pengajuan']}")
-        print(f"Total           : {format_rupiah(data_pilih['total'])}")
-    
-        # nampilin rincian barang / najwa
-        detail = tabel_rincian[tabel_rincian["id_pengajuan"] == id_target]
-
-        print("\n======== RINCIAN BARANG / JASA ========")
-        if detail.empty:
-            print("Tidak ada rincian barang.")
-        else:
-            detail_view = detail.copy()
-            detail_view["harga_satuan"] = detail_view["harga_satuan"].map(format_rupiah)
-            detail_view["subtotal"] = detail_view["subtotal"].map(format_rupiah)
-            tabel_rapih(detail_view[["nama_item", "jumlah", "harga_satuan", "subtotal"]])
-
-        # print(
-        #     detail_view[
-        #         ["nama_item", "jumlah", "harga_satuan", "subtotal"]
-        #     ].to_string(index=False)
-        # )
-
-        input("\nTekan Enter untuk lanjut ke keputusan...")
-
-        # ambil info nominal pengajuan tersebut /kei
-        # rev / najwa
-        total_pengajuan = data_pilih["total"] # ambil nominal sebelum di format /kei
-     
-        print(f"Saldo perusahaan saat ini : {format_rupiah(saldo_perusahaan)}")
-        print(f"Total pengajuan           : {format_rupiah(total_pengajuan)}") 
-
-        print("\n1. Setujui")
-        print("2. Tolak")
-        print("0. Batal")
+        total_pengajuan = data_pilih["total"]
+        diproses = False
+        status_baru = ""
+        catatan = ""
 
         while True:
+            clear_screen()
+            print("================ INFORMASI PENGAJUAN ================")
+            print(f"ID Pengajuan    : {data_pilih['id_pengajuan']}")
+            print(f"Divisi          : {data_pilih['divisi']}")
+            print(f"Jenis Pengajuan : {data_pilih['jenis_pengajuan']}")
+            print(f"Total           : {format_rupiah(data_pilih['total'])}")
+
+            detail = tabel_rincian[tabel_rincian["id_pengajuan"] == id_target]
+            # nampilin rincian barang / najwa
+            if detail.empty:
+                print("Tidak ada rincian barang.")
+            else:
+                view = detail.copy()
+                view["harga_satuan"] = view["harga_satuan"].map(format_rupiah)
+                view["subtotal"] = view["subtotal"].map(format_rupiah)
+                tabel_rapih(view[["nama_item", "jumlah", "harga_satuan", "subtotal"]])
+
+            print(f"\nSaldo perusahaan saat ini : {format_rupiah(saldo_perusahaan)}")
+            print(f"Total pengajuan           : {format_rupiah(total_pengajuan)}") 
+
+            print("1. Setujui")
+            print("2. Tolak")
+            print("0. Batal")
+
             keputusan = input("Pilih tindakan: ").strip()
         
             if keputusan == "1":
@@ -120,31 +111,51 @@ def proses_persetujuan_dana():
                 data_keuangan.loc[0, "saldo"] -= total_pengajuan
                 simpan_data("keuangan", data_keuangan)
                 status_baru = "Disetujui"
-                catatan = ""
+                diproses = True
                 break
         # rev nambah alasan penolakan / najwa
             elif keputusan == "2":
-                status_baru = "Ditolak"
                 catatan = input("Alasan penolakan: ")
+                status_baru = "Ditolak"
+                diproses = True
                 break
             elif keputusan == "0":
-                print("===== Proses dibatalkan ====")
-                return
+                break
             else:
-                print("⚠️  Pilihan tidak valid! Silakan pilih menu yang tersedia.")
+                print("\n⚠️  Pilihan tidak valid! Silakan pilih tindakan yang tersedia.")
+                input("Tekan Enter untuk input ulang...")
+        
+        if not diproses:
+            continue
 
-    # update status pengajuan   /najwa
-    tabel_pengajuan.loc[
-        tabel_pengajuan["id_pengajuan"] == id_target, "status"
-    ] = status_baru
+        # update status pengajuan   /najwa
+        tabel_pengajuan.loc[
+            tabel_pengajuan["id_pengajuan"] == id_target, "status"
+        ] = status_baru
 
-    tabel_pengajuan.loc[
-        tabel_pengajuan["id_pengajuan"] == id_target, "catatan_manajer"
-    ] = catatan
+        tabel_pengajuan.loc[
+            tabel_pengajuan["id_pengajuan"] == id_target, "catatan_manajer"
+        ] = catatan
 
-    simpan_data("pengajuan", tabel_pengajuan)
+        simpan_data("pengajuan", tabel_pengajuan)
 
-    print(f"\nSukses! Pengajuan {id_target} telah {status_baru}.")
+        # update status rincian
+        tabel_rincian.loc[
+            tabel_rincian["id_pengajuan"] == id_target, "status_item"
+        ] = status_baru
+
+        simpan_data("rincian_pengajuan", tabel_rincian)
+
+
+        clear_screen()
+        print("==== ✅ Pengajuan Berhasil Diproses! ====")
+        print(f"ID Pengajuan : {id_target}")
+        print(f"Status       : {status_baru}")
+
+        if status_baru == "Ditolak":
+            print(f"Catatan      : {catatan}")
+
+        input("\nTekan Enter untuk kembali ke daftar...")
 
 # 2. Fitur Lihat Saldo dan Limit    /farah
 def lihat_saldo_dan_limit():
