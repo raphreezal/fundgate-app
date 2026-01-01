@@ -53,7 +53,7 @@ def main():
                 break
 
             percobaan += 1
-            print(f"Sisa percobaan: {maks_login - percobaan}")
+            print(f"Sisa percobaan :  {maks_login - percobaan}")
 
         if percobaan == maks_login:
             print("❌ Login gagal 3 kali. Program dihentikan.")
