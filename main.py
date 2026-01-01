@@ -62,6 +62,8 @@ def main():
 
         if data_user is None:
             print("Gagal! Username atau Password salah.")
+            print("Gagal! Username atau Password salah.")
+            print("Gagal! Username atau Password salah.")git 
         else:
             # kalau berhasil login, cek rolenya siapa /kei
             nama = data_user['username']
