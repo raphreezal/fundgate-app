@@ -1,4 +1,4 @@
-from modules.utility import siapkan_folder_dan_file
+from modules.utility import siapkan_folder_dan_file, clear_screen, header
 from modules.auth import proses_login
 from modules.staff_ops import menu_kepala_divisi
 from modules.manager_ops import menu_manajer
@@ -10,14 +10,12 @@ from modules.divisi_ops import menu_divisi
 def main():
     # 1. pastiin database siap dulu sebelum aplikasi mulai /kei
     siapkan_folder_dan_file()
-
-    print("\n========================================")
-    print(" SELAMAT DATANG DI APLIKASI FUNDGATE ")
-    print("========================================")
+    clear_screen()
+    header()
+    print("     Selamat Datang di Aplikasi FundGate!")
     
     while True:
-        # 2. minta login /kei
-        print("\n===== Silakan Login Terlebih Dahulu =====")
+        print("\n────────────────── LOGIN ────────────────────")
         
         # validasi username / najwa 
         # while True:
@@ -77,15 +75,18 @@ def main():
                 menu_kepala_divisi(data_user)
             
             elif peran == "manajer_keuangan":
-                # manajer punya akses spesial ke menu admin juga /kei
-                print("\n==== MENU UTAMA MANAJER ====")
-                print("1. Kelola Keuangan")
-                print("2. Kelola User")
-                print("3. Kelola Divisi")
-                print("4. Lihat Laporan")
-                print("0. Logout")
-
                 while True:
+                    clear_screen()
+                # manajer punya akses spesial ke menu admin juga /kei
+
+                    header()
+                    print("──────────────── MENU UTAMA ─────────────────") # punya manajer keuangan /farah
+                    print("1. 💰 Kelola Keuangan")
+                    print("2. 👤 Kelola User")
+                    print("3. 👥 Kelola Divisi")
+                    print("4. 📊 Lihat Laporan")
+                    print("0. 🔒 Logout")
+
                     opsi = input("Pilih: ").strip()
 
                     if opsi == "1":
@@ -105,7 +106,8 @@ def main():
                         break
 
                     else:
-                        print("⚠️  Pilihan tidak valid! Silakan input ulang.")
+                        print("\n⚠️  Pilihan tidak valid!")
+                        input("Tekan Enter untuk input ulang...")
 
             elif peran in ("direktur", "auditor"):
                 menu_laporan(data_user)

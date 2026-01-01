@@ -1,20 +1,21 @@
 import pandas as pd
+
 from modules.utility import (
     baca_data, simpan_data, clear_screen,
     tampilkan_interaktif, validasi_username,
-    generate_id_user
+    generate_id_user, header
 )
 from modules.auth import validasi_password
 from modules.divisi_ops import menu_divisi
-
-
 
 # ===============================
 # MENU ADMIN
 # ===============================
 def menu_admin(user_sedang_login):
     while True:
-        print("\n=== KELOLA PENGGUNA (USER) ===")
+        clear_screen()
+        header()
+        print("─────────────── KELOLA USER ─────────────────")
         print("1. Lihat Daftar User")
         print("2. Tambah User")
         print("3. Edit User")
@@ -36,28 +37,33 @@ def menu_admin(user_sedang_login):
         else:
             print("Pilihan tidak valid!")
 
-# ===============================
-# READ
-# ===============================
+# read
 def lihat_user():
     tabel = baca_data("users")
     if tabel.empty:
+        header()
         print("Data user masih kosong.")
     else:
         # Tampilkan tabel dengan tabulate agar rapih /kei
         # clear_screen()
         # print("\n--- DAFTAR USER ---")
         # print(tabulate(tabel, headers='keys', tablefmt='psql', showindex=False))
-        tampilkan_interaktif(tabel, judul="DAFTAR USER")    
+        clear_screen()
+        print("════════════════════════════════════════════════════════════════")
+        print("|                        F U N D G A T E                       |")
+        print("|              Sistem Pengajuan & Manajemen Keuangan           |")
+        print("════════════════════════════════════════════════════════════════\n")
+        print("────────────────────────── DAFTAR USER ─────────────────────────")
+        tampilkan_interaktif(tabel)    
 
 def tambah_user_baru():
-    print("\n--- TAMBAH USER ---")
-
-    tabel_users = baca_data("users")
-
     # ===============================
     # INPUT USERNAME
     # ===============================
+    clear_screen()
+    header()
+    print("─────────────── TAMBAH USER ─────────────────")
+    tabel_users = baca_data("users")
     while True:
         username = input("Username (0 batal): ").strip()
         if username == "0":
