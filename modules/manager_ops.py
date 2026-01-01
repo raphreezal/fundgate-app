@@ -46,10 +46,13 @@ def proses_persetujuan_dana():
     
         # Pengajuan ada        /farah
         data_pending["total"] = data_pending["total"].map(format_rupiah)
+        print("════════════════════════════════════════════════════════════════════════════════════")
+        print("|                                 F U N D G A T E                                  |")
+        print("|                       Sistem Pengajuan & Manajemen Keuangan                      |")
+        print("════════════════════════════════════════════════════════════════════════════════════\n")
+        print("──────────────────────────────── DAFTAR PENGAJUAN ──────────────────────────────────")
         tabel_rapih(
-            data_pending[["id_pengajuan", "divisi", "jenis_pengajuan", "total", "status"]],
-            judul="DAFTAR PENGAJUAN" # judul tabel /kei
-        )
+            data_pending[["id_pengajuan", "divisi", "jenis_pengajuan", "total", "status"]])
 
         id_target = input("\nMasukkan ID Pengajuan yang ingin diproses (0 untuk kembali): ").strip()
 
@@ -77,7 +80,11 @@ def proses_persetujuan_dana():
 
         while True:
             clear_screen()
-            print("================ INFORMASI PENGAJUAN ================")
+            print("════════════════════════════════════════════════════════")
+            print("|                    F U N D G A T E                   |")
+            print("|          Sistem Pengajuan & Manajemen Keuangan       |")
+            print("════════════════════════════════════════════════════════\n")
+            print("────────────────── INFORMASI PENGAJUAN ─────────────────")
             print(f"ID Pengajuan    : {data_pilih['id_pengajuan']}")
             print(f"Divisi          : {data_pilih['divisi']}")
             print(f"Jenis Pengajuan : {data_pilih['jenis_pengajuan']}")

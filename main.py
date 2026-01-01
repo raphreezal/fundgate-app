@@ -1,4 +1,4 @@
-from modules.utility import siapkan_folder_dan_file, clear_screen
+from modules.utility import siapkan_folder_dan_file, clear_screen, header
 from modules.auth import proses_login
 from modules.staff_ops import menu_kepala_divisi
 from modules.manager_ops import menu_manajer
@@ -8,14 +8,13 @@ from modules.report import menu_laporan
 def main():
     # 1. pastiin database siap dulu sebelum aplikasi mulai /kei
     siapkan_folder_dan_file()
-
-    print("\n========================================")
-    print(" SELAMAT DATANG DI APLIKASI FUNDGATE ")
-    print("========================================")
+    clear_screen()
+    header()
+    print("     Selamat Datang di Aplikasi FundGate!")
     
     while True:
         # 2. minta login /kei
-        print("\nSilakan Login Terlebih Dahulu")
+        print("\n────────────────── LOGIN ────────────────────")
         
         # validasi username / najwa 
         while True:
@@ -55,11 +54,12 @@ def main():
                 while True:
                     clear_screen()
                 # manajer punya akses spesial ke menu admin juga /kei
-                    print("==== MENU UTAMA MANAJER ====")
-                    print("1. Kelola Keuangan")
-                    print("2. Kelola User")
-                    print("3. Lihat Laporan")
-                    print("0. Logout")
+                    header()
+                    print("──────────────── MENU UTAMA ─────────────────") # punya manajer keuangan /farah
+                    print("1. 💰 Kelola Keuangan")
+                    print("2. 👥 Kelola User")
+                    print("3. 📊 Lihat Laporan")
+                    print("0. 🔒 Logout")
 
                     opsi = input("Pilih: ").strip()
 
