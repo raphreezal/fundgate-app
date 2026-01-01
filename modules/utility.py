@@ -1,3 +1,4 @@
+import re
 import pandas as pd
 import os
 from tabulate import tabulate # pastikan pip install tabulate /kei
@@ -197,3 +198,38 @@ def tabel_rapih(df, judul="DATA", judul_cetak=True):
 
 def format_rupiah(angka):
     return f"Rp {int(angka):,}".replace(",", ".")
+
+# Validasi username dan password / najwa
+def validasi_username(username):
+    if not username:
+        return False, "Username tidak boleh kosong"
+    if len(username) > 20:
+        return False, "Username maksimal 20 karakter"
+    if not re.fullmatch(r"[A-Za-z ]+", username):
+        return False, "Username hanya boleh huruf dan spasi"
+    return True, "Valid"
+
+def validasi_password(password):
+    if not password:
+        return False, "Password tidak boleh kosong"
+    if " " in password:
+        return False, "Password tidak boleh mengandung spasi"
+    if len(password) < 8:
+        return False, "Password minimal 8 karakter"
+    if not re.search(r"[A-Z]", password):
+        return False, "Harus ada huruf kapital"
+    if not re.search(r"[a-z]", password):
+        return False, "Harus ada huruf kecil"
+    if not re.search(r"[0-9]", password):
+        return False, "Harus ada angka"
+    if not re.search(r"[!@#$%^&*()\-_=+{}[\]|:;\"'<>,.?/]", password):
+        return False, "Harus ada simbol"
+    return True, "Valid"
+
+# buat id user secara otomatis / najwa
+def generate_id_user(df):
+    if df.empty:
+        return "USR001"
+    last_id = df.iloc[-1]["id"]
+    nomor = int(last_id[3:])
+    return f"USR{nomor+1:03}"
