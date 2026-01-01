@@ -57,8 +57,6 @@ def main():
 
         if percobaan == maks_login:
             print("❌ Login gagal 3 kali. Program dihentikan.")
-            print("❌ Login gagal 3 kali. Program dihentikan.")
-            print("❌ Login gagal 3 kali. Program dihentikan.")
             exit()
 
 
