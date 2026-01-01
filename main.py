@@ -4,6 +4,8 @@ from modules.staff_ops import menu_kepala_divisi
 from modules.manager_ops import menu_manajer
 from modules.admin_ops import menu_admin
 from modules.report import menu_laporan
+from modules.divisi_ops import menu_divisi
+
 
 def main():
     # 1. pastiin database siap dulu sebelum aplikasi mulai /kei
@@ -13,28 +15,50 @@ def main():
     print("     Selamat Datang di Aplikasi FundGate!")
     
     while True:
-        # 2. minta login /kei
         print("\n────────────────── LOGIN ────────────────────")
         
         # validasi username / najwa 
-        while True:
-            input_user = input("Username : ").strip()
-            if not input_user:
-                print("Username tidak boleh kosong!")
-            else:
-                break
+        # while True:
+        #     input_user = input("Username : ").strip()
+        #     if not input_user:
+        #         print("Username tidak boleh kosong!")
+        #     else:
+        #         break
         
-        # validasi password / najwa
-        while True:
-            input_pass = input("Password : ").strip()
-            if not input_pass:
-                print("Password tidak boleh kosong!")
-            else:
-                break
+        # # validasi password / najwa
+        # while True:
+        #     input_pass = input("Password : ").strip()
+        #     if not input_pass:
+        #         print("Password tidak boleh kosong!")
+        #     else:
+        #         break
         
-        # panggil fungsi buatan Najwa /kei
-        # disini
-        data_user = proses_login(input_user, input_pass)
+        # login revisi (max 3 kali percobaan) / najwa
+        maks_login = 3
+        percobaan = 0
+
+        while percobaan < maks_login:
+            username = input("Username : ").strip()
+            if not username:
+                print("⚠️  Username tidak boleh kosong!\n")
+                continue
+
+            password = input("Password : ").strip()
+            if not password:
+                print("⚠️  Password tidak boleh kosong!")
+                continue
+
+            data_user = proses_login(username, password)
+            if data_user:
+                break
+
+            percobaan += 1
+            print(f"Sisa percobaan: {maks_login - percobaan}")
+
+        if percobaan == maks_login:
+            print("❌ Login gagal 3 kali. Program dihentikan.")
+            exit()
+
 
         if data_user is None:
             print("Gagal! Username atau Password salah.")
@@ -42,7 +66,7 @@ def main():
             # kalau berhasil login, cek rolenya siapa /kei
             nama = data_user['username']
             peran = data_user['role']
-            print(f"\nLogin Sukses! Halo, {nama} ({peran})")
+            print(f"\n===== ✅  Login Sukses! Halo, {nama} ({peran}) =====")
             
             # 3. arahin ke menu sesuai peran (Role) /kei
             if peran == "kepala_divisi":
@@ -54,11 +78,13 @@ def main():
                 while True:
                     clear_screen()
                 # manajer punya akses spesial ke menu admin juga /kei
+
                     header()
                     print("──────────────── MENU UTAMA ─────────────────") # punya manajer keuangan /farah
                     print("1. 💰 Kelola Keuangan")
-                    print("2. 👥 Kelola User")
-                    print("3. 📊 Lihat Laporan")
+                    print("2. 👤 Kelola User")
+                    print("3. 👥 Kelola Divisi")
+                    print("4. 📊 Lihat Laporan")
                     print("0. 🔒 Logout")
 
                     opsi = input("Pilih: ").strip()
@@ -68,8 +94,12 @@ def main():
 
                     elif opsi == "2":
                         menu_admin(data_user)
-
+                    
+                    #nambah menu kelola divisi / najwa
                     elif opsi == "3":
+                        menu_divisi(data_user)
+
+                    elif opsi == "4":
                         menu_laporan(data_user)
 
                     elif opsi == "0":
@@ -83,7 +113,7 @@ def main():
                 menu_laporan(data_user)
 
             else:
-                print("⚠️ Role tidak dikenali.")
+                print("⚠️  Role tidak dikenali.")
         
             # kalau loop menu selesai (user pilih logout), tanya mau keluar aplikasi gak? /kei
             lagi = input("\nApakah ada user lain yang mau login? (y/n): ")
