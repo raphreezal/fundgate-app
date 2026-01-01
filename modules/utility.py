@@ -105,15 +105,12 @@ def simpan_data(nama_file, data_frame_baru):
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def tampilkan_interaktif(df, judul="DATA"):
+def tampilkan_interaktif(df):
     # fungsi untuk menampilkan data dengan fitur /kei
     # SORTING dan SEARCHING bawaan /kei
     df_tampil = df.copy() # copy biar data asli gak rusak /kei
     
     while True:
-        clear_screen()
-        print(f"\n=== {judul} ===")
-        
         # cek kalau data kosong /kei
         if df_tampil.empty:
             print("Tidak ada data yang ditemukan.")
