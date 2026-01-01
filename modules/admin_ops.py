@@ -1,5 +1,5 @@
 import pandas as pd
-from modules.utility import baca_data, simpan_data, clear_screen
+from modules.utility import baca_data, simpan_data, clear_screen, header
 from modules.auth import validasi_password # import validasi / najwa
 from modules.utility import tampilkan_interaktif
 
@@ -8,7 +8,9 @@ from modules.utility import tampilkan_interaktif
 # ===============================
 def menu_admin(user_sedang_login):
     while True:
-        print("\n=== KELOLA PENGGUNA (USER) ===")
+        clear_screen()
+        header()
+        print("─────────────── KELOLA USER ─────────────────")
         print("1. Lihat Daftar User")
         print("2. Tambah User")
         print("3. Edit User")
@@ -30,25 +32,32 @@ def menu_admin(user_sedang_login):
         else:
             print("Pilihan tidak valid!")
 
-# ===============================
-# READ
-# ===============================
+# read
 def lihat_user():
     tabel = baca_data("users")
     if tabel.empty:
+        header()
         print("Data user masih kosong.")
     else:
         # Tampilkan tabel dengan tabulate agar rapih /kei
         # clear_screen()
         # print("\n--- DAFTAR USER ---")
         # print(tabulate(tabel, headers='keys', tablefmt='psql', showindex=False))
-        tampilkan_interaktif(tabel, judul="DAFTAR USER")    
+        clear_screen()
+        print("════════════════════════════════════════════════════════════════")
+        print("|                        F U N D G A T E                       |")
+        print("|              Sistem Pengajuan & Manajemen Keuangan           |")
+        print("════════════════════════════════════════════════════════════════\n")
+        print("────────────────────────── DAFTAR USER ─────────────────────────")
+        tampilkan_interaktif(tabel)    
 
 # ===============================
 # CREATE
 # ===============================
 def tambah_user_baru():
-    print("\n--- TAMBAH USER ---")
+    clear_screen()
+    header()
+    print("─────────────── TAMBAH USER ─────────────────")
     username = input("Username baru: ")
     # nambah validasi pw saat regis akun / najwa
     while True:

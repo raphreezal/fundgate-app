@@ -105,15 +105,12 @@ def simpan_data(nama_file, data_frame_baru):
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def tampilkan_interaktif(df, judul="DATA"):
+def tampilkan_interaktif(df):
     # fungsi untuk menampilkan data dengan fitur /kei
     # SORTING dan SEARCHING bawaan /kei
     df_tampil = df.copy() # copy biar data asli gak rusak /kei
     
     while True:
-        clear_screen()
-        print(f"\n=== {judul} ===")
-        
         # cek kalau data kosong /kei
         if df_tampil.empty:
             print("Tidak ada data yang ditemukan.")
@@ -188,12 +185,16 @@ def tampilkan_interaktif(df, judul="DATA"):
         else:
             print("Pilihan tidak valid.")
 
-def tabel_rapih(df, judul="DATA", judul_cetak=True):
+def tabel_rapih(df, judul="DATA"):
     df_tampil = df.copy()
-    if judul_cetak:
-        print(f"\n=== {judul} ===")
     # mengembalikan string tabel yang rapi dari DataFrame /kei
     print(tabulate(df_tampil, headers='keys', tablefmt='psql', showindex=False))
 
 def format_rupiah(angka):
     return f"Rp {int(angka):,}".replace(",", ".")
+
+def header():
+    print("═════════════════════════════════════════════")
+    print("|              F U N D G A T E              |")
+    print("|    Sistem Pengajuan & Manajemen Keuangan  |")
+    print("═════════════════════════════════════════════\n")
