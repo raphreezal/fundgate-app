@@ -197,3 +197,9 @@ def tabel_rapih(df, judul="DATA", judul_cetak=True):
 
 def format_rupiah(angka):
     return f"Rp {int(angka):,}".replace(",", ".")
+
+def header():
+    print("═════════════════════════════════════════════")
+    print("|              F U N D G A T E              |")
+    print("|    Sistem Pengajuan & Manajemen Keuangan  |")
+    print("═════════════════════════════════════════════\n")

@@ -1,9 +1,10 @@
-from modules.utility import baca_data, simpan_data, clear_screen, format_rupiah, tabel_rapih
+from modules.utility import baca_data, simpan_data, clear_screen, format_rupiah, tabel_rapih, header
 
 def menu_manajer(user_sedang_login):
     while True:
         clear_screen()
-        print("======== KELOLA KEUANGAN ========")
+        header()
+        print("────────────── KELOLA KEUANGAN ──────────────")
         print("1. Cek & Proses Pengajuan Dana")
         print("2. Lihat Saldo & Limit")
         print("3. Set Limit Pengajuan")
@@ -165,18 +166,20 @@ def lihat_saldo_dan_limit():
     saldo = data_keuangan.loc[0, "saldo"]
     limit = data_keuangan.loc[0, "limit_pengajuan"]
 
-    print("======== INFORMASI KEUANGAN ========")
+    header()
+    print("──────────── INFORMASI KEUANGAN ─────────────")
     print(f"Saldo perusahaan : {format_rupiah(saldo):>15}")
     print(f"Limit pengajuan  : {format_rupiah(limit):>15}")
 
 # 3. Fitur Set Limit Pengajuan Dana    /farah
 def set_limit_pengajuan():
+    data_keuangan = baca_data("keuangan")
+    
     while True:
         clear_screen()
-        data_keuangan = baca_data("keuangan")
+        header()
         limit = data_keuangan.loc[0, "limit_pengajuan"]
-
-        print("======== SET LIMIT PENGAJUAN ========")
+        print("──────────── SET LIMIT PENGAJUAN ────────────")
         print(f"Limit saat ini : {format_rupiah(limit):>15}")
         print("\n1. Set nominal limit baru")
         print("0. Batal / Kembali")
@@ -185,36 +188,40 @@ def set_limit_pengajuan():
 
         if pilihan == "1":
             while True:
-                clear_screen()
-                print("======== SET LIMIT PENGAJUAN ========")
+                clear_screen()  # clear tiap kali ulang input
+                header()
+                print("──────────── SET LIMIT PENGAJUAN ────────────")
                 print(f"Limit saat ini : {format_rupiah(limit):>15}")
-                print("\nMasukkan limit baru (0 untuk batal) :")
+                print("\nMasukkan limit baru (0 untuk batal): ", end="")
+                
+                inp = input().strip()
+
+                if inp == "0":
+                    print("\n❌ Pengaturan limit dibatalkan.")
+                    input("Tekan Enter untuk kembali...")
+                    break  # kembali ke menu set_limit
 
                 try:
-                    limit_baru = int(input("Limit baru: ").strip())
+                    limit_baru = int(inp)
                 except ValueError:
-                    print("\n⚠️  Input harus berupa angka.")
-                    input("Enter untuk coba lagi...")
-                    continue
-
-                if limit_baru == 0:
-                    break
+                    print("\n⚠️  Input harus berupa angka!")
+                    input("Tekan Enter untuk input ulang...")
+                    continue  # balik ke input awal
 
                 if limit_baru < 0:
-                    print("\n⚠️  Limit harus lebih dari 0.")
-                    input("Enter untuk coba lagi...")
-                    continue
+                    print("\n⚠️  Limit harus lebih dari 0!")
+                    input("Tekan Enter untuk input ulang...")
+                    continue  # balik ke input awal
 
+                # update limit
                 data_keuangan.loc[0, "limit_pengajuan"] = limit_baru
                 simpan_data("keuangan", data_keuangan)
-
-                print("\n✅ Limit pengajuan berhasil diperbarui.")
+                print(f"\n✅ Limit berhasil diperbarui menjadi {format_rupiah(limit_baru)}")
                 input("Tekan Enter untuk kembali...")
-                return
+                return  # selesai
 
         elif pilihan == "0":
-            return
-
+            return  # kembali ke menu sebelumnya
         else:
-            print("\n⚠️  Pilihan tidak valid!")
-            input("Tekan Enter untuk pilih ulang...")
+            print("\n⚠️  Pilihan tidak valid! Silakan pilih menu yang tersedia.")
+            input("Tekan Enter untuk input ulang...")
