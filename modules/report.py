@@ -1,5 +1,5 @@
 import os
-from modules.utility import baca_data,clear_screen, format_rupiah, tampilkan_interaktif 
+from modules.utility import baca_data,clear_screen, format_rupiah, tampilkan_interaktif, header
 import pandas as pd #pastikan sudah pip install pandas /kei
 
 
@@ -25,9 +25,10 @@ def menu_laporan(user_sedang_login):
         df = siapkan_data_laporan()
         
         clear_screen()
-        print(f"\n=== DASHBOARD LAPORAN ===")
-        print(f"User: {user_sedang_login['username']} | Role: {user_sedang_login['role']}")
-        print("-" * 40)
+        header()
+        print("───────────── DASHBOARD LAPORAN ─────────────")
+        print(f"     User: {user_sedang_login['username']} | Role: {user_sedang_login['role']}")
+        print("─────────────────────────────────────────────")
         print("1. Laporan Detail (Semua Data)")
         print("2. Rekapitulasi Per DIVISI")
         print("3. Rekapitulasi Per BULAN")
@@ -42,19 +43,46 @@ def menu_laporan(user_sedang_login):
             continue
 
         if pilihan == "1":
+            clear_screen()
+            print("══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════")
+            print("|                                                                 F U N D G A T E                                                                    |")
+            print("|                                                      Sistem Pengajuan & Manajemen Keuangan                                                         |")
+            print("|────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────|")
+            print("|                                                                DASHBOARD LAPORAN                                                                   |")
+            print(f"|                                                      User: {user_sedang_login['username']} | Role: {user_sedang_login['role']}                                                          |")
+            print("══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n")
             # tampilkan semua data mentah tapi interaktif /kei
-            # mengapus kolom bantuan biar kgk penuh /kei 
+            # mengapus kolom bantuan biar kgk penuh /kei
+            print("────────────────────────────────────────────────────────────── SEMUA DATA PENGAJUAN ──────────────────────────────────────────────────────────────────")
             view_df = df.drop(columns=['tahun', 'bulan', 'bulan_angka'], errors='ignore')
             view_df['total'] = view_df['total'].map(format_rupiah)
-            tampilkan_interaktif(view_df[["id_pengajuan","tanggal","jenis_pengajuan","nama_kepala_divisi","divisi","total", "status", "catatan_manajer"]], judul="SEMUA DATA PENGAJUAN")
+            tampilkan_interaktif(view_df[["id_pengajuan","tanggal","jenis_pengajuan","nama_kepala_divisi","divisi","total", "status", "catatan_manajer"]])
             
         elif pilihan == "2":
+            clear_screen()
+            print("══════════════════════════════════════════")
+            print("|            F U N D G A T E             |")
+            print("|  Sistem Pengajuan & Manajemen Keuangan |")
+            print("|────────────────────────────────────────|")
+            print("|           DASHBOARD LAPORAN            |")
+            print(f"|   User: {user_sedang_login['username']} | Role: {user_sedang_login['role']} |")
+            print("══════════════════════════════════════════\n")
             # Group by divisi /kei
+            print("────── TOTAL PENGELUARAN PER DIVISI ──────")
             rekap = df.groupby(['divisi'])['total'].sum().reset_index()
             rekap['total'] = rekap['total'].map(format_rupiah)
-            tampilkan_interaktif(rekap, judul="TOTAL PENGELUARAN PER DIVISI")
+            tampilkan_interaktif(rekap)
             
         elif pilihan == "3":
+            clear_screen()
+            print("══════════════════════════════════════════")
+            print("|            F U N D G A T E             |")
+            print("|  Sistem Pengajuan & Manajemen Keuangan |")
+            print("|────────────────────────────────────────|")
+            print("|           DASHBOARD LAPORAN            |")
+            print(f"|   User: {user_sedang_login['username']} | Role: {user_sedang_login['role']} |")
+            print("══════════════════════════════════════════\n")
+            print("────── TOTAL PENGELUARAN PER BULAN ──────")
             # Group by tahun dan Bulan (biar Jan 2024 beda sama Jan 2025) /kei
             rekap = df.groupby(['tahun', 'bulan_angka', 'bulan'])['total'].sum().reset_index()
             # Sort dulu berdasarkan tahun dan bulan angka biar urut /kei
@@ -66,15 +94,24 @@ def menu_laporan(user_sedang_login):
             #perbaiikan format rupiah /kei
             view_rekap.loc[:, 'total'] = view_rekap['total'].map(format_rupiah)
             
-            tampilkan_interaktif(view_rekap, judul="TOTAL PENGELUARAN PER BULAN")
+            tampilkan_interaktif(view_rekap)
 
         elif pilihan == "4":
+            clear_screen()
+            print("══════════════════════════════════════════")
+            print("|            F U N D G A T E             |")
+            print("|  Sistem Pengajuan & Manajemen Keuangan |")
+            print("|────────────────────────────────────────|")
+            print("|           DASHBOARD LAPORAN            |")
+            print(f"|   User: {user_sedang_login['username']} | Role: {user_sedang_login['role']} |")
+            print("══════════════════════════════════════════\n")
+            print("─────── TOTAL PENGELUARAN TAHUNAN ────────")
             # Group by tahun /kei
             rekap = df.groupby(['tahun'])['total'].sum().reset_index()
             # Mengubah nominal scientific jadi yang bisa dibaca  /farah
             # perbaikan format rupiah /kei
             rekap['total'] = rekap['total'].map(format_rupiah)
-            tampilkan_interaktif(rekap, judul="TOTAL PENGELUARAN TAHUNAN")
+            tampilkan_interaktif(rekap)
             
         elif pilihan == "0":
             break
