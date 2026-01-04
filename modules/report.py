@@ -35,11 +35,22 @@ def menu_laporan(user_sedang_login):
         print("4. Rekapitulasi Per TAHUN")
         print("0. Kembali")
         
-        pilihan = input("Pilih Menu: ")
+        pilihan = input("Pilih Menu: ").strip()
         
+        if pilihan == "":
+            input("\n⚠️  Pilihan tidak boleh kosong! Tekan Enter untuk input ulang...")
+            continue
+
+        if not pilihan.isdigit():
+            input("\n⚠️  Pilihan harus berupa angka! Tekan Enter untuk input ulang...")
+            continue
+
+        if pilihan not in ["0", "1", "2", "3", "4"]:
+            input("\n⚠️  Pilihan tidak valid! Tekan Enter untuk input ulang...")
+            continue
+
         if df.empty and pilihan != "0":
-            print("Belum ada data pengajuan sama sekali.")
-            input("Enter...")
+            input("\n⚠️  Belum ada data pengajuan sama sekali! Tekan Enter untuk kembali...")
             continue
 
         if pilihan == "1":
@@ -92,8 +103,7 @@ def menu_laporan(user_sedang_login):
             view_rekap = rekap[['tahun', 'bulan', 'total']].copy()
             # Mengubah penulisan nominal format Indonesia (ada titik)  /farah
             #perbaiikan format rupiah /kei
-            view_rekap.loc[:, 'total'] = view_rekap['total'].map(format_rupiah)
-            
+            view_rekap['total'] = view_rekap['total'].apply(format_rupiah)
             tampilkan_interaktif(view_rekap)
 
         elif pilihan == "4":
@@ -115,5 +125,3 @@ def menu_laporan(user_sedang_login):
             
         elif pilihan == "0":
             break
-        else:
-            print("Pilihan tidak valid.")
