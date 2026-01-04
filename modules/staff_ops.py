@@ -237,7 +237,11 @@ def buat_pengajuan_dana(user):
 # riwayat
 def riwayat_pengajuan(user):
     clear_screen()
-    header()
+    print("═══════════════════════════════════════════════════════════════════════════════════")
+    print("|                                 F U N D G A T E                                 |")
+    print("|                       Sistem Pengajuan & Manajemen Keuangan                     |")
+    print("═══════════════════════════════════════════════════════════════════════════════════\n")
+    print("──────────────────────────────── RIWAYAT PENGAJUAN ────────────────────────────────")
 
     data = baca_data("pengajuan")
     data = data[data["id_kepala_divisi"] == user["id"]]
