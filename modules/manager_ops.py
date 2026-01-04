@@ -36,7 +36,7 @@ def proses_persetujuan_dana():
         saldo_perusahaan = data_keuangan.loc[0, "saldo"]
 
         # Mencari data pengajuan dana   /farah
-        data_pending = tabel_pengajuan[tabel_pengajuan["status"] == "Menunggu"].copy() # copy biar gak warning
+        data_pending = tabel_pengajuan[tabel_pengajuan["status"].isin(["Menunggu", "Menunggu (Darurat)"])].copy() # copy biar gak warning
     
         # Pengajuan kosong     /farah
         if data_pending.empty:
