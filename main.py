@@ -1,5 +1,5 @@
 from modules.utility import siapkan_folder_dan_file, clear_screen, header
-from modules.auth import proses_login
+from modules.auth import proses_login, cek_username
 from modules.staff_ops import menu_kepala_divisi
 from modules.manager_ops import menu_manajer
 from modules.admin_ops import menu_admin
@@ -50,12 +50,9 @@ def main():
                 continue
 
             # cek usn / najwa
-            hasil_username = proses_login(username, None)
-
+            hasil_username = cek_username(username)
             if hasil_username == "USERNAME_TIDAK_ADA":
                 print("❌ Username tidak terdaftar!")
-                percobaan += 1
-                print(f"Sisa percobaan: {maks_login - percobaan}")
                 input("Enter...")
                 continue
 

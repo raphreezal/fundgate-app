@@ -2,18 +2,27 @@ import re
 from modules.utility import baca_data
 
 # login revisi / najwa
-def proses_login(username_input, password_input):
-    tabel_users = baca_data("users")
-    list_user = tabel_users.to_dict("records")
+def proses_login(username, password):
+    tabel = baca_data("users")
 
-    for user in list_user:
-        if user["username"] == username_input:
-            if user["password"] == password_input:
-                return user
-            else:
-                return "PASSWORD_SALAH"
-    return "USERNAME_TIDAK_ADA"
+    user = tabel[tabel["username"].str.lower() == username.lower()]
+    if user.empty:
+        return "USERNAME_TIDAK_ADA"
 
+    if user.iloc[0]["password"] != password:
+        return "PASSWORD_SALAH"
+
+    return user.iloc[0].to_dict()
+
+def cek_username(username):
+    tabel = baca_data("users")
+    if tabel.empty:
+        return "USERNAME_TIDAK_ADA"
+
+    if username.lower() not in tabel["username"].str.lower().values:
+        return "USERNAME_TIDAK_ADA"
+
+    return "ADA"
 
 
 # def proses_login(username_input, password_input):
