@@ -1,7 +1,8 @@
 import pandas as pd
 from modules.utility import baca_data, simpan_data, tampilkan_interaktif
 
-def menu_divisi():
+
+def menu_divisi(user_sedang_login=None):
     while True:
         print("\n=== KELOLA DIVISI ===")
         print("1. Lihat Divisi")
@@ -25,13 +26,14 @@ def menu_divisi():
         else:
             print("❌ Pilihan tidak valid")
 
+
 def lihat_divisi():
     tabel = baca_data("divisi")
     if tabel.empty:
-        print("Data divisi masih kosong.")
+        print("Data divisi kosong.")
         return
-
     tampilkan_interaktif(tabel, judul="DAFTAR DIVISI")
+
 
 def tambah_divisi():
     tabel = baca_data("divisi")
@@ -41,23 +43,21 @@ def tambah_divisi():
         if nama == "0":
             return
         if not nama:
-            print("❌ Nama divisi tidak boleh kosong")
+            print("❌ Tidak boleh kosong")
             continue
-        if not tabel.empty and nama in tabel["nama_divisi"].values:
+        if not tabel.empty and nama.lower() in tabel["nama_divisi"].str.lower().values:
             print("❌ Divisi sudah ada")
             continue
         break
 
-    konfirmasi = input("Simpan divisi ini? (y/n): ").lower()
-    if konfirmasi != "y":
-        print("❌ Penambahan dibatalkan")
+    if input("Simpan divisi ini? (y/n): ").lower() != "y":
+        print("❌ Dibatalkan")
         return
 
-    data_baru = {"nama_divisi": nama}
-    tabel = pd.concat([tabel, pd.DataFrame([data_baru])], ignore_index=True)
-
+    tabel = pd.concat([tabel, pd.DataFrame([{"nama_divisi": nama}])], ignore_index=True)
     simpan_data("divisi", tabel)
     print("✅ Divisi berhasil ditambahkan")
+
 
 def edit_divisi():
     tabel = baca_data("divisi")
@@ -67,32 +67,31 @@ def edit_divisi():
 
     tampilkan_interaktif(tabel, judul="DAFTAR DIVISI")
 
-    nama_lama = input("Nama divisi yang ingin diedit (0 batal): ")
+    nama_lama = input("Nama divisi yang diedit (0 batal): ")
     if nama_lama == "0":
         return
 
-    if nama_lama not in tabel["nama_divisi"].values:
+    if nama_lama.lower() not in tabel["nama_divisi"].str.lower().values:
         print("❌ Divisi tidak ditemukan")
         return
 
     nama_baru = input(f"Nama baru [{nama_lama}]: ").strip()
-    if nama_baru == "":
+    if not nama_baru:
         print("❌ Tidak ada perubahan")
         return
 
-    if nama_baru in tabel["nama_divisi"].values:
-        print("❌ Nama divisi sudah digunakan")
+    if nama_baru.lower() in tabel["nama_divisi"].str.lower().values:
+        print("❌ Nama sudah digunakan")
         return
 
-    konfirmasi = input("Simpan perubahan? (y/n): ").lower()
-    if konfirmasi != "y":
-        print("❌ Perubahan dibatalkan")
+    if input("Simpan perubahan? (y/n): ").lower() != "y":
+        print("❌ Dibatalkan")
         return
 
-    tabel.loc[tabel["nama_divisi"] == nama_lama, "nama_divisi"] = nama_baru
+    tabel.loc[tabel["nama_divisi"].str.lower() == nama_lama.lower(), "nama_divisi"] = nama_baru
     simpan_data("divisi", tabel)
-
     print("✅ Divisi berhasil diperbarui")
+
 
 def hapus_divisi():
     tabel = baca_data("divisi")
@@ -102,20 +101,18 @@ def hapus_divisi():
 
     tampilkan_interaktif(tabel, judul="DAFTAR DIVISI")
 
-    nama = input("Nama divisi yang akan dihapus (0 batal): ")
+    nama = input("Nama divisi yang dihapus (0 batal): ")
     if nama == "0":
         return
 
-    if nama not in tabel["nama_divisi"].values:
+    if nama.lower() not in tabel["nama_divisi"].str.lower().values:
         print("❌ Divisi tidak ditemukan")
         return
 
-    konfirmasi = input("Yakin hapus divisi ini? (y/n): ").lower()
-    if konfirmasi != "y":
-        print("❌ Penghapusan dibatalkan")
+    if input("Yakin hapus divisi ini? (y/n): ").lower() != "y":
+        print("❌ Dibatalkan")
         return
 
-    tabel = tabel[tabel["nama_divisi"] != nama]
+    tabel = tabel[tabel["nama_divisi"].str.lower() != nama.lower()]
     simpan_data("divisi", tabel)
-
     print("✅ Divisi berhasil dihapus")

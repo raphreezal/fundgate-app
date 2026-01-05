@@ -1,5 +1,5 @@
 from modules.utility import siapkan_folder_dan_file, clear_screen, header
-from modules.auth import proses_login
+from modules.auth import proses_login, cek_username
 from modules.staff_ops import menu_kepala_divisi
 from modules.manager_ops import menu_manajer
 from modules.admin_ops import menu_admin
@@ -38,22 +38,44 @@ def main():
         percobaan = 0
 
         while percobaan < maks_login:
+            clear_screen()
+            header()
+            print("────────────────── LOGIN ────────────────────")
+
+            # input usn / najwa
             username = input("Username : ").strip()
             if not username:
-                print("⚠️  Username tidak boleh kosong!\n")
+                print("❌ Username tidak boleh kosong!")
+                input("Enter...")
                 continue
 
+            # cek usn / najwa
+            hasil_username = cek_username(username)
+            if hasil_username == "USERNAME_TIDAK_ADA":
+                print("❌ Username tidak terdaftar!")
+                input("Enter...")
+                continue
+
+            # input pw / najwa
             password = input("Password : ").strip()
             if not password:
-                print("⚠️  Password tidak boleh kosong!")
+                print("❌ Password tidak boleh kosong!")
+                input("Enter...")
                 continue
 
-            data_user = proses_login(username, password)
-            if data_user:
-                break
+            # cek pw / najwa
+            hasil = proses_login(username, password)
 
-            percobaan += 1
-            print(f"Sisa percobaan :  {maks_login - percobaan}")
+            if isinstance(hasil, dict):
+                data_user = hasil
+                break
+            elif hasil == "PASSWORD_SALAH":
+                print("❌ Password salah!")
+                percobaan += 1
+                print(f"Sisa percobaan: {maks_login - percobaan}")
+                input("Enter...")
+
+
 
         if percobaan == maks_login:
             print("❌ Login gagal 3 kali. Program dihentikan.")

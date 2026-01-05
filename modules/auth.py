@@ -1,45 +1,28 @@
 import re
 from modules.utility import baca_data
 
-# validasi password / najwa
-def validasi_password(password):
-    if len(password) < 8:
-        return False, "Password minimal 8 karakter!"
-    if not re.search(r"[A-Z]", password):
-        return False, "Password harus mengandung huruf kapital!"
-    if not re.search(r"[a-z]", password):
-        return False, "Password harus mengandung huruf kecil!"
-    if not re.search(r"[0-9]", password):
-        return False, "Password harus mengandung angka!"
-    
-    simbol = "!@#$%^&*()-_=+[{]};:'\",<.>/?\\|"
-    punya_simbol = False
-    for char in password:
-        if char in simbol:
-            punya_simbol = True
-            break
-    
-    if not punya_simbol:
-        return False, "Password harus mengandung simbol!"
-    
-    return True, "Valid"
-
 # login revisi / najwa
-def proses_login(username_input, password_input):
-    tabel_users = baca_data("users")
-    list_user = tabel_users.to_dict("records")
+def proses_login(username, password):
+    tabel = baca_data("users")
 
-    for user in list_user:
-        if user["username"] == username_input:
-            if user["password"] == password_input:
-                return user
-            else:
-                print("❌ Password salah!")
-                return None
+    user = tabel[tabel["username"].str.lower() == username.lower()]
+    if user.empty:
+        return "USERNAME_TIDAK_ADA"
 
-    print("❌ Username tidak terdaftar!")
-    return None
+    if user.iloc[0]["password"] != password:
+        return "PASSWORD_SALAH"
 
+    return user.iloc[0].to_dict()
+
+def cek_username(username):
+    tabel = baca_data("users")
+    if tabel.empty:
+        return "USERNAME_TIDAK_ADA"
+
+    if username.lower() not in tabel["username"].str.lower().values:
+        return "USERNAME_TIDAK_ADA"
+
+    return "ADA"
 
 
 # def proses_login(username_input, password_input):

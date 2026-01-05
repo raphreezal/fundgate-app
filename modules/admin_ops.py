@@ -8,9 +8,6 @@ from modules.utility import (
 from modules.auth import validasi_password
 from modules.divisi_ops import menu_divisi
 
-# ===============================
-# MENU ADMIN
-# ===============================
 def menu_admin(user_sedang_login):
     while True:
         clear_screen()
@@ -39,27 +36,24 @@ def menu_admin(user_sedang_login):
 
 # read
 def lihat_user():
-    tabel = baca_data("users")
+    clear_screen()
+    header()
+
+    tabel = baca_data("users").copy()
+
     if tabel.empty:
-        header()
         print("Data user masih kosong.")
-    else:
-        # Tampilkan tabel dengan tabulate agar rapih /kei
-        # clear_screen()
-        # print("\n--- DAFTAR USER ---")
-        # print(tabulate(tabel, headers='keys', tablefmt='psql', showindex=False))
-        clear_screen()
-        print("════════════════════════════════════════════════════════════════")
-        print("|                        F U N D G A T E                       |")
-        print("|              Sistem Pengajuan & Manajemen Keuangan           |")
-        print("════════════════════════════════════════════════════════════════\n")
-        print("────────────────────────── DAFTAR USER ─────────────────────────")
-        tampilkan_interaktif(tabel)    
+        input("Enter...")
+        return
+
+    # sembunyikan pw / najwa
+    tabel["password"] = tabel["password"].apply(
+        lambda x: "*" * len(str(x))
+    )
+
+    tampilkan_interaktif(tabel)  
 
 def tambah_user_baru():
-    # ===============================
-    # INPUT USERNAME
-    # ===============================
     clear_screen()
     header()
     print("─────────────── TAMBAH USER ─────────────────")
@@ -78,14 +72,19 @@ def tambah_user_baru():
             print(f"❌ {msg}")
             continue
 
-        if username in tabel_users["username"].values:
+        if username.lower() in tabel_users["username"].str.lower().values:
             print("❌ Username sudah digunakan!")
+            input("Enter...")
+            clear_screen()
+            header()
             continue
+
+        print("✅ Username tersedia dan dapat digunakan")
+        input("Enter...")
+        clear_screen()
+        header()
         break
 
-    # ===============================
-    # INPUT PASSWORD
-    # ===============================
     while True:
         password = input("Password (0 batal): ")
         if password == "0":
@@ -94,8 +93,17 @@ def tambah_user_baru():
         valid, pesan = validasi_password(password)
         if not valid:
             print(f"❌ {pesan}")
+            input("Enter...")
+            clear_screen()
+            header()
             continue
+
+        print("✅ Password valid dan dapat digunakan")
+        input("Enter...")
+        clear_screen()
+        header()
         break
+
 
     while True:
         konfirmasi = input("Konfirmasi Password: ")
@@ -104,9 +112,7 @@ def tambah_user_baru():
             continue
         break
 
-    # ===============================
-    # PILIH ROLE
-    # ===============================
+    # pilih role / najwa
     daftar_role = ["kepala_divisi", "auditor", "direktur"]
 
     print("\nPilih Role:")
@@ -116,9 +122,7 @@ def tambah_user_baru():
     pilihan_role = int(input("Pilihan: "))
     role = daftar_role[pilihan_role - 1]
 
-    # ===============================
-    # PILIH DIVISI
-    # ===============================
+    # pilih divisi / najwa
     if role == "kepala_divisi":
         tabel_divisi = baca_data("divisi")
         print("\nPilih Divisi:")
@@ -144,9 +148,6 @@ def tambah_user_baru():
     else:
         divisi = "-"
 
-    # ===============================
-    # SIMPAN USER
-    # ===============================
     id_user = generate_id_user(tabel_users)
 
     user_baru = {
@@ -161,10 +162,9 @@ def tambah_user_baru():
     simpan_data("users", tabel_users)
 
     print("✅ User berhasil dibuat!")
+    input("Enter....")
 
-# ===============================
-# UPDATE
-# ===============================
+# edit user / najwa
 def edit_user():
     tabel = baca_data("users")
     if tabel.empty:
@@ -186,11 +186,11 @@ def edit_user():
 
     print("\nTekan ENTER jika tidak ingin mengubah data")
 
-    # ===============================
-    # EDIT USERNAME
-    # ===============================
+    # edit usn / najwa
     while True:
         username = input(f"Username baru [{data_lama['username']}]: ").strip()
+
+        # jika enter maka tidak diubah / najwa
         if username == "":
             username = data_lama["username"]
             break
@@ -200,14 +200,23 @@ def edit_user():
             print(f"❌ {msg}")
             continue
 
-        if username in tabel["username"].values and username != data_lama["username"]:
+        username_lower = username.lower()
+        username_lama_lower = data_lama["username"].lower()
+
+        username_terpakai = (
+            tabel["username"]
+            .str.lower()
+            .isin([username_lower])
+            .any()
+        )
+
+        if username_terpakai and username_lower != username_lama_lower:
             print("❌ Username sudah digunakan!")
             continue
+
         break
 
-    # ===============================
-    # EDIT PASSWORD
-    # ===============================
+    # edit pw / najwa
     password = data_lama["password"]
     ubah_pw = input("Ubah password? (y/n): ").lower()
 
@@ -227,9 +236,7 @@ def edit_user():
             password = pw_baru
             break
 
-    # ===============================
-    # EDIT ROLE
-    # ===============================
+    # edit role / najwa
     daftar_role = ["kepala_divisi", "auditor", "direktur"]
     print("\nRole saat ini:", data_lama["role"])
     ganti_role = input("Ubah role? (y/n): ").lower()
@@ -252,9 +259,6 @@ def edit_user():
         else:
             divisi = "-"
 
-    # ===============================
-    # KONFIRMASI UPDATE
-    # ===============================
     print("\n--- KONFIRMASI PERUBAHAN ---")
     print("Username :", data_lama["username"], "→", username)
     print("Role     :", data_lama["role"], "→", role)
@@ -265,9 +269,6 @@ def edit_user():
         print("❌ Perubahan dibatalkan")
         return
 
-    # ===============================
-    # SIMPAN
-    # ===============================
     tabel.at[index, "username"] = username
     tabel.at[index, "password"] = password
     tabel.at[index, "role"] = role
@@ -275,11 +276,10 @@ def edit_user():
 
     simpan_data("users", tabel)
     print("✅ Data user berhasil diperbarui!")
+    input("Enter...")
 
 
-# ===============================
-# DELETE
-# ===============================
+# hapus user / najwa
 def hapus_user():
     tabel_users = baca_data("users")
     if tabel_users.empty:
