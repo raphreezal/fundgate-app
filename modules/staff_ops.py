@@ -26,7 +26,7 @@ def menu_kepala_divisi(user):
         elif pilih == "0":
             return
         else:
-            input("\n⚠️  Pilihan tidak valid! Tekan Enter untuk input ulang...")
+            input("\n⚠️  Pilihan tidak valid!\nTekan Enter untuk input ulang...")
 
 
 # form pengajuan dana
@@ -61,9 +61,9 @@ def buat_pengajuan_dana(user):
             if jenis:
                 prefix = "LNS"
                 break
-            input("\n⚠️  Tidak boleh kosong! Tekan Enter untuk input ulang...")
+            input("\n⚠️  Tidak boleh kosong!\nTekan Enter untuk input ulang...")
         else:
-            input("\n⚠️  Pilihan tidak valid! Tekan Enter untuk input ulang...")
+            input("\n⚠️  Pilihan tidak valid!\nTekan Enter untuk input ulang...")
 
     id_pengajuan = f"{prefix}-{datetime.now().strftime('%H%M%S')}{random.randint(10,99)}"
     id_rincian = f"RIN-{datetime.now().strftime('%H%M%S')}{random.randint(10,99)}"
@@ -100,7 +100,7 @@ def buat_pengajuan_dana(user):
                 goto_simpan = False
                 break
             else:
-                input("\n⚠️  Pilihan tidak valid! Tekan Enter untuk input ulang...")
+                input("\n⚠️  Pilihan tidak valid!\nTekan Enter untuk input ulang...")
 
         if goto_simpan:
             break
@@ -116,7 +116,7 @@ def buat_pengajuan_dana(user):
 
             if nama:
                 break
-            input("\n⚠️  Nama tidak boleh kosong! Tekan Enter untuk input ulang...")
+            input("\n⚠️  Nama tidak boleh kosong!\nTekan Enter untuk input ulang...")
 
         # jumlah item
         while True:
@@ -131,7 +131,7 @@ def buat_pengajuan_dana(user):
             if jumlah.isdigit() and int(jumlah) > 0:
                 jumlah = int(jumlah)
                 break
-            input("\n⚠️  Jumlah harus angka > 0! Tekan Enter untuk input ulang...")
+            input("\n⚠️  Jumlah harus angka > 0!\nTekan Enter untuk input ulang...")
 
         # harga satuan
         while True:
@@ -147,7 +147,7 @@ def buat_pengajuan_dana(user):
             if harga.isdigit() and int(harga) > 0:
                 harga = int(harga)
                 break
-            input("\n⚠️  Harga harus angka > 0! Tekan Enter untuk input ulang...")
+            input("\n⚠️  Harga harus angka > 0!\nTekan Enter untuk input ulang...")
 
         subtotal = jumlah * harga
         total += subtotal
@@ -201,13 +201,13 @@ def buat_pengajuan_dana(user):
                 catatan = "Melebihi limit"
                 break
             elif pilih == "0":
-                input("\n❎ Pengajuan dibatalkan! Tekan Enter untuk kembali...")
+                input("\n❎ Pengajuan dibatalkan!\nTekan Enter untuk kembali...")
                 return
             else:
-                input("\n⚠️  Pilihan tidak valid! Tekan Enter untuk input ulang...")
+                input("\n⚠️  Pilihan tidak valid!\nTekan Enter untuk input ulang...")
     else:
         if input("\nKonfirmasi simpan pengajuan? (y/n): ").lower() != "y":
-            input("\n❎ Pengajuan dibatalkan! Tekan Enter untuk kembali...")
+            input("\n❎ Pengajuan dibatalkan!\nTekan Enter untuk kembali...")
             return
 
     # simpan pengajuan dana
@@ -234,7 +234,7 @@ def buat_pengajuan_dana(user):
     simpan_data("pengajuan", df_pengajuan)
     simpan_data("rincian_pengajuan", df_rincian)
 
-    input("\n✅ Pengajuan berhasil diproses! Tekan Enter untuk lanjut...")
+    input("\n✅ Pengajuan berhasil diproses!\nTekan Enter untuk lanjut...")
 
 # riwayat
 def riwayat_pengajuan(user):
@@ -249,7 +249,7 @@ def riwayat_pengajuan(user):
     data = data[data["id_kepala_divisi"] == user["id"]]
 
     if data.empty:
-        input("⚠️  Belum ada pengajuan. Tekan Enter untuk kembali...")
+        input("⚠️  Belum ada pengajuan.\nTekan Enter untuk kembali...")
         return
 
     view = data.copy()
