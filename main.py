@@ -42,18 +42,31 @@ def main():
             header()
             print("────────────────── LOGIN ────────────────────")
 
+            # input usn / najwa
             username = input("Username : ").strip()
             if not username:
                 print("❌ Username tidak boleh kosong!")
                 input("Enter...")
                 continue
 
+            # cek usn / najwa
+            hasil_username = proses_login(username, None)
+
+            if hasil_username == "USERNAME_TIDAK_ADA":
+                print("❌ Username tidak terdaftar!")
+                percobaan += 1
+                print(f"Sisa percobaan: {maks_login - percobaan}")
+                input("Enter...")
+                continue
+
+            # input pw / najwa
             password = input("Password : ").strip()
             if not password:
                 print("❌ Password tidak boleh kosong!")
                 input("Enter...")
                 continue
 
+            # cek pw / najwa
             hasil = proses_login(username, password)
 
             if isinstance(hasil, dict):
@@ -61,12 +74,10 @@ def main():
                 break
             elif hasil == "PASSWORD_SALAH":
                 print("❌ Password salah!")
-            elif hasil == "USERNAME_TIDAK_ADA":
-                print("❌ Username tidak terdaftar!")
+                percobaan += 1
+                print(f"Sisa percobaan: {maks_login - percobaan}")
+                input("Enter...")
 
-            percobaan += 1
-            print(f"Sisa percobaan: {maks_login - percobaan}")
-            input("Enter...")
 
 
         if percobaan == maks_login:
