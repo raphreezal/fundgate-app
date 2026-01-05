@@ -80,8 +80,17 @@ def tambah_user_baru():
 
         if username in tabel_users["username"].values:
             print("❌ Username sudah digunakan!")
+            input("Enter...")
+            clear_screen()
+            header()
             continue
+
+        print("✅ Username tersedia dan dapat digunakan")
+        input("Enter...")
+        clear_screen()
+        header()
         break
+
 
     # ===============================
     # INPUT PASSWORD
@@ -94,8 +103,17 @@ def tambah_user_baru():
         valid, pesan = validasi_password(password)
         if not valid:
             print(f"❌ {pesan}")
+            input("Enter...")
+            clear_screen()
+            header()
             continue
+
+        print("✅ Password valid dan dapat digunakan")
+        input("Enter...")
+        clear_screen()
+        header()
         break
+
 
     while True:
         konfirmasi = input("Konfirmasi Password: ")
@@ -161,6 +179,7 @@ def tambah_user_baru():
     simpan_data("users", tabel_users)
 
     print("✅ User berhasil dibuat!")
+    input("Enter...")
 
 # ===============================
 # UPDATE
@@ -275,6 +294,7 @@ def edit_user():
 
     simpan_data("users", tabel)
     print("✅ Data user berhasil diperbarui!")
+    input("Enter...")
 
 
 # ===============================

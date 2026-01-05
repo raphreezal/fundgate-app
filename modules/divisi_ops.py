@@ -1,7 +1,7 @@
 import pandas as pd
 from modules.utility import baca_data, simpan_data, tampilkan_interaktif
 
-def menu_divisi():
+def menu_divisi(user_sedang_login=None):
     while True:
         print("\n=== KELOLA DIVISI ===")
         print("1. Lihat Divisi")
