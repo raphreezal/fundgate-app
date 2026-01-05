@@ -179,7 +179,7 @@ def tambah_user_baru():
     simpan_data("users", tabel_users)
 
     print("✅ User berhasil dibuat!")
-    input("Enter...")
+    input("Enter....")
 
 # ===============================
 # UPDATE
