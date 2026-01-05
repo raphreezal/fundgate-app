@@ -182,8 +182,8 @@ def buat_pengajuan_dana(user):
     clear_screen()
     header()
     tabel_rapih(rincian, "RINGKASAN PENGAJUAN")
-    print(f"\nTOTAL : {format_rupiah(total)}")
-    print(f"LIMIT : {format_rupiah(limit)}")
+    print(f"\nLimit Pengajuan Dana   : {format_rupiah(limit)}")
+    print(f"Total Pengajuan Dana   : {format_rupiah(total)}")
 
     status = "Menunggu"
     catatan = ""
@@ -201,11 +201,13 @@ def buat_pengajuan_dana(user):
                 catatan = "Melebihi limit"
                 break
             elif pilih == "0":
+                input("\n❎ Pengajuan dibatalkan! Tekan Enter untuk kembali...")
                 return
             else:
-                input("\n⚠️  Pilihan tidak valid! Tekan Enter...")
+                input("\n⚠️  Pilihan tidak valid! Tekan Enter untuk input ulang...")
     else:
         if input("\nKonfirmasi simpan pengajuan? (y/n): ").lower() != "y":
+            input("\n❎ Pengajuan dibatalkan! Tekan Enter untuk kembali...")
             return
 
     # simpan pengajuan dana
@@ -232,7 +234,7 @@ def buat_pengajuan_dana(user):
     simpan_data("pengajuan", df_pengajuan)
     simpan_data("rincian_pengajuan", df_rincian)
 
-    input("\n✅ Pengajuan berhasil diproses! Tekan Enter...")
+    input("\n✅ Pengajuan berhasil diproses! Tekan Enter untuk lanjut...")
 
 # riwayat
 def riwayat_pengajuan(user):
@@ -247,7 +249,7 @@ def riwayat_pengajuan(user):
     data = data[data["id_kepala_divisi"] == user["id"]]
 
     if data.empty:
-        input("⚠️  Belum ada pengajuan. Tekan Enter...")
+        input("⚠️  Belum ada pengajuan. Tekan Enter untuk kembali...")
         return
 
     view = data.copy()
