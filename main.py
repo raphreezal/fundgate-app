@@ -38,22 +38,36 @@ def main():
         percobaan = 0
 
         while percobaan < maks_login:
+            clear_screen()
+            header()
+            print("────────────────── LOGIN ────────────────────")
+
             username = input("Username : ").strip()
             if not username:
-                print("⚠️  Username tidak boleh kosong!\n")
+                print("❌ Username tidak boleh kosong!")
+                input("Enter...")
                 continue
 
             password = input("Password : ").strip()
             if not password:
-                print("⚠️  Password tidak boleh kosong!")
+                print("❌ Password tidak boleh kosong!")
+                input("Enter...")
                 continue
 
-            data_user = proses_login(username, password)
-            if data_user:
+            hasil = proses_login(username, password)
+
+            if isinstance(hasil, dict):
+                data_user = hasil
                 break
+            elif hasil == "PASSWORD_SALAH":
+                print("❌ Password salah!")
+            elif hasil == "USERNAME_TIDAK_ADA":
+                print("❌ Username tidak terdaftar!")
 
             percobaan += 1
-            print(f"Sisa percobaan :  {maks_login - percobaan}")
+            print(f"Sisa percobaan: {maks_login - percobaan}")
+            input("Enter...")
+
 
         if percobaan == maks_login:
             print("❌ Login gagal 3 kali. Program dihentikan.")

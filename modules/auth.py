@@ -34,11 +34,8 @@ def proses_login(username_input, password_input):
             if user["password"] == password_input:
                 return user
             else:
-                print("❌ Password salah!")
-                return None
-
-    print("❌ Username tidak terdaftar!")
-    return None
+                return "PASSWORD_SALAH"
+    return "USERNAME_TIDAK_ADA"
 
 
 

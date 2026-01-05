@@ -39,22 +39,22 @@ def menu_admin(user_sedang_login):
 
 # read
 def lihat_user():
-    tabel = baca_data("users")
+    clear_screen()
+    header()
+
+    tabel = baca_data("users").copy()
+
     if tabel.empty:
-        header()
         print("Data user masih kosong.")
-    else:
-        # Tampilkan tabel dengan tabulate agar rapih /kei
-        # clear_screen()
-        # print("\n--- DAFTAR USER ---")
-        # print(tabulate(tabel, headers='keys', tablefmt='psql', showindex=False))
-        clear_screen()
-        print("════════════════════════════════════════════════════════════════")
-        print("|                        F U N D G A T E                       |")
-        print("|              Sistem Pengajuan & Manajemen Keuangan           |")
-        print("════════════════════════════════════════════════════════════════\n")
-        print("────────────────────────── DAFTAR USER ─────────────────────────")
-        tampilkan_interaktif(tabel)    
+        input("Enter...")
+        return
+
+    # 🔐 Sembunyikan password
+    tabel["password"] = tabel["password"].apply(
+        lambda x: "*" * len(str(x))
+    )
+
+    tampilkan_interaktif(tabel)  
 
 def tambah_user_baru():
     # ===============================
