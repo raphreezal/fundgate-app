@@ -13,11 +13,11 @@ def menu_admin(user_sedang_login):
         clear_screen()
         header()
         print("─────────────── KELOLA USER ─────────────────")
-        print("1. Lihat Daftar User")
-        print("2. Tambah User")
-        print("3. Edit User")
-        print("4. Hapus User")
-        print("0. Kembali")
+        print("[1] Lihat Daftar User")
+        print("[2] Tambah User")
+        print("[3] Edit User")
+        print("[4] Hapus User")
+        print("[0] Kembali")
 
         pilihan = input("Pilih: ")
 
