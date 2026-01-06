@@ -24,7 +24,7 @@ def menu_divisi(user_sedang_login=None):
         elif pilih == "0":
             break
         else:
-            print("❌ Pilihan tidak valid")
+            print("⚠️   Pilihan tidak valid")
 
 
 def lihat_divisi():
@@ -43,15 +43,15 @@ def tambah_divisi():
         if nama == "0":
             return
         if not nama:
-            print("❌ Tidak boleh kosong")
+            print("⚠️   Tidak boleh kosong")
             continue
         if not tabel.empty and nama.lower() in tabel["nama_divisi"].str.lower().values:
-            print("❌ Divisi sudah ada")
+            print("⚠️   Divisi sudah ada")
             continue
         break
 
     if input("Simpan divisi ini? (y/n): ").lower() != "y":
-        print("❌ Dibatalkan")
+        print("⚠️   Dibatalkan")
         return
 
     tabel = pd.concat([tabel, pd.DataFrame([{"nama_divisi": nama}])], ignore_index=True)
@@ -72,20 +72,20 @@ def edit_divisi():
         return
 
     if nama_lama.lower() not in tabel["nama_divisi"].str.lower().values:
-        print("❌ Divisi tidak ditemukan")
+        print("⚠️   Divisi tidak ditemukan")
         return
 
     nama_baru = input(f"Nama baru [{nama_lama}]: ").strip()
     if not nama_baru:
-        print("❌ Tidak ada perubahan")
+        print("⚠️   Tidak ada perubahan")
         return
 
     if nama_baru.lower() in tabel["nama_divisi"].str.lower().values:
-        print("❌ Nama sudah digunakan")
+        print("⚠️   Nama sudah digunakan")
         return
 
     if input("Simpan perubahan? (y/n): ").lower() != "y":
-        print("❌ Dibatalkan")
+        print("⚠️   Dibatalkan")
         return
 
     tabel.loc[tabel["nama_divisi"].str.lower() == nama_lama.lower(), "nama_divisi"] = nama_baru
@@ -106,11 +106,11 @@ def hapus_divisi():
         return
 
     if nama.lower() not in tabel["nama_divisi"].str.lower().values:
-        print("❌ Divisi tidak ditemukan")
+        print("⚠️   Divisi tidak ditemukan")
         return
 
     if input("Yakin hapus divisi ini? (y/n): ").lower() != "y":
-        print("❌ Dibatalkan")
+        print("⚠️   Dibatalkan")
         return
 
     tabel = tabel[tabel["nama_divisi"].str.lower() != nama.lower()]

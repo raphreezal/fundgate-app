@@ -38,19 +38,19 @@ def menu_laporan(user_sedang_login):
         pilihan = input("Pilih Menu: ").strip()
         
         if pilihan == "":
-            input("\n⚠️  Pilihan tidak boleh kosong! Tekan Enter untuk input ulang...")
+            input("\n⚠️    Pilihan tidak boleh kosong! Tekan Enter untuk input ulang...\n")
             continue
 
         if not pilihan.isdigit():
-            input("\n⚠️  Pilihan harus berupa angka! Tekan Enter untuk input ulang...")
+            input("\n⚠️    Pilihan harus berupa angka! Tekan Enter untuk input ulang...\n")
             continue
 
         if pilihan not in ["0", "1", "2", "3", "4"]:
-            input("\n⚠️  Pilihan tidak valid! Tekan Enter untuk input ulang...")
+            input("\n⚠️    Pilihan tidak valid! Tekan Enter untuk input ulang...\n")
             continue
 
         if df.empty and pilihan != "0":
-            input("\n⚠️  Belum ada data pengajuan sama sekali! Tekan Enter untuk kembali...")
+            input("\n⚠️    Belum ada data pengajuan sama sekali! Tekan Enter untuk kembali...\n")
             continue
 
         if pilihan == "1":

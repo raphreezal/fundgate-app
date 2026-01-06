@@ -139,7 +139,7 @@ def tampilkan_interaktif(df):
             if i_kolom.isdigit() and 0 <= int(i_kolom) < len(cols):
                 kolom = cols[int(i_kolom)]
             else:
-                input("Nomor kolom salah! Enter untuk lanjut...")
+                input("Nomor kolom salah! Enter untuk lanjut...\n")
                 continue
 
             if kolom in cols:
@@ -149,7 +149,7 @@ def tampilkan_interaktif(df):
                 # Proses sorting
                 df_tampil = df_tampil.sort_values(by=kolom, ascending=is_asc)
             else:
-                input("Nama kolom salah! Enter untuk lanjut...")
+                input("Nama kolom salah! Enter untuk lanjut...\n")
 
         elif aksi == "2":
             # FITUR SEARCHING /kei
@@ -174,7 +174,7 @@ def tampilkan_interaktif(df):
             df_tampil = df_tampil[baris_yang_cocok]
             
             print(f"Ketemu {len(df_tampil)} data.")
-            input("Tekan Enter untuk melihat hasil...")
+            input("Tekan Enter untuk melihat hasil...\n")
 
         elif aksi == "3":
             # reset ke data awal /kei

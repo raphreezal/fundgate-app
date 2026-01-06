@@ -17,70 +17,62 @@ def main():
     while True:
         print("\n────────────────── LOGIN ────────────────────")
         
-        # validasi username / najwa 
-        # while True:
-        #     input_user = input("Username : ").strip()
-        #     if not input_user:
-        #         print("Username tidak boleh kosong!")
-        #     else:
-        #         break
-        
-        # # validasi password / najwa
-        # while True:
-        #     input_pass = input("Password : ").strip()
-        #     if not input_pass:
-        #         print("Password tidak boleh kosong!")
-        #     else:
-        #         break
-        
         # login revisi (max 3 kali percobaan) / najwa
         maks_login = 3
         percobaan = 0
+        data_user = None
 
         while percobaan < maks_login:
             clear_screen()
             header()
-            print("────────────────── LOGIN ────────────────────")
+            
+            while True:
+                print("────────────────── LOGIN ────────────────────\n")
+                username = input("Username : ").strip()
+                if not username:
+                    print("⚠️   Username tidak boleh kosong!")
+                    input("Tekan Enter untuk input ulang...\n")
+                    clear_screen()
+                    header()
+                    continue
 
-            # input usn / najwa
-            username = input("Username : ").strip()
-            if not username:
-                print("❌ Username tidak boleh kosong!")
-                input("Enter...")
-                continue
+                hasil_username = cek_username(username)
+                if hasil_username == "USERNAME_TIDAK_ADA":
+                    print("⚠️   Username tidak terdaftar!")
+                    input("Tekan Enter untuk input ulang...\n")
+                    clear_screen()
+                    header()
+                    continue
+                else:
+                    print("✅ Username terdaftar")
+                    input("Tekan Enter untuk melanjutkan...\n")
+                    break 
 
-            # cek usn / najwa
-            hasil_username = cek_username(username)
-            if hasil_username == "USERNAME_TIDAK_ADA":
-                print("❌ Username tidak terdaftar!")
-                input("Enter...")
-                continue
+            while True:
+                password = input("Password : ").strip()
+                if not password:
+                    print("⚠️   Password tidak boleh kosong!")
+                    input("Tekan Enter untuk input ulang...\n")
+                    continue 
 
-            # input pw / najwa
-            password = input("Password : ").strip()
-            if not password:
-                print("❌ Password tidak boleh kosong!")
-                input("Enter...")
-                continue
+                hasil = proses_login(username, password)
+                if isinstance(hasil, dict):
+                    data_user = hasil
+                    break  
+                elif hasil == "PASSWORD_SALAH":
+                    percobaan += 1
 
-            # cek pw / najwa
-            hasil = proses_login(username, password)
+                    if percobaan >= maks_login:
+                        print("❌ Login Gagal! Percobaan login sudah habis (3 kali).")
+                        print("Program dihentikan.")
+                        exit()
 
-            if isinstance(hasil, dict):
-                data_user = hasil
-                break
-            elif hasil == "PASSWORD_SALAH":
-                print("❌ Password salah!")
-                percobaan += 1
-                print(f"Sisa percobaan: {maks_login - percobaan}")
-                input("Enter...")
+                    print("⚠️   Password salah!")
+                    print(f"Sisa percobaan: {maks_login - percobaan}")
+                    input("Tekan Enter untuk input ulang...\n")
 
-
-
-        if percobaan == maks_login:
-            print("❌ Login gagal 3 kali. Program dihentikan.")
-            exit()
-
+            if data_user is not None:
+                break 
 
         if data_user is None:
             print("Gagal! Username atau Password salah.")
@@ -88,20 +80,20 @@ def main():
             # kalau berhasil login, cek rolenya siapa /kei
             nama = data_user['username']
             peran = data_user['role']
-            print(f"\n===== ✅  Login Sukses! Halo, {nama} ({peran}) =====")
+            # print(f"\n===== ✅  Login Sukses! Halo, {nama} ({peran}) =====")
             
             # 3. arahin ke menu sesuai peran (Role) /kei
-            if peran == "kepala_divisi":
+            if peran == "Kepala Divisi":
                 # panggil fungsi buatan mars /kei
-                # disini
                 menu_kepala_divisi(data_user)
             
-            elif peran == "manajer_keuangan":
+            elif peran == "Manajer Keuangan":
                 while True:
                     clear_screen()
-                # manajer punya akses spesial ke menu admin juga /kei
+                    # manajer punya akses spesial ke menu admin juga /kei
 
                     header()
+                    print(f"Selamat datang, {nama}! \nAnda masuk sebagai {peran}.\n") # nambah info usn sama role / najwa
                     print("──────────────── MENU UTAMA ─────────────────") # punya manajer keuangan /farah
                     print("1. 💰 Kelola Keuangan")
                     print("2. 👤 Kelola User")
@@ -128,14 +120,14 @@ def main():
                         break
 
                     else:
-                        print("\n⚠️  Pilihan tidak valid!")
-                        input("Tekan Enter untuk input ulang...")
+                        print("\n⚠️    Pilihan tidak valid!")
+                        input("Tekan Enter untuk input ulang...\n")
 
-            elif peran in ("direktur", "auditor"):
+            elif peran in ("Direktur", "Auditor"):
                 menu_laporan(data_user)
 
             else:
-                print("⚠️  Role tidak dikenali.")
+                print("⚠️    Role tidak dikenali.")
         
             # kalau loop menu selesai (user pilih logout), tanya mau keluar aplikasi gak? /kei
             lagi = input("\nApakah ada user lain yang mau login? (y/n): ")

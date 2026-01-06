@@ -1,4 +1,4 @@
 id,username,password,role,divisi
-USR001,Evelyn,Admin123*,manajer_keuangan
-USR002,yanto,Yanto123#,kepala_divisi,pemasaran
-USR003,kei,kei,kepala_divisi,IT
+USR001,Evelyn,Admin123*,Manajer Keuangan
+USR002,yanto,Yanto123#,Kepala Divisi,pemasaran
+USR003,kei,kei,Kepala Divisi,IT
