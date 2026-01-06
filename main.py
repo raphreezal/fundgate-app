@@ -6,6 +6,14 @@ from modules.admin_ops import menu_admin
 from modules.report import menu_laporan
 from modules.divisi_ops import menu_divisi
 
+# funsi konfirmasi inputan / najwa
+def konfirmasi_yn(pesan):
+    while True:
+        jawab = input(pesan).strip().lower()
+        if jawab in ("y", "n"):
+            return jawab
+        print("❌ Input tidak valid! Harus y atau n.")
+        input("Tekan Enter untuk input ulang...\n")
 
 def main():
     # 1. pastiin database siap dulu sebelum aplikasi mulai /kei
@@ -117,8 +125,13 @@ def main():
                         menu_laporan(data_user)
 
                     elif opsi == "0":
-                        break
-
+                        jawab = konfirmasi_yn("\nApakah yakin ingin logout? (y/n): ")
+                        if jawab == "n":
+                            continue 
+                        else:
+                            print("\n✅  Berhasil logout.")
+                            break 
+                        
                     else:
                         print("\n⚠️    Pilihan tidak valid!")
                         input("Tekan Enter untuk input ulang...\n")
@@ -130,10 +143,14 @@ def main():
                 print("⚠️    Role tidak dikenali.")
         
             # kalau loop menu selesai (user pilih logout), tanya mau keluar aplikasi gak? /kei
-            lagi = input("\nApakah ada user lain yang mau login? (y/n): ")
-            if lagi.lower() != 'y':
+            # updated / najwa
+            jawab = konfirmasi_yn("\nApakah ada user lain yang mau login? (y/n): ")
+            if jawab == "y":
+                continue  
+            else:
                 print("Terima kasih, sampai jumpa!")
-                break
+                break 
+
 
 if __name__ == "__main__":
     main()
