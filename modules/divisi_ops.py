@@ -5,11 +5,11 @@ from modules.utility import baca_data, simpan_data, tampilkan_interaktif
 def menu_divisi(user_sedang_login=None):
     while True:
         print("\n=== KELOLA DIVISI ===")
-        print("1. Lihat Divisi")
-        print("2. Tambah Divisi")
-        print("3. Edit Divisi")
-        print("4. Hapus Divisi")
-        print("0. Kembali")
+        print("[1] Lihat Divisi")
+        print("[2] Tambah Divisi")
+        print("[3] Edit Divisi")
+        print("[4] Hapus Divisi")
+        print("[0] Kembali")
 
         pilih = input("Pilih: ")
 
