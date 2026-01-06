@@ -120,12 +120,19 @@ def tampilkan_interaktif(df):
             print(tabulate(df_tampil, headers='keys', tablefmt='psql', showindex=False))
         
         print("\n[MENU INTERAKTIF]")
-        print("1. Sort (Urutkan Data)")
-        print("2. Search (Cari Data)")
-        print("3. Reset (Kembalikan Awal)")
-        print("0. Kembali")
+        print("[1] Sort (Urutkan Data)")
+        print("[2] Search (Cari Data)")
+        print("[3] Reset (Kembalikan Awal)")
+        print("[0] Kembali")
         
         aksi = input("Pilih aksi: ")
+
+        if aksi == "":
+            input("\n⚠️  Pilihan tidak boleh kosong!\nTekan Enter untuk input ulang...")
+            continue
+        if not aksi.isdigit() or aksi not in ["0","1","2","3"]:
+            input("\n⚠️  Pilihan tidak valid!\nTekan Enter untuk input ulang...")
+            continue
         
         if aksi == "1":
             # --- FITUR SORTING --- /kei
@@ -133,27 +140,25 @@ def tampilkan_interaktif(df):
             print("\nKolom tersedia:")
             for i, c in enumerate(cols):
                 print(f"{i}. {c}")
-                
-            i_kolom = input("Urutkan berdasarkan kolom apa? : ")
-            
-            if i_kolom.isdigit() and 0 <= int(i_kolom) < len(cols):
-                kolom = cols[int(i_kolom)]
-            else:
-                input("Nomor kolom salah! Enter untuk lanjut...")
+            i_kolom = input("Urutkan berdasarkan kolom apa? ").strip()
+            if not i_kolom.isdigit() or int(i_kolom) not in range(len(cols)):
+                input("\n⚠️  Nomor kolom salah!\nTekan Enter untuk input ulang...")
+                continue
+            kolom = cols[int(i_kolom)]
+
+            urutan = input("Ascending (a) atau Descending (d)? ").strip().lower()
+            if urutan not in ["a","d"]:
+                input("\n⚠️  Pilihan urutan salah!\nTekan Enter untuk input ulang...")
                 continue
 
-            if kolom in cols:
-                urutan = input("Ascending (a) atau Descending (d)? : ").lower()
-                is_asc = True if urutan == 'a' else False
-                
-                # Proses sorting
-                df_tampil = df_tampil.sort_values(by=kolom, ascending=is_asc)
-            else:
-                input("Nama kolom salah! Enter untuk lanjut...")
+            df_tampil = df_tampil.sort_values(by=kolom, ascending=(urutan=="a"))
 
         elif aksi == "2":
             # FITUR SEARCHING /kei
             kata_kunci = input("Cari kata apa? : ").lower()
+            if kata_kunci == "":
+                input("\n⚠️  Kata kunci tidak boleh kosong!\nTekan Enter untuk input ulang...")
+                continue
             
             # 1. siapkan wadah kosong (anggap semua baris belum ketemu / False) /kei
             baris_yang_cocok = pd.Series(False, index=df_tampil.index)
@@ -172,19 +177,15 @@ def tampilkan_interaktif(df):
 
             # 4. ambil cuma baris yang cocok tadi /kei
             df_tampil = df_tampil[baris_yang_cocok]
-            
-            print(f"Ketemu {len(df_tampil)} data.")
-            input("Tekan Enter untuk melihat hasil...")
+            input(f"\nKetemu {len(df_tampil)} data.\nTekan Enter untuk melihat hasil...")
 
         elif aksi == "3":
             # reset ke data awal /kei
             df_tampil = df.copy()
-            print("Data di-reset.")
+            input("\nData di-reset.\nTekan Enter untuk melanjutkan...")
 
         elif aksi == "0":
             break
-        else:
-            print("Pilihan tidak valid.")
 
 def tabel_rapih(df, judul="DATA"):
     df_tampil = df.copy()
