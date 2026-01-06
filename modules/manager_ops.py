@@ -5,10 +5,10 @@ def menu_manajer(user_sedang_login):
         clear_screen()
         header()
         print("────────────── KELOLA KEUANGAN ──────────────")
-        print("1. Cek & Proses Pengajuan Dana")
-        print("2. Lihat Saldo & Limit")
-        print("3. Set Limit Pengajuan")
-        print("0. Kembali")
+        print("[1] Cek & Proses Pengajuan Dana")
+        print("[2] Lihat Saldo & Limit")
+        print("[3] Set Limit Pengajuan")
+        print("[0] Kembali")
 
         pilihan = input("Pilih menu: ").strip()
         if pilihan == "1":
@@ -103,9 +103,9 @@ def proses_persetujuan_dana():
             print(f"\nSaldo perusahaan saat ini : {format_rupiah(saldo_perusahaan)}")
             print(f"Total pengajuan           : {format_rupiah(total_pengajuan)}") 
 
-            print("1. Setujui")
-            print("2. Tolak")
-            print("0. Batal")
+            print("[1] Setujui")
+            print("[2] Tolak")
+            print("[0] Batal")
 
             keputusan = input("Pilih tindakan: ").strip()
         
@@ -188,8 +188,8 @@ def set_limit_pengajuan():
         limit = data_keuangan.loc[0, "limit_pengajuan"]
         print("──────────── SET LIMIT PENGAJUAN ────────────")
         print(f"Limit saat ini : {format_rupiah(limit):>15}")
-        print("\n1. Set nominal limit baru")
-        print("0. Batal / Kembali")
+        print("\n[1] Set nominal limit baru")
+        print("[0] Batal / Kembali")
 
         pilihan = input("Pilih menu: ").strip()
 
