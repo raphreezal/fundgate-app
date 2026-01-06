@@ -3,9 +3,9 @@ import pandas as pd
 from modules.utility import (
     baca_data, simpan_data, clear_screen,
     tampilkan_interaktif, validasi_username,
-    generate_id_user, header
+    generate_id_user, header, validasi_password
 )
-from modules.auth import validasi_password
+# from modules.auth import validasi_password
 from modules.divisi_ops import menu_divisi
 
 def menu_admin(user_sedang_login):
