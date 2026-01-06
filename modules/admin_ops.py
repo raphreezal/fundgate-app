@@ -43,7 +43,7 @@ def lihat_user():
 
     if tabel.empty:
         print("Data user masih kosong.")
-        input("Enter...")
+        input("Enter...\n\n")
         return
 
     # sembunyikan pw / najwa
@@ -64,23 +64,23 @@ def tambah_user_baru():
             return
 
         if not username:
-            print("❌ Username tidak boleh kosong\n")
+            print("⚠️   Username tidak boleh kosong\n")
             continue
 
         valid, msg = validasi_username(username)
         if not valid:
-            print(f"❌ {msg}")
+            print(f"⚠️   {msg}")
             continue
 
         if username.lower() in tabel_users["username"].str.lower().values:
-            print("❌ Username sudah digunakan!")
-            input("Enter...")
+            print("⚠️   Username sudah digunakan!")
+            input("Enter...\n\n")
             clear_screen()
             header()
             continue
 
         print("✅ Username tersedia dan dapat digunakan")
-        input("Enter...")
+        input("Enter...\n\n")
         clear_screen()
         header()
         break
@@ -92,14 +92,14 @@ def tambah_user_baru():
 
         valid, pesan = validasi_password(password)
         if not valid:
-            print(f"❌ {pesan}")
-            input("Enter...")
+            print(f"⚠️   {pesan}")
+            input("Enter...\n\n")
             clear_screen()
             header()
             continue
 
         print("✅ Password valid dan dapat digunakan")
-        input("Enter...")
+        input("Enter...\n\n")
         clear_screen()
         header()
         break
@@ -108,7 +108,7 @@ def tambah_user_baru():
     while True:
         konfirmasi = input("Konfirmasi Password: ")
         if konfirmasi != password:
-            print("❌ Konfirmasi tidak sesuai")
+            print("⚠️   Konfirmasi tidak sesuai")
             continue
         break
 
@@ -162,7 +162,7 @@ def tambah_user_baru():
     simpan_data("users", tabel_users)
 
     print("✅ User berhasil dibuat!")
-    input("Enter....")
+    input("Enter...\n\n.")
 
 # edit user / najwa
 def edit_user():
@@ -178,7 +178,7 @@ def edit_user():
         return
 
     if id_edit not in tabel["id"].astype(str).values:
-        print("❌ ID tidak ditemukan!")
+        print("⚠️   ID tidak ditemukan!")
         return
 
     index = tabel[tabel["id"].astype(str) == id_edit].index[0]
@@ -197,7 +197,7 @@ def edit_user():
 
         valid, msg = validasi_username(username)
         if not valid:
-            print(f"❌ {msg}")
+            print(f"⚠️   {msg}")
             continue
 
         username_lower = username.lower()
@@ -211,7 +211,7 @@ def edit_user():
         )
 
         if username_terpakai and username_lower != username_lama_lower:
-            print("❌ Username sudah digunakan!")
+            print("⚠️   Username sudah digunakan!")
             continue
 
         break
@@ -225,12 +225,12 @@ def edit_user():
             pw_baru = input("Password baru: ")
             valid, pesan = validasi_password(pw_baru)
             if not valid:
-                print(f"❌ {pesan}")
+                print(f"⚠️   {pesan}")
                 continue
 
             konfirmasi = input("Konfirmasi password: ")
             if konfirmasi != pw_baru:
-                print("❌ Konfirmasi tidak sesuai")
+                print("⚠️   Konfirmasi tidak sesuai")
                 continue
 
             password = pw_baru
@@ -266,7 +266,7 @@ def edit_user():
 
     konfirmasi = input("Simpan perubahan? (y/n): ").lower()
     if konfirmasi != "y":
-        print("❌ Perubahan dibatalkan")
+        print("⚠️   Perubahan dibatalkan")
         return
 
     tabel.at[index, "username"] = username
@@ -276,7 +276,7 @@ def edit_user():
 
     simpan_data("users", tabel)
     print("✅ Data user berhasil diperbarui!")
-    input("Enter...")
+    input("Enter...\n\n")
 
 
 # hapus user / najwa
@@ -293,12 +293,12 @@ def hapus_user():
         return
 
     if id_target not in tabel_users["id"].astype(str).values:
-        print("❌ ID tidak ditemukan")
+        print("⚠️   ID tidak ditemukan")
         return
 
     konfirmasi = input("Yakin ingin menghapus user ini? (y/n): ").lower()
     if konfirmasi != "y":
-        print("❌ Penghapusan dibatalkan")
+        print("⚠️   Penghapusan dibatalkan")
         return
 
     tabel_users = tabel_users[tabel_users["id"].astype(str) != id_target]

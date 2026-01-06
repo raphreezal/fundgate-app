@@ -140,6 +140,7 @@ def tampilkan_interaktif(df):
             print("\nKolom tersedia:")
             for i, c in enumerate(cols):
                 print(f"{i}. {c}")
+
             i_kolom = input("Urutkan berdasarkan kolom apa? ").strip()
             if not i_kolom.isdigit() or int(i_kolom) not in range(len(cols)):
                 input("\n⚠️  Nomor kolom salah!\nTekan Enter untuk input ulang...")
@@ -177,6 +178,7 @@ def tampilkan_interaktif(df):
 
             # 4. ambil cuma baris yang cocok tadi /kei
             df_tampil = df_tampil[baris_yang_cocok]
+
             input(f"\nKetemu {len(df_tampil)} data.\nTekan Enter untuk melihat hasil...")
 
         elif aksi == "3":

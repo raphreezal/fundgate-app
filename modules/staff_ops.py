@@ -12,6 +12,7 @@ def menu_kepala_divisi(user):
         # clear screen & header biar rapih  /farah
         clear_screen()
         header()
+        print(f"Selamat datang, {user['username']}! \nAnda masuk sebagai {user['role']}.\n") # nambah info usn sama role / najwa
         print(f"─────── MENU KEPALA DIVISI: {user['divisi']} ───────")
         print("1. 💰 Buat Pengajuan Dana")
         print("2. 📊 Riwayat Pengajuan Dana")
@@ -26,7 +27,7 @@ def menu_kepala_divisi(user):
         elif pilih == "0":
             return
         else:
-            input("\n⚠️  Pilihan tidak valid!\nTekan Enter untuk input ulang...")
+            input("\n⚠️    Pilihan tidak valid!\nTekan Enter untuk input ulang...\n")
 
 
 # form pengajuan dana
@@ -61,9 +62,9 @@ def buat_pengajuan_dana(user):
             if jenis:
                 prefix = "LNS"
                 break
-            input("\n⚠️  Tidak boleh kosong!\nTekan Enter untuk input ulang...")
+            input("\n⚠️    Tidak boleh kosong!\nTekan Enter untuk input ulang...\n")
         else:
-            input("\n⚠️  Pilihan tidak valid!\nTekan Enter untuk input ulang...")
+            input("\n⚠️    Pilihan tidak valid!\nTekan Enter untuk input ulang...\n")
 
     id_pengajuan = f"{prefix}-{datetime.now().strftime('%H%M%S')}{random.randint(10,99)}"
     id_rincian = f"RIN-{datetime.now().strftime('%H%M%S')}{random.randint(10,99)}"
@@ -100,7 +101,7 @@ def buat_pengajuan_dana(user):
                 goto_simpan = False
                 break
             else:
-                input("\n⚠️  Pilihan tidak valid!\nTekan Enter untuk input ulang...")
+                input("\n⚠️    Pilihan tidak valid!\nTekan Enter untuk input ulang...\n")
 
         if goto_simpan:
             break
@@ -116,7 +117,7 @@ def buat_pengajuan_dana(user):
 
             if nama:
                 break
-            input("\n⚠️  Nama tidak boleh kosong!\nTekan Enter untuk input ulang...")
+            input("\n⚠️    Nama tidak boleh kosong!\nTekan Enter untuk input ulang...\n")
 
         # jumlah item
         while True:
@@ -131,7 +132,7 @@ def buat_pengajuan_dana(user):
             if jumlah.isdigit() and int(jumlah) > 0:
                 jumlah = int(jumlah)
                 break
-            input("\n⚠️  Jumlah harus angka > 0!\nTekan Enter untuk input ulang...")
+            input("\n⚠️    Jumlah harus angka > 0!\nTekan Enter untuk input ulang...\n")
 
         # harga satuan
         while True:
@@ -147,7 +148,7 @@ def buat_pengajuan_dana(user):
             if harga.isdigit() and int(harga) > 0:
                 harga = int(harga)
                 break
-            input("\n⚠️  Harga harus angka > 0!\nTekan Enter untuk input ulang...")
+            input("\n⚠️    Harga harus angka > 0!\nTekan Enter untuk input ulang...\n")
 
         subtotal = jumlah * harga
         total += subtotal
@@ -190,7 +191,7 @@ def buat_pengajuan_dana(user):
 
     # lebih dari limit = dana darurat atau tidak  /farah
     if total > limit:
-        print("\n⚠️  Nominal melebihi limit!")
+        print("\n⚠️    Nominal melebihi limit!")
         print("1. Ajukan sebagai DANA DARURAT")
         print("0. Batalkan pengajuan")
 
@@ -201,13 +202,13 @@ def buat_pengajuan_dana(user):
                 catatan = "Melebihi limit"
                 break
             elif pilih == "0":
-                input("\n❎ Pengajuan dibatalkan!\nTekan Enter untuk kembali...")
+                input("\n❎ Pengajuan dibatalkan!\nTekan Enter untuk kembali...\n")
                 return
             else:
-                input("\n⚠️  Pilihan tidak valid!\nTekan Enter untuk input ulang...")
+                input("\n⚠️    Pilihan tidak valid!\nTekan Enter untuk input ulang...\n")
     else:
         if input("\nKonfirmasi simpan pengajuan? (y/n): ").lower() != "y":
-            input("\n❎ Pengajuan dibatalkan!\nTekan Enter untuk kembali...")
+            input("\n❎ Pengajuan dibatalkan!\nTekan Enter untuk kembali...\n")
             return
 
     # simpan pengajuan dana
@@ -234,7 +235,7 @@ def buat_pengajuan_dana(user):
     simpan_data("pengajuan", df_pengajuan)
     simpan_data("rincian_pengajuan", df_rincian)
 
-    input("\n✅ Pengajuan berhasil diproses!\nTekan Enter untuk lanjut...")
+    input("\n✅ Pengajuan berhasil diproses!\nTekan Enter untuk lanjut...\n")
 
 # riwayat
 def riwayat_pengajuan(user):
@@ -249,7 +250,7 @@ def riwayat_pengajuan(user):
     data = data[data["id_kepala_divisi"] == user["id"]]
 
     if data.empty:
-        input("⚠️  Belum ada pengajuan.\nTekan Enter untuk kembali...")
+        input("⚠️    Belum ada pengajuan.\nTekan Enter untuk kembali...\n")
         return
 
     view = data.copy()
@@ -260,4 +261,4 @@ def riwayat_pengajuan(user):
         "RIWAYAT PENGAJUAN"
     )
 
-    input("\nTekan Enter untuk kembali...")
+    input("\nTekan Enter untuk kembali...\n")
