@@ -12,7 +12,7 @@ def konfirmasi_yn(pesan):
         jawab = input(pesan).strip().lower()
         if jawab in ("y", "n"):
             return jawab
-        print("❌ Input tidak valid! Harus y atau n.")
+        print("⚠️   Input tidak valid! Harus y atau n.")
         input("Tekan Enter untuk input ulang...\n")
 
 def main():
@@ -38,7 +38,7 @@ def main():
                 print("────────────────── LOGIN ────────────────────\n")
                 username = input("Username : ").strip()
                 if not username:
-                    print("⚠️   Username tidak boleh kosong!")
+                    print("⚠️     Username tidak boleh kosong!")
                     input("Tekan Enter untuk input ulang...\n")
                     clear_screen()
                     header()
@@ -46,7 +46,7 @@ def main():
 
                 hasil_username = cek_username(username)
                 if hasil_username == "USERNAME_TIDAK_ADA":
-                    print("⚠️   Username tidak terdaftar!")
+                    print("⚠️     Username tidak terdaftar!")
                     input("Tekan Enter untuk input ulang...\n")
                     clear_screen()
                     header()
@@ -59,7 +59,7 @@ def main():
             while True:
                 password = input("Password : ").strip()
                 if not password:
-                    print("⚠️   Password tidak boleh kosong!")
+                    print("⚠️     Password tidak boleh kosong!")
                     input("Tekan Enter untuk input ulang...\n")
                     continue 
 
@@ -71,11 +71,11 @@ def main():
                     percobaan += 1
 
                     if percobaan >= maks_login:
-                        print("❌ Login Gagal! Percobaan login sudah habis (3 kali).")
+                        print("⚠️   Login Gagal! Percobaan login sudah habis (3 kali).")
                         print("Program dihentikan.")
                         exit()
 
-                    print("⚠️   Password salah!")
+                    print("⚠️     Password salah!")
                     print(f"Sisa percobaan: {maks_login - percobaan}")
                     input("Tekan Enter untuk input ulang...\n")
 
@@ -133,14 +133,14 @@ def main():
                             break 
                         
                     else:
-                        print("\n⚠️    Pilihan tidak valid!")
+                        print("\n⚠️      Pilihan tidak valid!")
                         input("Tekan Enter untuk input ulang...\n")
 
             elif peran in ("Direktur", "Auditor"):
                 menu_laporan(data_user)
 
             else:
-                print("⚠️    Role tidak dikenali.")
+                print("⚠️      Role tidak dikenali.")
         
             # kalau loop menu selesai (user pilih logout), tanya mau keluar aplikasi gak? /kei
             # updated / najwa

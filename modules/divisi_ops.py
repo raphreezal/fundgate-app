@@ -1,17 +1,34 @@
 import pandas as pd
-from modules.utility import baca_data, simpan_data, tampilkan_interaktif
+import re
+from modules.utility import (
+    baca_data, simpan_data,
+    tampilkan_interaktif, clear_screen, header
+)
 
+# validasi nama divisi / najwa
+def validasi_nama_divisi(nama):
+    return bool(re.fullmatch(r"[A-Za-z]+( [A-Za-z]+)*", nama))
+
+
+# buat id divisi otomatis / najwa
+def generate_id_divisi(tabel):
+    if tabel.empty:
+        return "D001"
+    terakhir = tabel["id_divisi"].astype(str).str[1:].astype(int).max()
+    return f"D{terakhir + 1:03d}"
 
 def menu_divisi(user_sedang_login=None):
     while True:
-        print("\n=== KELOLA DIVISI ===")
+        clear_screen()
+        header()
+        print("────────────── KELOLA DIVISI ──────────────")
         print("[1] Lihat Divisi")
         print("[2] Tambah Divisi")
         print("[3] Edit Divisi")
         print("[4] Hapus Divisi")
         print("[0] Kembali")
 
-        pilih = input("Pilih: ")
+        pilih = input("Pilih: ").strip()
 
         if pilih == "1":
             lihat_divisi()
@@ -24,95 +41,216 @@ def menu_divisi(user_sedang_login=None):
         elif pilih == "0":
             break
         else:
-            print("⚠️   Pilihan tidak valid")
+            print("⚠️   Input tidak valid!")
+            input("Tekan Enter untuk input ulang...")
 
-
+# lihat divisi / najwa
 def lihat_divisi():
+    clear_screen()
+    header()
+
     tabel = baca_data("divisi")
+
     if tabel.empty:
-        print("Data divisi kosong.")
+        print("⚠️    Data divisi masih kosong.")
+        input("Tekan Enter untuk input ulang...")
         return
-    tampilkan_interaktif(tabel, judul="DAFTAR DIVISI")
+
+    print("────────────── DAFTAR DIVISI ──────────────")
+    tampilkan_interaktif(tabel)
+    input("Tekan Enter untuk kembali...")
 
 
+# tambah divisi / najwa
 def tambah_divisi():
     tabel = baca_data("divisi")
 
     while True:
+        clear_screen()
+        header()
+
+        # tampilin daftar divisi yang sudah ada / najwa
+        print("────────────── DAFTAR DIVISI ──────────────")
+        for i, row in tabel.iterrows():
+            print(f"[{i+1}] {row['id_divisi']} - {row['nama_divisi']}")
+
+        print("\n────────────── TAMBAH DIVISI ──────────────")
+
         nama = input("Nama divisi (0 batal): ").strip()
+
         if nama == "0":
             return
+
         if not nama:
-            print("⚠️   Tidak boleh kosong")
+            print("\n⚠️   Nama divisi tidak boleh kosong!")
+            input("Tekan Enter untuk input ulang...")
             continue
+
+        if not validasi_nama_divisi(nama):
+            print("\n⚠️   Nama divisi hanya boleh huruf dan spasi!")
+            input("Tekan Enter untuk input ulang...")
+            continue
+
         if not tabel.empty and nama.lower() in tabel["nama_divisi"].str.lower().values:
-            print("⚠️   Divisi sudah ada")
+            print("\n⚠️   Divisi sudah ada!")
+            input("Tekan Enter untuk input ulang...")
             continue
         break
 
-    if input("Simpan divisi ini? (y/n): ").lower() != "y":
-        print("⚠️   Dibatalkan")
+    if input("\nSimpan divisi ini? (y/n): ").lower() != "y":
+        print("⚠️    Penambahan dibatalkan.")
+        input("Tekan Enter untuk melanjutkan...")
         return
 
-    tabel = pd.concat([tabel, pd.DataFrame([{"nama_divisi": nama}])], ignore_index=True)
+    id_divisi = generate_id_divisi(tabel)
+
+    tabel = pd.concat(
+        [tabel, pd.DataFrame([{
+            "id_divisi": id_divisi,
+            "nama_divisi": nama
+        }])],
+        ignore_index=True
+    )
+
     simpan_data("divisi", tabel)
-    print("✅ Divisi berhasil ditambahkan")
+
+    print("\n✅  Divisi berhasil ditambahkan!")
+    input("Tekan Enter untuk melanjutkan...")
 
 
+# edit divisi / najwa
 def edit_divisi():
     tabel = baca_data("divisi")
+
     if tabel.empty:
-        print("Data kosong.")
+        clear_screen()
+        header()
+        print("⚠️    Data divisi kosong.")
+        input("Tekan Enter untuk kembali...")
         return
 
-    tampilkan_interaktif(tabel, judul="DAFTAR DIVISI")
+    # pilih divisi / najwa
+    while True:
+        clear_screen()
+        header()
+        print("────────────── DAFTAR DIVISI ──────────────")
+        for i, row in tabel.iterrows():
+            print(f"[{i+1}] {row['id_divisi']} - {row['nama_divisi']}")
 
-    nama_lama = input("Nama divisi yang diedit (0 batal): ")
-    if nama_lama == "0":
-        return
+        pilih = input("\nPilih nomor divisi (0 batal): ").strip()
 
-    if nama_lama.lower() not in tabel["nama_divisi"].str.lower().values:
-        print("⚠️   Divisi tidak ditemukan")
-        return
+        if not pilih.isdigit():
+            input("⚠️   Input harus angka!\nTekan Enter untuk input ulang...")
+            continue
 
-    nama_baru = input(f"Nama baru [{nama_lama}]: ").strip()
-    if not nama_baru:
-        print("⚠️   Tidak ada perubahan")
-        return
+        pilih = int(pilih)
 
-    if nama_baru.lower() in tabel["nama_divisi"].str.lower().values:
-        print("⚠️   Nama sudah digunakan")
-        return
+        if pilih == 0:
+            return
 
-    if input("Simpan perubahan? (y/n): ").lower() != "y":
-        print("⚠️   Dibatalkan")
-        return
+        if not (1 <= pilih <= len(tabel)):
+            input("⚠️   Nomor tidak valid!\nTekan Enter untuk input ulang...")
+            continue
 
-    tabel.loc[tabel["nama_divisi"].str.lower() == nama_lama.lower(), "nama_divisi"] = nama_baru
-    simpan_data("divisi", tabel)
-    print("✅ Divisi berhasil diperbarui")
+        index = tabel.index[pilih - 1]
+
+        # form edit / najwa
+        while True:
+            clear_screen()
+            header()
+
+            data_lama = tabel.loc[index]
+
+            print("────────────── EDIT DIVISI ──────────────")
+            print("ID Divisi   :", data_lama["id_divisi"])
+            print("Nama Lama   :", data_lama["nama_divisi"])
+
+            nama_baru = input("\nNama divisi baru (Enter/0 kembali): ").strip()
+
+            if nama_baru == "" or nama_baru == "0": #kembali ke pilih nomor / najwa
+                break
+
+            if not validasi_nama_divisi(nama_baru):
+                input("⚠️   Nama hanya boleh huruf dan spasi!\nTekan Enter untuk input ulang...")
+                continue
+
+            if nama_baru.lower() in tabel["nama_divisi"].str.lower().values:
+                input("⚠️   Nama divisi sudah ada!\nTekan Enter untuk input ulang...")
+                continue
+
+            # konfirmasi simpan perubahan / najwa
+            while True:
+                konfirmasi = input("\nYakin ingin menyimpan perubahan? (y/n): ").lower()
+
+                if konfirmasi == "y":
+                    tabel.at[index, "nama_divisi"] = nama_baru
+                    simpan_data("divisi", tabel)
+                    input("✅  Divisi berhasil diperbarui!\nTekan Enter untuk melanjutkan...")
+                    return
+
+                elif konfirmasi == "n":
+                    break
+
+                else:
+                    input("⚠️   Input tidak valid! (y/n)\nTekan Enter untuk input ulang...")
 
 
+# hapus divisi / najwa
 def hapus_divisi():
     tabel = baca_data("divisi")
+
     if tabel.empty:
-        print("Data kosong.")
+        clear_screen()
+        header()
+        print("⚠️    Data divisi kosong.")
+        input("Tekan Enter untuk kembali...")
         return
 
-    tampilkan_interaktif(tabel, judul="DAFTAR DIVISI")
+    while True:  # 🔁 loop utama hapus divisi
+        # pilih divisi / najwa
+        while True:
+            clear_screen()
+            header()
+            print("────────────── DAFTAR DIVISI ──────────────")
+            for i, row in tabel.iterrows():
+                print(f"[{i+1}] {row['id_divisi']} - {row['nama_divisi']}")
 
-    nama = input("Nama divisi yang dihapus (0 batal): ")
-    if nama == "0":
-        return
+            pilih = input("\nPilih nomor divisi (0 batal): ").strip()
 
-    if nama.lower() not in tabel["nama_divisi"].str.lower().values:
-        print("⚠️   Divisi tidak ditemukan")
-        return
+            if not pilih.isdigit():
+                input("⚠️   Input harus angka!\nTekan Enter untuk input ulang...")
+                continue
 
-    if input("Yakin hapus divisi ini? (y/n): ").lower() != "y":
-        print("⚠️   Dibatalkan")
-        return
+            pilih = int(pilih)
 
-    tabel = tabel[tabel["nama_divisi"].str.lower() != nama.lower()]
-    simpan_data("divisi", tabel)
-    print("✅ Divisi berhasil dihapus")
+            if pilih == 0:
+                return  # keluar dari hapus_divisi
+
+            if 1 <= pilih <= len(tabel):
+                index = tabel.index[pilih - 1]
+                data = tabel.loc[index]
+                break
+            else:
+                input("⚠️   Nomor tidak valid!\nTekan Enter untuk input ulang...")
+
+        # konfirmasi hapus / najwa
+        while True:
+            clear_screen()
+            header()
+            print("────────────── HAPUS DIVISI ──────────────")
+            print("ID Divisi   :", data["id_divisi"])
+            print("Nama Divisi :", data["nama_divisi"])
+
+            konfirmasi = input("\nYakin hapus divisi ini? (y/n): ").lower().strip()
+
+            if konfirmasi == "y":
+                tabel = tabel.drop(index)
+                simpan_data("divisi", tabel)
+                input("✅  Divisi berhasil dihapus!\nTekan Enter untuk melanjutkan...")
+                return
+
+            elif konfirmasi == "n":
+                break  # 🔙 KEMBALI KE PILIH NOMOR DIVISI
+
+            else:
+                input("⚠️   Input tidak valid! (hanya y / n)\nTekan Enter untuk input ulang...")
