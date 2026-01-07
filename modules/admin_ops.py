@@ -190,7 +190,7 @@ def tambah_user():
         if konfirmasi == "y":
             break
         elif konfirmasi == "n":
-            input("⚠️   Penambahan dibatalkan.\nTekan Enter untuk kembali...\n")
+            input("⚠️   Penambahan dibatalkan.\nTekan Enter untuk input ulang...\n")
             return
         else:
             input("⚠️   Input tidak valid! (y/n)\nTekan Enter untuk input ulang...\n")
