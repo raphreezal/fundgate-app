@@ -128,10 +128,10 @@ def tampilkan_interaktif(df):
         aksi = input("Pilih aksi: ")
 
         if aksi == "":
-            input("\n⚠️  Pilihan tidak boleh kosong!\nTekan Enter untuk input ulang...")
+            input("\n⚠️    Pilihan tidak boleh kosong!\nTekan Enter untuk input ulang...")
             continue
         if not aksi.isdigit() or aksi not in ["0","1","2","3"]:
-            input("\n⚠️  Pilihan tidak valid!\nTekan Enter untuk input ulang...")
+            input("\n⚠️    Pilihan tidak valid!\nTekan Enter untuk input ulang...")
             continue
         
         if aksi == "1":
@@ -143,13 +143,13 @@ def tampilkan_interaktif(df):
 
             i_kolom = input("Urutkan berdasarkan kolom apa? ").strip()
             if not i_kolom.isdigit() or int(i_kolom) not in range(len(cols)):
-                input("\n⚠️  Nomor kolom salah!\nTekan Enter untuk input ulang...")
+                input("\n⚠️    Nomor kolom salah!\nTekan Enter untuk input ulang...")
                 continue
             kolom = cols[int(i_kolom)]
 
             urutan = input("Ascending (a) atau Descending (d)? ").strip().lower()
             if urutan not in ["a","d"]:
-                input("\n⚠️  Pilihan urutan salah!\nTekan Enter untuk input ulang...")
+                input("\n⚠️    Pilihan urutan salah!\nTekan Enter untuk input ulang...")
                 continue
 
             df_tampil = df_tampil.sort_values(by=kolom, ascending=(urutan=="a"))
@@ -158,7 +158,7 @@ def tampilkan_interaktif(df):
             # FITUR SEARCHING /kei
             kata_kunci = input("Cari kata apa? : ").lower()
             if kata_kunci == "":
-                input("\n⚠️  Kata kunci tidak boleh kosong!\nTekan Enter untuk input ulang...")
+                input("\n⚠️    Kata kunci tidak boleh kosong!\nTekan Enter untuk input ulang...")
                 continue
             
             # 1. siapkan wadah kosong (anggap semua baris belum ketemu / False) /kei

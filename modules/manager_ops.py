@@ -21,7 +21,7 @@ def menu_manajer(user_sedang_login):
         elif pilihan == "0":
             return
         else:
-            print("\n⚠️    Pilihan tidak valid! Silakan pilih menu yang tersedia.")
+            print("\n⚠️      Pilihan tidak valid! Silakan pilih menu yang tersedia.")
             input("Tekan Enter untuk input ulang...\n")
 
 # 1. Fitur Persetujuan dan Penolakan Pengajuan Dana    /farah
@@ -60,11 +60,11 @@ def proses_persetujuan_dana():
         if id_target == "0":
             return
         if not id_target:
-            print("\n⚠️    ID tidak boleh kosong!")
+            print("\n⚠️      ID tidak boleh kosong!")
             input("Tekan Enter untuk input ulang...\n")
             continue
         if id_target not in data_pending["id_pengajuan"].astype(str).values:
-            print("\n⚠️    ID tidak ditemukan atau tidak berstatus Menunggu!")
+            print("\n⚠️      ID tidak ditemukan atau tidak berstatus Menunggu!")
             input("Tekan Enter untuk input ulang...\n")
             continue
 
@@ -112,7 +112,7 @@ def proses_persetujuan_dana():
             if keputusan == "1":
                 if saldo_perusahaan < total_pengajuan:
                     kurang = total_pengajuan - saldo_perusahaan
-                    print(f"⚠️   Saldo tidak cukup (kurang {format_rupiah(kurang)})")
+                    print(f"⚠️     Saldo tidak cukup (kurang {format_rupiah(kurang)})")
                     input("Tekan Enter untuk pilih tindakan lain...\n")
                     continue
 
@@ -130,7 +130,7 @@ def proses_persetujuan_dana():
             elif keputusan == "0":
                 break
             else:
-                print("\n⚠️    Pilihan tidak valid! Silakan pilih tindakan yang tersedia.")
+                print("\n⚠️      Pilihan tidak valid! Silakan pilih tindakan yang tersedia.")
                 input("Tekan Enter untuk input ulang...\n")
         
         if not diproses:
@@ -204,19 +204,19 @@ def set_limit_pengajuan():
                 inp = input().strip()
 
                 if inp == "0":
-                    print("\n⚠️   Pengaturan limit dibatalkan.")
+                    print("\n⚠️     Pengaturan limit dibatalkan.")
                     input("Tekan Enter untuk kembali...\n")
                     break  # kembali ke menu set_limit
 
                 try:
                     limit_baru = int(inp)
                 except ValueError:
-                    print("\n⚠️    Input harus berupa angka!")
+                    print("\n⚠️      Input harus berupa angka!")
                     input("Tekan Enter untuk input ulang...\n")
                     continue  # balik ke input awal
 
                 if limit_baru < 0:
-                    print("\n⚠️    Limit harus lebih dari 0!")
+                    print("\n⚠️      Limit harus lebih dari 0!")
                     input("Tekan Enter untuk input ulang...\n")
                     continue  # balik ke input awal
 
@@ -230,5 +230,5 @@ def set_limit_pengajuan():
         elif pilihan == "0":
             return  # kembali ke menu sebelumnya
         else:
-            print("\n⚠️    Pilihan tidak valid! Silakan pilih menu yang tersedia.")
+            print("\n⚠️      Pilihan tidak valid! Silakan pilih menu yang tersedia.")
             input("Tekan Enter untuk input ulang...\n")
