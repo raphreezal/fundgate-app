@@ -2,9 +2,15 @@ import os
 from modules.utility import baca_data,clear_screen, format_rupiah, tampilkan_interaktif, header
 import pandas as pd #pastikan sudah pip install pandas /kei
 
-# ==========================================
-# LOGIKA UTAMA LAPORAN
-# ==========================================
+# funsi konfirmasi inputan / najwa
+def konfirmasi_yn(pesan):
+    while True:
+        jawab = input(pesan).strip().lower()
+        if jawab in ("y", "n"):
+            return jawab
+        print("⚠️   Input tidak valid! Harus y atau n.")
+        input("Tekan Enter untuk input ulang...\n")
+        
 def siapkan_data_laporan():
     """Load data dan convert tanggal biar bisa diolah per bulan/tahun"""
     df = baca_data("pengajuan")
@@ -122,4 +128,13 @@ def menu_laporan(user_sedang_login):
             tampilkan_interaktif(rekap)
             
         elif pilihan == "0":
-            break
+            jawab = konfirmasi_yn("\nApakah yakin ingin logout? (y/n): ")
+            if jawab == "n":
+                continue 
+            else:
+                print("\n✅  Berhasil logout.")
+                break 
+                        
+        else:
+            print("\n⚠️      Pilihan tidak valid!")
+            input("Tekan Enter untuk input ulang...\n")

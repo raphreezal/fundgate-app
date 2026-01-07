@@ -6,6 +6,15 @@ from modules.utility import (
     clear_screen, header, tabel_rapih
 )
 
+# funsi konfirmasi inputan / najwa
+def konfirmasi_yn(pesan):
+    while True:
+        jawab = input(pesan).strip().lower()
+        if jawab in ("y", "n"):
+            return jawab
+        print("⚠️   Input tidak valid! Harus y atau n.")
+        input("Tekan Enter untuk input ulang...\n")
+
 # menu utama kepala divisi  /najwa
 def menu_kepala_divisi(user):
     while True:
@@ -25,9 +34,16 @@ def menu_kepala_divisi(user):
         elif pilih == "2":
             riwayat_pengajuan(user)
         elif pilih == "0":
-            return
+            jawab = konfirmasi_yn("\nApakah yakin ingin logout? (y/n): ")
+            if jawab == "n":
+                continue 
+            else:
+                print("\n✅  Berhasil logout.")
+                break 
+                        
         else:
-            input("\n⚠️      Pilihan tidak valid!\nTekan Enter untuk input ulang...\n")
+            print("\n⚠️      Pilihan tidak valid!")
+            input("Tekan Enter untuk input ulang...\n")
 
 
 # form pengajuan dana
