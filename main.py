@@ -1,10 +1,5 @@
-<<<<<<< Updated upstream
 from modules.utility import siapkan_folder_dan_file, clear_screen, header
-from modules.auth import proses_login, cek_username
-=======
-from modules.data_store import siapkan_folder_dan_file
-from modules.auth import proses_login
->>>>>>> Stashed changes
+from modules.auth import proses_login, cek_username  
 from modules.staff_ops import menu_kepala_divisi
 from modules.manager_ops import menu_manajer
 from modules.admin_ops import menu_admin
