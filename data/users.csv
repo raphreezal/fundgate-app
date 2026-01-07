@@ -1,5 +1,6 @@
 id,username,password,role,divisi
-USR001,Evelyn,Admin123*,Manajer Keuangan
+USR001,Evelyn,Admin123*,Manajer Keuangan,
 USR002,yanto,Yanto123#,Kepala Divisi,pemasaran
-USR003,Budi,Budidaya33#,Direktur
-USR004,Angel,Kucing67*,Auditor
+USR003,Budi,Budidaya33#,Direktur,
+USR004,Angel,Kucing67*,Auditor,
+USR005,Toni,Toni123#,Manajer Keuangan,-

@@ -46,19 +46,16 @@ def menu_divisi(user_sedang_login=None):
 
 # lihat divisi / najwa
 def lihat_divisi():
-    clear_screen()
-    header()
-
     tabel = baca_data("divisi")
 
     if tabel.empty:
-        print("⚠️    Data divisi masih kosong.")
-        input("Tekan Enter untuk input ulang...")
+        input("⚠️   Data divisi masih kosong.\nTekan Enter untuk kembali...")
         return
 
-    print("────────────── DAFTAR DIVISI ──────────────")
-    tampilkan_interaktif(tabel)
-    input("Tekan Enter untuk kembali...")
+    clear_screen()
+    header()
+    print("───────── DAFTAR DIVISI ─────────\n")
+    tampilkan_interaktif(tabel) 
 
 
 # tambah divisi / najwa
@@ -70,9 +67,12 @@ def tambah_divisi():
         header()
 
         # tampilin daftar divisi yang sudah ada / najwa
-        print("────────────── DAFTAR DIVISI ──────────────")
+        print("──────────────────────────── DAFTAR DIVISI ─────────────────────────────\n")
+        print(f"{'No':<4} {'ID Divisi':<10} {'Nama Divisi'}")
+        print("-" * 50)
+
         for i, row in tabel.iterrows():
-            print(f"[{i+1}] {row['id_divisi']} - {row['nama_divisi']}")
+            print(f"{i+1:<4} {row['id_divisi']:<10} {row['nama_divisi']}")
 
         print("\n────────────── TAMBAH DIVISI ──────────────")
 
@@ -133,9 +133,12 @@ def edit_divisi():
     while True:
         clear_screen()
         header()
-        print("────────────── DAFTAR DIVISI ──────────────")
+        print("──────────────────────────── DAFTAR DIVISI ─────────────────────────────\n")
+        print(f"{'No':<4} {'ID Divisi':<10} {'Nama Divisi'}")
+        print("-" * 50)
+
         for i, row in tabel.iterrows():
-            print(f"[{i+1}] {row['id_divisi']} - {row['nama_divisi']}")
+            print(f"{i+1:<4} {row['id_divisi']:<10} {row['nama_divisi']}")
 
         pilih = input("\nPilih nomor divisi (0 batal): ").strip()
 
@@ -211,9 +214,12 @@ def hapus_divisi():
         while True:
             clear_screen()
             header()
-            print("────────────── DAFTAR DIVISI ──────────────")
+            print("──────────────────────────── DAFTAR DIVISI ─────────────────────────────\n")
+            print(f"{'No':<4} {'ID Divisi':<10} {'Nama Divisi'}")
+            print("-" * 50)
+
             for i, row in tabel.iterrows():
-                print(f"[{i+1}] {row['id_divisi']} - {row['nama_divisi']}")
+                print(f"{i+1:<4} {row['id_divisi']:<10} {row['nama_divisi']}")
 
             pilih = input("\nPilih nomor divisi (0 batal): ").strip()
 
