@@ -1,156 +1,204 @@
 import pandas as pd
-
 from modules.utility import (
-    baca_data, simpan_data, clear_screen,
-    tampilkan_interaktif, validasi_username,
-    generate_id_user, header, validasi_password
+    baca_data, simpan_data,
+    clear_screen, header,
+    validasi_username, validasi_password,
+    generate_id_user, tampilkan_interaktif
 )
-# from modules.auth import validasi_password
-from modules.divisi_ops import menu_divisi
 
-def menu_admin(user_sedang_login):
+def menu_admin(user_login=None):
     while True:
         clear_screen()
         header()
-        print("─────────────── KELOLA USER ─────────────────")
-        print("[1] Lihat Daftar User")
+        print("────────────── KELOLA USER ──────────────")
+        print("[1] Lihat User")
         print("[2] Tambah User")
         print("[3] Edit User")
         print("[4] Hapus User")
         print("[0] Kembali")
 
-        pilihan = input("Pilih: ")
+        pilih = input("Pilih: ").strip()
 
-        if pilihan == "1":
+        if pilih == "1":
             lihat_user()
-        elif pilihan == "2":
-            tambah_user_baru()
-        elif pilihan == "3":
+        elif pilih == "2":
+            tambah_user()
+        elif pilih == "3":
             edit_user()
-        elif pilihan == "4":
+        elif pilih == "4":
             hapus_user()
-        elif pilihan == "0":
+        elif pilih == "0":
             break
         else:
-            print("Pilihan tidak valid!")
+            input("⚠️   Input tidak valid!\nTekan Enter untuk input ulang...\n")
 
-# read
+
 def lihat_user():
-    clear_screen()
-    header()
-
-    tabel = baca_data("users").copy()
+    tabel = baca_data("users")
 
     if tabel.empty:
-        print("Data user masih kosong.")
-        input("Enter...\n\n")
+        input("⚠️   Data user kosong.\nTekan Enter untuk kembali...\n")
         return
+    
+    # sembunyikan password / najwa
+    df_tampil = tabel.copy()
+    if "password" in df_tampil.columns:
+        df_tampil["password"] = "*****"
 
-    # sembunyikan pw / najwa
-    tabel["password"] = tabel["password"].apply(
-        lambda x: "*" * len(str(x))
-    )
+    # divisi yg kosong jd - / najwa
+    if "divisi" in df_tampil.columns:
+        df_tampil["divisi"] = df_tampil["divisi"].fillna("-")
 
-    tampilkan_interaktif(tabel)  
-
-def tambah_user_baru():
     clear_screen()
     header()
-    print("─────────────── TAMBAH USER ─────────────────")
-    tabel_users = baca_data("users")
+    print("────────────────────────── DAFTAR USER ───────────────────────────\n")
+    tampilkan_interaktif(df_tampil) 
+
+
+def tambah_user():
+    tabel = baca_data("users")
+    tabel_divisi = baca_data("divisi")
+
     while True:
+        clear_screen()
+        header()
+        print("────────────── TAMBAH USER ──────────────\n")
+
         username = input("Username (0 batal): ").strip()
         if username == "0":
             return
 
-        if not username:
-            print("⚠️     Username tidak boleh kosong\n")
-            continue
-
-        valid, msg = validasi_username(username)
+        valid, pesan = validasi_username(username)
         if not valid:
-            print(f"⚠️     {msg}")
+            input(f"⚠️   {pesan}\nTekan Enter untuk input ulang...\n")
             continue
 
-        if username.lower() in tabel_users["username"].str.lower().values:
-            print("⚠️     Username sudah digunakan!")
-            input("Enter...\n\n")
-            clear_screen()
-            header()
+        if not tabel.empty and username.lower() in tabel["username"].str.lower().values:
+            input("⚠️   Username sudah digunakan!\nTekan Enter untuk input ulang...\n")
             continue
 
-        print("✅ Username tersedia dan dapat digunakan")
-        input("Enter...\n\n")
-        clear_screen()
-        header()
         break
 
     while True:
-        password = input("Password (0 batal): ")
+        print("\n=== Password harus terdiri dari minimal 8 karakter, huruf kapital, huruf kecil, angka, dan simbol. ===")
+        password = input("Password (0 batal): ").strip()
         if password == "0":
             return
 
+        if not password:
+            input("⚠️   Password tidak boleh kosong!\nTekan Enter untuk input ulang...\n")
+            continue
+
+        if " " in password:
+            input("⚠️   Password tidak boleh mengandung spasi!\nTekan Enter untuk input ulang...\n")
+            continue
+
         valid, pesan = validasi_password(password)
         if not valid:
-            print(f"⚠️     {pesan}")
-            input("Enter...\n\n")
-            clear_screen()
-            header()
+            input("⚠️   Inputan tidak valid!\nTekan Enter untuk input ulang...\n")
             continue
 
-        print("✅ Password valid dan dapat digunakan")
-        input("Enter...\n\n")
-        clear_screen()
-        header()
-        break
+        while True:
+            konfirmasi = input("Konfirmasi Password (0 batal): ").strip()
+            if konfirmasi == "0":
+                return
+            if not konfirmasi:
+                input("⚠️   Konfirmasi password tidak boleh kosong!\nTekan Enter untuk input ulang...\n")
+                continue
+            if konfirmasi != password:
+                input("⚠️   Konfirmasi password tidak sesuai!\nTekan Enter untuk input ulang...\n")
+                continue
+            break
 
-
-    while True:
-        konfirmasi = input("Konfirmasi Password: ")
-        if konfirmasi != password:
-            print("⚠️     Konfirmasi tidak sesuai")
-            continue
         break
 
     # pilih role / najwa
-    daftar_role = ["kepala_divisi", "auditor", "direktur"]
+    while True:
+        clear_screen()
+        header()
+        print("────────────── PILIH ROLE ──────────────")
+        print("[1] Direktur")
+        print("[2] Manajer Keuangan")
+        print("[3] Kepala Divisi")
+        print("[4] Auditor")
 
-    print("\nPilih Role:")
-    for i, r in enumerate(daftar_role, start=1):
-        print(f"{i}. {r}")
+        pilih_role = input("Pilih role (1-4): ").strip()
 
-    pilihan_role = int(input("Pilihan: "))
-    role = daftar_role[pilihan_role - 1]
+        if not pilih_role.isdigit():
+            input("⚠️   Input harus angka!\nTekan Enter untuk input ulang...\n")
+            continue
 
-    # pilih divisi / najwa
-    if role == "kepala_divisi":
-        tabel_divisi = baca_data("divisi")
-        print("\nPilih Divisi:")
-        for i, d in enumerate(tabel_divisi["nama_divisi"], start=1):
-            print(f"{i}. {d}")
+        if pilih_role == "1":
+            role = "Direktur"
+            divisi = "-"
+            break
+        elif pilih_role == "2":
+            role = "Manajer Keuangan"
+            divisi = "-"
+            break
+        elif pilih_role == "3":
+            role = "Kepala Divisi"
 
-        while True:
-            pilih = input("Pilih nomor divisi (0 batal): ")
-            if pilih == "0":
+            # pilih divisi / najwa
+            if tabel_divisi.empty:
+                input("⚠️   Data divisi kosong!\nTekan Enter untuk kembali...\n")
                 return
 
-            if not pilih.isdigit():
-                print("Input harus angka")
-                continue
+            while True:
+                clear_screen()
+                header()
+                print("────────────── PILIH DIVISI ──────────────\n")
+                print(f"{'No':<4} {'ID Divisi':<10} {'Nama Divisi'}")
+                print("-" * 40)
 
-            idx = int(pilih) - 1
-            if idx < 0 or idx >= len(tabel_divisi):
-                print("Pilihan tidak valid")
-                continue
+                for i, row in tabel_divisi.iterrows():
+                    print(f"{i+1:<4} {row['id_divisi']:<10} {row['nama_divisi']}")
 
-            divisi = tabel_divisi.iloc[idx]["nama_divisi"]
+                pilih_divisi = input("\nPilih nomor divisi: ").strip()
+
+                if not pilih_divisi.isdigit():
+                    input("⚠️   Input harus angka!\nTekan Enter untuk input ulang...\n")
+                    continue
+
+                pilih_divisi = int(pilih_divisi)
+                if 1 <= pilih_divisi <= len(tabel_divisi):
+                    divisi = tabel_divisi.iloc[pilih_divisi - 1]["nama_divisi"]
+                    break
+                else:
+                    input("⚠️   Nomor divisi tidak valid!\nTekan Enter untuk input ulang...\n")
+
             break
-    else:
-        divisi = "-"
 
-    id_user = generate_id_user(tabel_users)
+        elif pilih_role == "4":
+            role = "Auditor"
+            divisi = "-"
+            break
+        else:
+            input("⚠️   Pilihan tidak valid!\nTekan Enter untuk input ulang...\n")
 
-    user_baru = {
+    # konfirmasi
+    while True:
+        clear_screen()
+        header()
+        print("────────────── KONFIRMASI DATA USER ──────────────\n")
+        print(f"Username : {username}")
+        print(f"Password : {(password)}")
+        print(f"Role     : {role}")
+        print(f"Divisi   : {divisi}")
+
+        konfirmasi = input("\nSimpan user ini? (y/n): ").lower()
+        if konfirmasi == "y":
+            break
+        elif konfirmasi == "n":
+            input("⚠️   Penambahan dibatalkan.\nTekan Enter untuk kembali...\n")
+            return
+        else:
+            input("⚠️   Input tidak valid! (y/n)\nTekan Enter untuk input ulang...\n")
+
+    #simpen
+    id_user = generate_id_user(tabel)
+
+    data_baru = {
         "id": id_user,
         "username": username,
         "password": password,
@@ -158,150 +206,260 @@ def tambah_user_baru():
         "divisi": divisi
     }
 
-    tabel_users = tabel_users.append(user_baru, ignore_index=True)
-    simpan_data("users", tabel_users)
+    tabel = pd.concat([tabel, pd.DataFrame([data_baru])], ignore_index=True)
+    simpan_data("users", tabel)
 
-    print("✅ User berhasil dibuat!")
-    input("Enter...\n\n.")
+    input("✅  User berhasil ditambahkan!\nTekan Enter untuk kembali...\n")
 
-# edit user / najwa
+
+
 def edit_user():
     tabel = baca_data("users")
+
     if tabel.empty:
-        print("Data kosong.")
+        clear_screen()
+        header()
+        input("⚠️   Data user kosong.\nTekan Enter untuk kembali...\n")
         return
 
-    tampilkan_interaktif(tabel, judul="DAFTAR USER")
-
-    id_edit = input("\nMasukkan ID user yang ingin diedit (0 batal): ")
-    if id_edit == "0":
-        return
-
-    if id_edit not in tabel["id"].astype(str).values:
-        print("⚠️     ID tidak ditemukan!")
-        return
-
-    index = tabel[tabel["id"].astype(str) == id_edit].index[0]
-    data_lama = tabel.loc[index]
-
-    print("\nTekan ENTER jika tidak ingin mengubah data")
-
-    # edit usn / najwa
     while True:
-        username = input(f"Username baru [{data_lama['username']}]: ").strip()
+        clear_screen()
+        header()
+        print("──────────────────────────── DAFTAR USER ─────────────────────────────\n")
+        print(f"{'No':<4} {'ID':<8} {'Username':<15} {'Role':<20} {'Divisi'}")
+        print("-" * 70)
 
-        # jika enter maka tidak diubah / najwa
-        if username == "":
-            username = data_lama["username"]
-            break
+        for i, row in tabel.iterrows():
+            divisi = row['divisi'] if pd.notna(row['divisi']) and row['divisi'] != "" else "-"
+            print(f"{i+1:<4} {row['id']:<8} {row['username']:<15} {row['role']:<20} {divisi}")
 
-        valid, msg = validasi_username(username)
-        if not valid:
-            print(f"⚠️     {msg}")
+        pilih = input("\nPilih nomor user (0 kembali): ").strip()
+
+        if pilih == "0":
+            return
+        if not pilih.isdigit() or not (1 <= int(pilih) <= len(tabel)):
+            input("⚠️   Pilihan tidak valid!\nTekan Enter untuk input ulang...\n")
             continue
 
-        username_lower = username.lower()
-        username_lama_lower = data_lama["username"].lower()
+        index = tabel.index[int(pilih) - 1]
+        data = tabel.loc[index]
 
-        username_terpakai = (
-            tabel["username"]
-            .str.lower()
-            .isin([username_lower])
-            .any()
-        )
-
-        if username_terpakai and username_lower != username_lama_lower:
-            print("⚠️     Username sudah digunakan!")
-            continue
-
-        break
-
-    # edit pw / najwa
-    password = data_lama["password"]
-    ubah_pw = input("Ubah password? (y/n): ").lower()
-
-    if ubah_pw == "y":
         while True:
-            pw_baru = input("Password baru: ")
-            valid, pesan = validasi_password(pw_baru)
-            if not valid:
-                print(f"⚠️     {pesan}")
-                continue
+            clear_screen()
+            header()
+            print("────────────── EDIT USER ──────────────\n")
+            print("DATA LAMA")
+            print(f"ID       : {data['id']}")
+            print(f"Username : {data['username']}")
+            print(f"Password : {'*' * len(str(data['password']))}")
+            print(f"Role     : {data['role']}")
+            print(f"Divisi   : {data['divisi'] if pd.notna(data['divisi']) else '-'}")
 
-            konfirmasi = input("Konfirmasi password: ")
-            if konfirmasi != pw_baru:
-                print("⚠️     Konfirmasi tidak sesuai")
-                continue
+            username_baru = input("\nUsername baru (Enter lewati | 0 kembali): ").strip()
+            if username_baru == "0":
+                break
+            daftar_username = (
+                tabel[tabel.index != index]["username"]
+                .str.lower()
+                .values
+            )
 
-            password = pw_baru
-            break
+            if username_baru != "":
+                valid, pesan = validasi_username(username_baru)
+                if not valid:
+                    input(f"⚠️   {pesan}\nTekan Enter...\n")
+                    continue
 
-    # edit role / najwa
-    daftar_role = ["kepala_divisi", "auditor", "direktur"]
-    print("\nRole saat ini:", data_lama["role"])
-    ganti_role = input("Ubah role? (y/n): ").lower()
-
-    role = data_lama["role"]
-    divisi = data_lama["divisi"]
-
-    if ganti_role == "y":
-        for i, r in enumerate(daftar_role, start=1):
-            print(f"{i}. {r}")
-        pilih = int(input("Pilih role: "))
-        role = daftar_role[pilih - 1]
-
-        if role == "kepala_divisi":
-            tabel_divisi = baca_data("divisi")
-            for i, d in enumerate(tabel_divisi["nama_divisi"], start=1):
-                print(f"{i}. {d}")
-            idx = int(input("Pilih divisi: ")) - 1
-            divisi = tabel_divisi.iloc[idx]["nama_divisi"]
-        else:
-            divisi = "-"
-
-    print("\n--- KONFIRMASI PERUBAHAN ---")
-    print("Username :", data_lama["username"], "→", username)
-    print("Role     :", data_lama["role"], "→", role)
-    print("Divisi   :", data_lama["divisi"], "→", divisi)
-
-    konfirmasi = input("Simpan perubahan? (y/n): ").lower()
-    if konfirmasi != "y":
-        print("⚠️     Perubahan dibatalkan")
-        return
-
-    tabel.at[index, "username"] = username
-    tabel.at[index, "password"] = password
-    tabel.at[index, "role"] = role
-    tabel.at[index, "divisi"] = divisi
-
-    simpan_data("users", tabel)
-    print("✅ Data user berhasil diperbarui!")
-    input("Enter...\n\n")
+                if username_baru.lower() in daftar_username:
+                    input("⚠️   Username sudah digunakan!\nTekan Enter untuk input ulang...\n")
+                    continue
+            else:
+                username_baru = data['username']
 
 
-# hapus user / najwa
+            while True:
+                print("\n=== Password minimal 8 karakter, huruf besar, kecil, angka & simbol ===")
+                password_baru = input("Password baru (Enter lewati | 0 kembali): ").strip()
+
+                if password_baru == "0":
+                    break
+
+                if password_baru == "":
+                    password_baru = data['password']
+                    break
+
+                valid, pesan = validasi_password(password_baru)
+                if not valid:
+                    input("⚠️   Input tidak valid!\nTekan Enter untuk input ulang...")
+                    continue
+
+                while True:
+                    konfirmasi = input("Konfirmasi password baru: ").strip()
+                    if konfirmasi != password_baru:
+                        input("⚠️   Konfirmasi tidak sesuai!\nTekan Enter untuk input ulang...")
+                        continue
+                    break
+
+                break
+
+
+            while True:
+                clear_screen()
+                header()
+                print("────────────── PILIH ROLE ──────────────")
+                print("[1] Direktur")
+                print("[2] Manajer Keuangan")
+                print("[3] Kepala Divisi")
+                print("[4] Auditor")
+                print("[Enter] Lewati (tetap sama)")
+                print("[0] Kembali")
+
+                pilih_role = input("Pilih role: ").strip()
+
+                if pilih_role == "0":
+                    break
+                elif pilih_role == "":
+                    role_baru = data['role']
+                    break
+                elif pilih_role == "1":
+                    role_baru = "Direktur"
+                elif pilih_role == "2":
+                    role_baru = "Manajer Keuangan"
+                elif pilih_role == "3":
+                    role_baru = "Kepala Divisi"
+                elif pilih_role == "4":
+                    role_baru = "Auditor"
+                else:
+                    input("⚠️   Role tidak valid!\nTekan Enter untuk input ulang...")
+                    continue
+
+                break
+
+
+            if role_baru == "Kepala Divisi":
+                tabel_divisi = baca_data("divisi")
+
+                if tabel_divisi.empty:
+                    input("⚠️   Data divisi kosong!\nTekan Enter untuk input ulang...")
+                    continue
+
+                while True:
+                    clear_screen()
+                    header()
+                    print("────────────── PILIH DIVISI ──────────────")
+                    for i, row in tabel_divisi.iterrows():
+                        print(f"[{i+1}] {row['nama_divisi']}")
+                    print("[Enter] Lewati (tetap sama)")
+                    print("[0] Kembali")
+
+                    pilih_divisi = input("Pilih divisi: ").strip()
+
+                    if pilih_divisi == "0":
+                        break
+                    elif pilih_divisi == "":
+                        divisi_baru = data['divisi']
+                        break
+                    elif pilih_divisi.isdigit() and 1 <= int(pilih_divisi) <= len(tabel_divisi):
+                        divisi_baru = tabel_divisi.iloc[int(pilih_divisi) - 1]["nama_divisi"]
+                        break
+                    else:
+                        input("⚠️   Divisi tidak valid!\nTekan Enter  untuk input ulang...")
+                        continue
+            else:
+                divisi_baru = "-"
+
+
+            clear_screen()
+            header()
+            print("────────────── KONFIRMASI PERUBAHAN ──────────────\n")
+
+            def status(lama, baru):
+                return " (berubah)" if lama != baru else " (tetap)"
+
+            print("DATA LAMA")
+            print(f"Username : {data['username']}")
+            print(f"Password : {'*' * len(str(data['password']))}")
+            print(f"Role     : {data['role']}")
+            print(f"Divisi   : {data['divisi'] if pd.notna(data['divisi']) else '-'}")
+
+            print("\nDATA BARU")
+            print(f"Username : {username_baru}{status(data['username'], username_baru)}")
+            print(f"Password : {'*' * len(str(password_baru))}{status(data['password'], password_baru)}")
+            print(f"Role     : {role_baru}{status(data['role'], role_baru)}")
+            print(f"Divisi   : {divisi_baru}{status(data['divisi'], divisi_baru)}")
+
+            while True:
+                konfirmasi = input("\nYakin simpan perubahan? (y/n): ").lower()
+                if konfirmasi == "y":
+                    tabel.at[index, "username"] = username_baru
+                    tabel.at[index, "password"] = password_baru
+                    tabel.at[index, "role"] = role_baru
+                    tabel.at[index, "divisi"] = divisi_baru
+                    simpan_data("users", tabel)
+                    input("✅  User berhasil diperbarui!\nTekan Enter untuk kembali...\n")
+                    return
+                elif konfirmasi == "n":
+                    break
+                else:
+                    input("⚠️   Input tidak valid!\nTekan Enter untuk kembali...\n")
+
 def hapus_user():
-    tabel_users = baca_data("users")
-    if tabel_users.empty:
-        print("Data kosong.")
+    tabel = baca_data("users")
+
+    if tabel.empty:
+        clear_screen()
+        header()
+        input("⚠️   Data user kosong.\nTekan Enter untuk kembali...\n")
         return
 
-    tampilkan_interaktif(tabel_users, judul="DAFTAR USER")
+    while True:
+        # pilih user
+        while True:
+            clear_screen()
+            header()
+            print("──────────────────────────── DAFTAR USER ─────────────────────────────\n")
+            print(f"{'No':<4} {'ID':<8} {'Username':<15} {'Role':<20} {'Divisi'}")
+            print("-" * 70)
 
-    id_target = input("Masukkan ID user yang akan dihapus (0 batal): ")
-    if id_target == "0":
-        return
+            for i, row in tabel.iterrows():
+                print(f"{i+1:<4} {row['id']:<8} {row['username']:<15} {row['role']:<20} {row['divisi']}")
 
-    if id_target not in tabel_users["id"].astype(str).values:
-        print("⚠️     ID tidak ditemukan")
-        return
+            pilih = input("\nPilih nomor user (0 batal): ").strip()
 
-    konfirmasi = input("Yakin ingin menghapus user ini? (y/n): ").lower()
-    if konfirmasi != "y":
-        print("⚠️     Penghapusan dibatalkan")
-        return
+            if not pilih.isdigit():
+                input("⚠️   Input harus angka!\nTekan Enter untuk input ulang...\n")
+                continue
 
-    tabel_users = tabel_users[tabel_users["id"].astype(str) != id_target]
-    simpan_data("users", tabel_users)
+            pilih = int(pilih)
 
-    print("✅ User berhasil dihapus")
+            if pilih == 0:
+                return
+
+            if 1 <= pilih <= len(tabel):
+                index = tabel.index[pilih - 1]
+                data = tabel.loc[index]
+                break
+            else:
+                input("⚠️   Nomor tidak valid!\nTekan Enter untuk input ulang...\n")
+
+        # konfirmasi hapus
+        while True:
+            clear_screen()
+            header()
+            print("────────────── HAPUS USER ──────────────")
+            print("ID       :", data["id"])
+            print("Username :", data["username"])
+
+            konfirmasi = input("\nYakin hapus user ini? (y/n): ").lower()
+
+            if konfirmasi == "y":
+                tabel = tabel.drop(index)
+                simpan_data("users", tabel)
+                input("✅  User berhasil dihapus!\nTekan Enter untuk melanjutkan...\n")
+                return
+
+            elif konfirmasi == "n":
+                break  # kembali ke pilih nomor user
+
+            else:
+                input("⚠️   Input tidak valid!\nTekan Enter untuk input ulang...\n")
