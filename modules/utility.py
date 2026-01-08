@@ -227,6 +227,7 @@ def tabel_rapih(df, judul="DATA"):
     
     # buat tabel judul /kei
     tabel_judul = [[judul]]
+    print()
     print(tabulate(tabel_judul, tablefmt="fancy_grid", stralign="center", maxcolwidths=100))
     
     # tampilkan data /axiro0

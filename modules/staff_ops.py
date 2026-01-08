@@ -82,7 +82,7 @@ def buat_pengajuan_dana(user):
 
     id_pengajuan = f"{prefix}-{datetime.now().strftime('%H%M%S')}{random.randint(10,99)}"
 
-    tanggal = datetime.now().strftime("%Y-%m-%d")
+    tanggal = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     rincian = []
     total = 0

@@ -15,13 +15,14 @@ def siapkan_data_laporan():
     """Load data dan convert tanggal biar bisa diolah per bulan/tahun"""
     df = baca_data("pengajuan")
     if not df.empty:
-        # ubah kolom 'tanggal' dari string jadi datetime /kei
-        df['tanggal'] = pd.to_datetime(df['tanggal'])
-        
+        # ubah kolom 'tanggal' dari string contoh(2026-01-08 18:18:57) jadi pandas datetime /kei
+        df['tanggal'] = pd.to_datetime(df['tanggal'], format="%Y-%m-%d %H:%M:%S", errors='coerce')
         # bikin kolom bantuan tahun dan bulan /kei
         df['tahun'] = df['tanggal'].dt.year
         df['bulan'] = df['tanggal'].dt.strftime('%B') # nama bulan (january, dll) /kei
         df['bulan_angka'] = df['tanggal'].dt.month # urutanm bulan (1-12) /kei
+        # # remove time /kei
+        # df['tanggal'] = df['tanggal'].dt.date
     return df
 
 def menu_laporan(user_sedang_login):

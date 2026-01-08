@@ -1,10 +1,11 @@
 id_pengajuan,tanggal,id_kepala_divisi,nama_kepala_divisi,divisi,jenis_pengajuan,status,total,catatan_manajer
-REQ-20251230122456,2025-12-30,2,yanto,pemasaran,Operasional,Disetujui,16250000,-
-REQ-20251230124951,2025-12-30,2,yanto,pemasaran,Operasional,Ditolak,40000,boros
-REQ-20251231113550,2025-12-31,3,kei,operasional,Operasional,Menunggu,816040000,
-JAS-121345,2025-12-31,3,kei,IT,Inventaris,Menunggu,1000000,
-BAR-121648556,2025-12-31,3,kei,IT,Inventaris,Menunggu,480880000,
-BAR-134632531,2025-12-31,3,kei,IT,Operasional,Menunggu,23423400,
-OPT-14290531,2025-12-31,3,kei,IT,Operasional,Menunggu,5,
-OPT-16225375,2026-01-08,USR002,yanto,pemasaran,Operasional,Menunggu,1531498,
-OPT-17080744,2026-01-08,USR002,yanto,pemasaran,Operasional,Menunggu,51116,
+REQ-20251230122456,2025-12-30 12:24:56,2,yanto,pemasaran,Operasional,Disetujui,16250000,-
+REQ-20251230124951,2025-12-30 12:49:51,2,yanto,pemasaran,Operasional,Ditolak,40000,boros
+REQ-20251231113550,2025-12-31 11:35:50,3,kei,operasional,Operasional,Menunggu,816040000,
+JAS-121345,2025-12-31 18:47:47,3,kei,IT,Inventaris,Menunggu,1000000,
+BAR-121648556,2025-12-31 18:47:47,3,kei,IT,Inventaris,Menunggu,480880000,
+BAR-134632531,2025-12-31 18:47:47,3,kei,IT,Operasional,Menunggu,23423400,
+OPT-14290531,2025-12-31 14:29:05,3,kei,IT,Operasional,Menunggu,5,
+OPT-16225375,2026-01-08 16:22:53,USR002,yanto,pemasaran,Operasional,Menunggu,1531498,
+OPT-17080744,2026-01-08 17:08:07,USR002,yanto,pemasaran,Operasional,Menunggu,51116,
+OPT-18185718,2026-01-08 18:18:57,USR002,yanto,pemasaran,Operasional,Menunggu,220000,
