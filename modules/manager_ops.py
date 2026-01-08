@@ -3,8 +3,8 @@ from modules.utility import baca_data, simpan_data, clear_screen, format_rupiah,
 def menu_manajer(user_sedang_login):
     while True:
         clear_screen()
-        header()
-        print("────────────── KELOLA KEUANGAN ──────────────")
+        header(subjudul="kelola keuangan", user=user_sedang_login)
+        # print("────────────── KELOLA KEUANGAN ──────────────")
         print("[1] Cek & Proses Pengajuan Dana")
         print("[2] Lihat Saldo & Limit")
         print("[3] Set Limit Pengajuan")
@@ -12,12 +12,12 @@ def menu_manajer(user_sedang_login):
 
         pilihan = input("Pilih menu: ").strip()
         if pilihan == "1":
-            proses_persetujuan_dana()
+            proses_persetujuan_dana(user_sedang_login)
         elif pilihan == "2":
-            lihat_saldo_dan_limit()
+            lihat_saldo_dan_limit(user_sedang_login)
             input("\nTekan Enter untuk kembali...\n")
         elif pilihan == "3":
-            set_limit_pengajuan()
+            set_limit_pengajuan(user_sedang_login)
         elif pilihan == "0":
             return
         else:
@@ -25,7 +25,7 @@ def menu_manajer(user_sedang_login):
             input("Tekan Enter untuk input ulang...\n")
 
 # 1. Fitur Persetujuan dan Penolakan Pengajuan Dana    /farah
-def proses_persetujuan_dana():
+def proses_persetujuan_dana(user_sedang_login):
     while True:
         clear_screen()
         tabel_pengajuan = baca_data("pengajuan")
@@ -46,13 +46,9 @@ def proses_persetujuan_dana():
     
         # Pengajuan ada        /farah
         data_pending["total"] = data_pending["total"].map(format_rupiah)
-        print("════════════════════════════════════════════════════════════════════════════════════")
-        print("|                                 F U N D G A T E                                  |")
-        print("|                       Sistem Pengajuan & Manajemen Keuangan                      |")
-        print("════════════════════════════════════════════════════════════════════════════════════\n")
-        print("──────────────────────────────── DAFTAR PENGAJUAN ──────────────────────────────────")
+        header(subjudul="proses pengajuan dana", user=user_sedang_login)
         tabel_rapih(
-            data_pending[["id_pengajuan", "divisi", "jenis_pengajuan", "total", "status"]])
+            data_pending[["id_pengajuan", "divisi", "jenis_pengajuan", "total", "status"]],judul="DAFTAR PENGAJUAN DANA")
 
         id_target = input("\nMasukkan ID Pengajuan yang ingin diproses (0 untuk kembali): ").strip()
 
@@ -80,11 +76,7 @@ def proses_persetujuan_dana():
 
         while True:
             clear_screen()
-            print("════════════════════════════════════════════════════════")
-            print("|                    F U N D G A T E                   |")
-            print("|          Sistem Pengajuan & Manajemen Keuangan       |")
-            print("════════════════════════════════════════════════════════\n")
-            print("────────────────── INFORMASI PENGAJUAN ─────────────────")
+            header(subjudul="detail pengajuan dana", user=user_sedang_login)
             print(f"ID Pengajuan    : {data_pilih['id_pengajuan']}")
             print(f"Divisi          : {data_pilih['divisi']}")
             print(f"Jenis Pengajuan : {data_pilih['jenis_pengajuan']}")
@@ -98,7 +90,7 @@ def proses_persetujuan_dana():
                 view = detail.copy()
                 view["harga_satuan"] = view["harga_satuan"].map(format_rupiah)
                 view["subtotal"] = view["subtotal"].map(format_rupiah)
-                tabel_rapih(view[["nama_item", "jumlah", "harga_satuan", "subtotal"]])
+                tabel_rapih(view[["nama_item", "jumlah", "harga_satuan", "subtotal"]],judul="RINCIAN BARANG")
 
             print(f"\nSaldo perusahaan saat ini : {format_rupiah(saldo_perusahaan)}")
             print(f"Total pengajuan           : {format_rupiah(total_pengajuan)}") 
@@ -166,25 +158,25 @@ def proses_persetujuan_dana():
         input("\nTekan Enter untuk kembali ke daftar...\n")
 
 # 2. Fitur Lihat Saldo dan Limit    /farah
-def lihat_saldo_dan_limit():
+def lihat_saldo_dan_limit(user_sedang_login=None):
     clear_screen()
     data_keuangan = baca_data("keuangan")
 
     saldo = data_keuangan.loc[0, "saldo"]
     limit = data_keuangan.loc[0, "limit_pengajuan"]
 
-    header()
-    print("──────────── INFORMASI KEUANGAN ─────────────")
+    header(subjudul="informasi keuangan", user=user_sedang_login)
+    # print("──────────── INFORMASI KEUANGAN ─────────────")
     print(f"Saldo perusahaan : {format_rupiah(saldo):>15}")
     print(f"Limit pengajuan  : {format_rupiah(limit):>15}")
 
 # 3. Fitur Set Limit Pengajuan Dana    /farah
-def set_limit_pengajuan():
+def set_limit_pengajuan(user_sedang_login=None):
     data_keuangan = baca_data("keuangan")
     
     while True:
         clear_screen()
-        header()
+        header(subjudul="set limit pengajuan", user=user_sedang_login)
         limit = data_keuangan.loc[0, "limit_pengajuan"]
         print("──────────── SET LIMIT PENGAJUAN ────────────")
         print(f"Limit saat ini : {format_rupiah(limit):>15}")
@@ -196,8 +188,8 @@ def set_limit_pengajuan():
         if pilihan == "1":
             while True:
                 clear_screen()  # clear tiap kali ulang input
-                header()
-                print("──────────── SET LIMIT PENGAJUAN ────────────")
+                header(subjudul="set limit pengajuan", user=user_sedang_login)
+                # print("──────────── SET LIMIT PENGAJUAN ────────────")
                 print(f"Limit saat ini : {format_rupiah(limit):>15}")
                 print("\nMasukkan limit baru (0 untuk batal): ", end="")
                 
