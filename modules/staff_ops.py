@@ -81,7 +81,7 @@ def buat_pengajuan_dana(user):
             input("\n⚠️      Pilihan tidak valid!\nTekan Enter untuk input ulang...\n")
 
     id_pengajuan = f"{prefix}-{datetime.now().strftime('%H%M%S')}{random.randint(10,99)}"
-    id_rincian = f"RIN-{datetime.now().strftime('%H%M%S')}{random.randint(10,99)}"
+
     tanggal = datetime.now().strftime("%Y-%m-%d")
 
     rincian = []
@@ -89,6 +89,8 @@ def buat_pengajuan_dana(user):
 
     # loop rincian
     while True:
+        
+        id_rincian = f"RIN-{datetime.now().strftime('%H%M%S')}{random.randint(10,99)}"
 
         # tipe pengajuan
         while True:
