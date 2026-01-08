@@ -44,6 +44,8 @@ def main():
                     username = username_terakhir
                 else:
                     username = input("Username : ").strip()
+                
+                # cek input kosong biar ga eror pas dicek database /kei
                 if not username:
                     print("\n⚠️  Username tidak boleh kosong!")
                     input("Tekan Enter untuk input ulang...")
@@ -88,11 +90,13 @@ def main():
         # login berhasil, cek role  /kei
         nama = data_user["username"]
         peran = data_user["role"]
+        
         # arahin menu sesuai role   /kei
         if peran == "Kepala Divisi":
             menu_kepala_divisi(data_user)
 
         elif peran == "Manajer Keuangan":
+            # ini menunya kepanjnagan tpi gpp dh rapihin dkit /kei
             while True:
                 clear_screen()
 
@@ -122,24 +126,24 @@ def main():
                     else:
                         print("\n✅  Berhasil logout.")
                         break 
-                    
                 else:
                     print("\n⚠️      Pilihan tidak valid!")
                     input("Tekan Enter untuk input ulang...\n")
+
         elif peran in ("Direktur", "Auditor"):
             menu_laporan(data_user)
         else:
             print("⚠️      Role tidak dikenali.")
         
-            # kalau loop menu selesai (user pilih logout), tanya mau keluar aplikasi gak? /kei
-            # updated / najwa
-            jawab = konfirmasi_yn("\nApakah ada user lain yang mau login? (y/n): ")
-            if jawab == "y":
-                continue  
-            else:
-                print("Terima kasih, sampai jumpa!")
-                break 
-
+        # kalau loop menu selesai (user pilih logout), tanya mau keluar aplikasi gak? /kei
+        # updated / najwa
+        # ini tadinya masuk ke else, harusnya sejajar sma if peran /kei
+        jawab = konfirmasi_yn("\nApakah ada user lain yang mau login? (y/n): ")
+        if jawab == "y":
+            continue  
+        else:
+            print("Terima kasih, sampai jumpa!")
+            break 
 
 if __name__ == "__main__":
     main()
