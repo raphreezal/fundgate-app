@@ -23,9 +23,9 @@ def menu_kepala_divisi(user):
         header()
         print(f"Selamat datang, {user['username']}! \nAnda masuk sebagai {user['role']}.\n") # nambah info usn sama role / najwa
         print(f"─────── MENU KEPALA DIVISI: {user['divisi']} ───────")
-        print("1. 💰 Buat Pengajuan Dana")
-        print("2. 📊 Riwayat Pengajuan Dana")
-        print("0. 🔒 Logout")
+        print("[1] 💰 Buat Pengajuan Dana")
+        print("[2] 📊 Riwayat Pengajuan Dana")
+        print("[0] 🔒 Logout")
 
         pilih = input("Pilih menu: ").strip()
 
@@ -56,10 +56,10 @@ def buat_pengajuan_dana(user):
         header()
         print("──────────── FORM PENGAJUAN DANA ────────────")
         print("Jenis        :")
-        print("1. Operasional")
-        print("2. Inventaris")
-        print("3. Lainnya")
-        print("0. Kembali")
+        print("[1] Operasional")
+        print("[2] Inventaris")
+        print("[3] Lainnya")
+        print("[0] Kembali")
 
         pilih = input("Pilih: ").strip()
 
@@ -99,9 +99,9 @@ def buat_pengajuan_dana(user):
             print("──────────── FORM PENGAJUAN DANA ────────────")
             print(f"Jenis        : {jenis}")
             print("Tipe         :")
-            print("1. Barang")
-            print("2. Jasa")
-            print("0. Batal")
+            print("[1] Barang")
+            print("[2] Jasa")
+            print("[0] Batal")
 
             pilih_tipe = input("Pilih: ").strip()
 
@@ -183,8 +183,8 @@ def buat_pengajuan_dana(user):
         clear_screen()
         header()
         tabel_rapih(rincian, "RINCIAN SAAT INI")
-        print("\n1. Tambah item")
-        print("0. Simpan pengajuan")
+        print("\n[1] Tambah item")
+        print("[0] Simpan pengajuan")
 
         if input("Pilih: ").strip() != "1":
             break
@@ -208,8 +208,8 @@ def buat_pengajuan_dana(user):
     # lebih dari limit = dana darurat atau tidak  /farah
     if total > limit:
         print("\n⚠️      Nominal melebihi limit!")
-        print("1. Ajukan sebagai DANA DARURAT")
-        print("0. Batalkan pengajuan")
+        print("[1] Ajukan sebagai DANA DARURAT")
+        print("[0] Batalkan pengajuan")
 
         while True:
             pilih = input("Pilih: ").strip()

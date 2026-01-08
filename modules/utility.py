@@ -128,10 +128,10 @@ def tampilkan_interaktif(df):
         aksi = input("Pilih aksi: ")
 
         if aksi == "":
-            input("\n⚠️    Pilihan tidak boleh kosong!\nTekan Enter untuk input ulang...")
+            input("\n⚠️    Pilihan tidak boleh kosong!\nTekan Enter untuk input ulang...\n")
             continue
         if not aksi.isdigit() or aksi not in ["0","1","2","3"]:
-            input("\n⚠️    Pilihan tidak valid!\nTekan Enter untuk input ulang...")
+            input("\n⚠️    Pilihan tidak valid!\nTekan Enter untuk input ulang...\n")
             continue
         
         if aksi == "1":

@@ -90,12 +90,12 @@ def main():
                 header()
                 print(f"Selamat datang, {nama}!")
                 print(f"Anda masuk sebagai {peran}\n")  # nambah info usn sama role /najwa
-                print("──────────── MENU UTAMA ────────────")   # menu manajer keuangan /farah
-                print("1. 💰 Kelola Keuangan")
-                print("2. 👤 Kelola User")
-                print("3. 👥 Kelola Divisi")
-                print("4. 📊 Lihat Laporan")
-                print("0. 🔒 Logout")
+                print("──────────────── MENU UTAMA ─────────────────")   # menu manajer keuangan /farah
+                print("[1] 💰 Kelola Keuangan")
+                print("[2] 👤 Kelola User")
+                print("[3] 👥 Kelola Divisi")
+                print("[4] 📊 Lihat Laporan")
+                print("[0] 🔒 Logout")
 
                 opsi = input("Pilih: ").strip()
 
