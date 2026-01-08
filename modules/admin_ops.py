@@ -10,7 +10,7 @@ def menu_admin(user_login=None):
     while True:
         clear_screen()
         header()
-        print("────────────── KELOLA USER ──────────────")
+        print("──────────────── KELOLA USER ────────────────")
         print("[1] Lihat User")
         print("[2] Tambah User")
         print("[3] Edit User")
@@ -50,8 +50,12 @@ def lihat_user():
         df_tampil["divisi"] = df_tampil["divisi"].fillna("-")
 
     clear_screen()
-    header()
-    tampilkan_interaktif(df_tampil, judul="DAFTAR USER", show_judul=True)
+    print("═══════════════════════════════════════════════════════════════════")
+    print("|                         F U N D G A T E                         |")
+    print("|               Sistem Pengajuan & Manajemen Keuangan             |")
+    print("═══════════════════════════════════════════════════════════════════\n")
+    print("─────────────────────────── DAFTAR USER ───────────────────────────")
+    tampilkan_interaktif(df_tampil) 
 
 
 def tambah_user():
@@ -61,7 +65,7 @@ def tambah_user():
     while True:
         clear_screen()
         header()
-        print("────────────── TAMBAH USER ──────────────\n")
+        print("──────────────── TAMBAH USER ────────────────")
 
         username = input("Username (0 batal): ").strip()
         if username == "0":
@@ -223,8 +227,11 @@ def edit_user():
 
     while True:
         clear_screen()
-        header()
-        print("──────────────────────────── DAFTAR USER ─────────────────────────────\n")
+        print("══════════════════════════════════════════════════════════════════════")
+        print("|                          F U N D G A T E                           |")
+        print("|                Sistem Pengajuan & Manajemen Keuangan               |")
+        print("══════════════════════════════════════════════════════════════════════\n")
+        print("──────────────────────────── DAFTAR USER ─────────────────────────────")
         print(f"{'No':<4} {'ID':<8} {'Username':<15} {'Role':<20} {'Divisi'}")
         print("-" * 70)
 
@@ -415,7 +422,10 @@ def hapus_user():
         # pilih user
         while True:
             clear_screen()
-            header()
+            print("══════════════════════════════════════════════════════════════════════")
+            print("|                          F U N D G A T E                           |")
+            print("|                Sistem Pengajuan & Manajemen Keuangan               |")
+            print("══════════════════════════════════════════════════════════════════════\n")
             print("──────────────────────────── DAFTAR USER ─────────────────────────────\n")
             print(f"{'No':<4} {'ID':<8} {'Username':<15} {'Role':<20} {'Divisi'}")
             print("-" * 70)

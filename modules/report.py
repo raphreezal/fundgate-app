@@ -31,7 +31,7 @@ def menu_laporan(user_sedang_login):
         clear_screen()
         header()
         print("───────────── DASHBOARD LAPORAN ─────────────")
-        print(f"Selamat datang, {user_sedang_login['username']}! Anda masuk sebagai {user_sedang_login['role']}.")
+        print(f"Selamat datang, {user_sedang_login['username']}!\nAnda masuk sebagai {user_sedang_login['role']}.")
         print("─────────────────────────────────────────────")
         print("[1] Laporan Detail (Semua Data)")
         print("[2] Rekapitulasi Per DIVISI")
