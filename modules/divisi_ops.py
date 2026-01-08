@@ -54,8 +54,7 @@ def lihat_divisi():
 
     clear_screen()
     header()
-    print("─────────────── DAFTAR DIVISI ───────────────\n")
-    tampilkan_interaktif(tabel) 
+    tampilkan_interaktif(tabel, judul="DAFTAR DIVISI", show_judul=True)
 
 
 # tambah divisi / najwa
