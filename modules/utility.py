@@ -114,17 +114,18 @@ def tampilkan_interaktif(df, judul="DATA", show_judul=False):
     pesan_error = "" #variabel untuk menampung pesan eror sementara /kei
 
     while True:
-        clear_screen() #biar layar selalu bersih /kei
-        header() #tampilkan header /kei
+
         if show_judul:
-            print(f"────────────────────────── {judul} ───────────────────────────\n")
+            tabel_judul = [[judul]]
+            print()
+            print(tabulate(tabel_judul, tablefmt="fancy_grid", stralign="center"))
         # cek kalau data kosong /kei
         if df_tampil.empty:
             print("\n⚠️  Tidak ada data yang ditemukan (Hasil Filter/Search Kosong).")
             print("💡  Saran: Gunakan fitur [3] Reset untuk kembali.")
         else:
             # tampilkan tabel rapi /kei
-            print(tabulate(df_tampil, headers='keys', tablefmt='psql', showindex=False))
+            print(tabulate(df_tampil, headers='keys', tablefmt='fancy_grid', showindex=False))
         
         # tampilin pesan error jika ada, terus kosongiin lagi /kei
         if pesan_error:
@@ -219,17 +220,34 @@ def tampilkan_interaktif(df, judul="DATA", show_judul=False):
 
 def tabel_rapih(df, judul="DATA"):
     df_tampil = df.copy()
-    # mengembalikan string tabel yang rapi dari DataFrame /kei
-    print(tabulate(df_tampil, headers='keys', tablefmt='psql', showindex=False))
+    # menampilkan judul dan tabel yang rapi dari DataFrame /kei
+    
+    # buat tabel judul /kei
+    tabel_judul = [[judul]]
+    print(tabulate(tabel_judul, tablefmt="fancy_grid", stralign="center", maxcolwidths=100))
+    
+    # tampilkan data /axiro0
+    print(tabulate(df_tampil, headers='keys', tablefmt='fancy_grid', showindex=False))
 
 def format_rupiah(angka):
     return f"Rp {int(angka):,}".replace(",", ".")
     
-def header():
-    print("═════════════════════════════════════════════")
-    print("|              F U N D G A T E              |")
-    print("|    Sistem Pengajuan & Manajemen Keuangan  |")
-    print("═════════════════════════════════════════════\n")
+def header(subjudul=None, show_judul=False, user=None):
+    judul_utama = "F U N D G A T E\nSistem Pengajuan & Manajemen Keuangan"
+
+    tabel_data = [
+        [judul_utama],
+    ]
+
+    if user is not None:
+        info_user = f"User: {user['username']} | Role: {user['role']}"
+        tabel_data.append([info_user]) 
+        
+    if subjudul is not None:
+        info_subjudul = f"{subjudul.upper()}"
+        tabel_data.append([info_subjudul]) 
+
+    print(tabulate(tabel_data, tablefmt="fancy_grid", stralign="center"))
   
 # Validasi username dan password / najwa
 def validasi_username(username):
