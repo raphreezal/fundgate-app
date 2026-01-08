@@ -20,14 +20,8 @@ def konfirmasi_yn(pesan):
 def main():
     # 1. pastiin database siap dulu sebelum aplikasi mulai /kei
     siapkan_folder_dan_file()
-    clear_screen()
-    header(subjudul="login")
-    print("     Selamat Datang di Aplikasi FundGate!")
-    
     while True:
-
-        
-        # login revisi (max 3 kali percobaan) / najwa
+        # login revisi (max 3 kali percobaan)   /najwa
         maks_login = 3
         percobaan = 0
         data_user = None
@@ -36,24 +30,19 @@ def main():
         while percobaan < maks_login:
             clear_screen()
             header(subjudul="login")
-            
-            while True:
-                # username
-                if username_terakhir:
-                    print(f"Username : {username_terakhir}")
-                    username = username_terakhir
-                else:
-                    username = input("Username : ").strip()
-                
-                # cek input kosong biar ga eror pas dicek database /kei
-                if not username:
-                    print("\n⚠️  Username tidak boleh kosong!")
-                    input("Tekan Enter untuk input ulang...")
-                    continue
-                else:
-                    print("✅ Username terdaftar")
-                    input("Tekan Enter untuk melanjutkan...\n")
-                    break 
+            print("    Selamat datang di Aplikasi FundGate !\n")
+
+            # username
+            if username_terakhir:
+                print(f"Username : {username_terakhir}")
+                username = username_terakhir
+            else:
+                username = input("Username : ").strip()
+
+            if not username:
+                print("\n⚠️  Username tidak boleh kosong!")
+                input("Tekan Enter untuk input ulang...")
+                continue
 
             hasil_username = cek_username(username)
             if hasil_username == "USERNAME_TIDAK_ADA":
@@ -90,13 +79,11 @@ def main():
         # login berhasil, cek role  /kei
         nama = data_user["username"]
         peran = data_user["role"]
-        
         # arahin menu sesuai role   /kei
         if peran == "Kepala Divisi":
             menu_kepala_divisi(data_user)
 
         elif peran == "Manajer Keuangan":
-            # ini menunya kepanjnagan tpi gpp dh rapihin dkit /kei
             while True:
                 clear_screen()
 
@@ -113,37 +100,31 @@ def main():
                 if opsi == "1":
                     menu_manajer(data_user)
                 elif opsi == "2":
-                    menu_admin(data_user)
-                #nambah menu kelola divisi / najwa
+                    menu_admin(data_user)   # manajer punya akses spesial ke menu admin juga    /kei
                 elif opsi == "3":
                     menu_divisi(data_user)
                 elif opsi == "4":
                     menu_laporan(data_user)
                 elif opsi == "0":
-                    jawab = konfirmasi_yn("\nApakah yakin ingin logout? (y/n): ")
-                    if jawab == "n":
-                        continue 
-                    else:
-                        print("\n✅  Berhasil logout.")
-                        break 
+                    if konfirmasi_yn("\nYakin ingin logout? (y/n): ") == "y":
+                        break
                 else:
-                    print("\n⚠️      Pilihan tidak valid!")
-                    input("Tekan Enter untuk input ulang...\n")
+                    print("\n⚠️  Pilihan tidak valid!")
+                    input("Tekan Enter untuk input ulang...")
 
         elif peran in ("Direktur", "Auditor"):
             menu_laporan(data_user)
+
         else:
-            print("⚠️      Role tidak dikenali.")
-        
-        # kalau loop menu selesai (user pilih logout), tanya mau keluar aplikasi gak? /kei
-        # updated / najwa
-        # ini tadinya masuk ke else, harusnya sejajar sma if peran /kei
-        jawab = konfirmasi_yn("\nApakah ada user lain yang mau login? (y/n): ")
-        if jawab == "y":
-            continue  
+            print("\n⚠️  Role tidak dikenali.")
+
+        # loop menu selesai, tanya mau keluar aplikasi gak? /kei
+        # updated  /najwa
+        if konfirmasi_yn("\nApakah ada user lain yang mau login? (y/n): ") == "y":
+            continue
         else:
-            print("Terima kasih, sampai jumpa!")
-            break 
+            print("\nTerima kasih, sampai jumpa!")
+            break
 
 if __name__ == "__main__":
     main()
