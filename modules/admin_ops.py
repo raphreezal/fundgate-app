@@ -51,8 +51,7 @@ def lihat_user():
 
     clear_screen()
     header()
-    print("────────────────────────── DAFTAR USER ───────────────────────────\n")
-    tampilkan_interaktif(df_tampil) 
+    tampilkan_interaktif(df_tampil, judul="DAFTAR USER", show_judul=True)
 
 
 def tambah_user():
