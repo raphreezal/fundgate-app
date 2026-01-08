@@ -106,19 +106,31 @@ def simpan_data(nama_file, data_frame_baru):
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def tampilkan_interaktif(df):
+def tampilkan_interaktif(df, judul="DATA", show_judul=False):
     # fungsi untuk menampilkan data dengan fitur /kei
     # SORTING dan SEARCHING bawaan /kei
     df_tampil = df.copy() # copy biar data asli gak rusak /kei
     
+    pesan_error = "" #variabel untuk menampung pesan eror sementara /kei
+
     while True:
+        clear_screen() #biar layar selalu bersih /kei
+        header() #tampilkan header /kei
+        if show_judul:
+            print(f"────────────────────────── {judul} ───────────────────────────\n")
         # cek kalau data kosong /kei
         if df_tampil.empty:
-            print("Tidak ada data yang ditemukan.")
+            print("\n⚠️  Tidak ada data yang ditemukan (Hasil Filter/Search Kosong).")
+            print("💡  Saran: Gunakan fitur [3] Reset untuk kembali.")
         else:
             # tampilkan tabel rapi /kei
             print(tabulate(df_tampil, headers='keys', tablefmt='psql', showindex=False))
         
+        # tampilin pesan error jika ada, terus kosongiin lagi /kei
+        if pesan_error:
+            print(f"\n{pesan_error}")
+            pesan_error = ""
+
         print("\n[MENU INTERAKTIF]")
         print("[1] Sort (Urutkan Data)")
         print("[2] Search (Cari Data)")
@@ -128,37 +140,46 @@ def tampilkan_interaktif(df):
         aksi = input("Pilih aksi: ")
 
         if aksi == "":
-            input("\n⚠️    Pilihan tidak boleh kosong!\nTekan Enter untuk input ulang...")
-            continue
-        if not aksi.isdigit() or aksi not in ["0","1","2","3"]:
-            input("\n⚠️    Pilihan tidak valid!\nTekan Enter untuk input ulang...")
+            pesan_error = "⚠️  Pilihan tidak boleh kosong!"
             continue
         
         if aksi == "1":
             # --- FITUR SORTING --- /kei
+            if df_tampil.empty:
+                pesan_error = "⚠️  Data kosong, tidak bisa diurutkan"
+                continue
+
             cols = list(df_tampil.columns)
-            print("\nKolom tersedia:")
+            print("\n[Kolom tersedia]")
             for i, c in enumerate(cols):
-                print(f"{i}. {c}")
+                print(f"[{i + 1}] {c}") # penomoran user friendly (mulai dari 1) /kei
 
-            i_kolom = input("Urutkan berdasarkan kolom apa? ").strip()
-            if not i_kolom.isdigit() or int(i_kolom) not in range(len(cols)):
-                input("\n⚠️    Nomor kolom salah!\nTekan Enter untuk input ulang...")
+            i_kolom = input("Urutkan berdasarkan nomor kolom: ").strip()
+            
+            # fix bug: validasi harus pakai AND dan cek range yang benar (1 sampai len) /kei
+            if i_kolom.isdigit() and 1 <= int(i_kolom) <= len(cols):
+                index_pilih = int(i_kolom) - 1
+                kolom = cols[index_pilih]
+                
+                # konfirmasi user (opsional, tapi bagus untuk safety ig?) /keidjaur axior
+                print(f"Target sort: {kolom}")
+                
+                urutan = input("Ascending (a) atau Descending (d)? [Default: a]: ").strip().lower()
+                is_ascending = True if urutan != 'd' else False # default ke A jika input aneh/kosong /kei
+                
+                df_tampil = df_tampil.sort_values(by=kolom, ascending=is_ascending)
+                pesan_error = f"✅ Sukses mengurutkan berdasarkan '{kolom}'"
+            
+            else:
+                pesan_error = "⚠️  Nomor kolom tidak valid!"
                 continue
-            kolom = cols[int(i_kolom)]
-
-            urutan = input("Ascending (a) atau Descending (d)? ").strip().lower()
-            if urutan not in ["a","d"]:
-                input("\n⚠️    Pilihan urutan salah!\nTekan Enter untuk input ulang...")
-                continue
-
-            df_tampil = df_tampil.sort_values(by=kolom, ascending=(urutan=="a"))
 
         elif aksi == "2":
             # FITUR SEARCHING /kei
-            kata_kunci = input("Cari kata apa? : ").lower()
+            kata_kunci = input("Cari kata apa? : ").strip().lower() # tambah strip() biar spasi gak ganggu /kei
+            
             if kata_kunci == "":
-                input("\n⚠️    Kata kunci tidak boleh kosong!\nTekan Enter untuk input ulang...")
+                pesan_error = "⚠️  Kata kunci tidak boleh kosong!"
                 continue
             
             # 1. siapkan wadah kosong (anggap semua baris belum ketemu / False) /kei
@@ -168,26 +189,33 @@ def tampilkan_interaktif(df):
             for nama_kolom in df_tampil.columns:
                 # ambil isi kolom, jadikan teks, dan huruf kecilkan /kei
                 isi_kolom = df_tampil[nama_kolom].astype(str).str.lower()
-                
-                # cek apakah kata kunci ada di dalam kolom ini? /kei
-                ada_gak = isi_kolom.str.contains(kata_kunci)
-                
-                # 3. gabungkan hasil pencarian /kei
-                # kalo ketemu di kolom ini atau (|) kolom sebelumnya, tandai sebagai true /kei
+                ada_gak = isi_kolom.str.contains(kata_kunci, na=False) # na=False biar aman kalau ada data yg NULL /kei
                 baris_yang_cocok = baris_yang_cocok | ada_gak
 
-            # 4. ambil cuma baris yang cocok tadi /kei
-            df_tampil = df_tampil[baris_yang_cocok]
-
-            input(f"\nKetemu {len(df_tampil)} data.\nTekan Enter untuk melihat hasil...")
+            hasil_cari = df_tampil[baris_yang_cocok]
+            
+            # [UX] kasih feedback langsung berapa data ketemu /kei
+            if len(hasil_cari) > 0:
+                df_tampil = hasil_cari
+                pesan_error = f"✅ Ditemukan {len(df_tampil)} data dengan kata kunci '{kata_kunci}'."
+            else:
+                pesan_error = f"⚠️  Kata kunci '{kata_kunci}' tidak ditemukan di kolom manapun."
+                # jangn update df_tampil kalo kgk ketemu, atau update jdi kosong
+                # Di sini gw biarin df_tampil tetap seperti sebelumnya biar user kgk kaget tabel nya ilang
+                # tapi kalau mw strict (tabel jadi kosong), baris di bawah ini di uncomment aja:
+                
+                # df_tampil = hasil_cari 
 
         elif aksi == "3":
             # reset ke data awal /kei
             df_tampil = df.copy()
-            input("\nData di-reset.\nTekan Enter untuk melanjutkan...")
+            pesan_error = "🔄 Data berhasil direset ke kondisi awal."
 
         elif aksi == "0":
             break
+        
+        else:
+             pesan_error = "⚠️  Pilihan menu tidak valid!"
 
 def tabel_rapih(df, judul="DATA"):
     df_tampil = df.copy()
