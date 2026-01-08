@@ -54,7 +54,7 @@ def lihat_divisi():
 
     clear_screen()
     header()
-    print("───────── DAFTAR DIVISI ─────────\n")
+    print("─────────────── DAFTAR DIVISI ───────────────\n")
     tampilkan_interaktif(tabel) 
 
 
@@ -67,14 +67,14 @@ def tambah_divisi():
         header()
 
         # tampilin daftar divisi yang sudah ada / najwa
-        print("──────────────────────────── DAFTAR DIVISI ─────────────────────────────\n")
+        print("─────────────── DAFTAR DIVISI ───────────────\n")
         print(f"{'No':<4} {'ID Divisi':<10} {'Nama Divisi'}")
         print("-" * 50)
 
         for i, row in tabel.iterrows():
             print(f"{i+1:<4} {row['id_divisi']:<10} {row['nama_divisi']}")
 
-        print("\n────────────── TAMBAH DIVISI ──────────────")
+        print("\n─────────────── TAMBAH DIVISI ───────────────")
 
         nama = input("Nama divisi (0 batal): ").strip()
 
@@ -133,7 +133,7 @@ def edit_divisi():
     while True:
         clear_screen()
         header()
-        print("──────────────────────────── DAFTAR DIVISI ─────────────────────────────\n")
+        print("─────────────── DAFTAR DIVISI ───────────────\n")
         print(f"{'No':<4} {'ID Divisi':<10} {'Nama Divisi'}")
         print("-" * 50)
 
@@ -164,7 +164,7 @@ def edit_divisi():
 
             data_lama = tabel.loc[index]
 
-            print("────────────── EDIT DIVISI ──────────────")
+            print("──────────────── EDIT DIVISI ────────────────")
             print("ID Divisi   :", data_lama["id_divisi"])
             print("Nama Lama   :", data_lama["nama_divisi"])
 
@@ -214,7 +214,7 @@ def hapus_divisi():
         while True:
             clear_screen()
             header()
-            print("──────────────────────────── DAFTAR DIVISI ─────────────────────────────\n")
+            print("─────────────── DAFTAR DIVISI ───────────────\n")
             print(f"{'No':<4} {'ID Divisi':<10} {'Nama Divisi'}")
             print("-" * 50)
 
@@ -243,7 +243,7 @@ def hapus_divisi():
         while True:
             clear_screen()
             header()
-            print("────────────── HAPUS DIVISI ──────────────")
+            print("─────────────── HAPUS DIVISI ────────────────")
             print("ID Divisi   :", data["id_divisi"])
             print("Nama Divisi :", data["nama_divisi"])
 
