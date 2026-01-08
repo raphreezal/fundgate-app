@@ -123,6 +123,7 @@ def tambah_divisi(user_login=None):
 # edit divisi / najwa
 def edit_divisi(user_login=None):
     tabel = baca_data("divisi")
+    display_tabel = tabel.copy()
 
     if tabel.empty:
         clear_screen()
@@ -141,9 +142,13 @@ def edit_divisi(user_login=None):
 
         # for i, row in tabel.iterrows():
         #     print(f"{i+1:<4} {row['id_divisi']:<10} {row['nama_divisi']}")
+         
+        for i in range(len(display_tabel)):
+            display_tabel.at[i, 'No'] = i + 1
+        display_tabel = display_tabel[["No", "id_divisi", "nama_divisi"]]
         
         # ganti ke tabulate / kei
-        tabel_rapih(tabel[["id_divisi", "nama_divisi"]], judul="DAFTAR DIVISI")
+        tabel_rapih(display_tabel, judul="DAFTAR DIVISI")
         
         print("\nPilih yang ingin diedit")
         pilih = input("Nomor divisi (0 batal): ").strip()
@@ -207,6 +212,7 @@ def edit_divisi(user_login=None):
 # hapus divisi / najwa
 def hapus_divisi(user_login=None):
     tabel = baca_data("divisi")
+    display_tabel = tabel.copy()
 
     if tabel.empty:
         clear_screen()
@@ -227,8 +233,12 @@ def hapus_divisi(user_login=None):
             # for i, row in tabel.iterrows():
             #     print(f"{i+1:<4} {row['id_divisi']:<10} {row['nama_divisi']}")
             
+            for i in range(len(display_tabel)):
+                display_tabel.at[i, 'No'] = i + 1
+            display_tabel = display_tabel[["No", "id_divisi", "nama_divisi"]]
+            
             # ganti ke tabulate / kei
-            tabel_rapih(tabel[["id_divisi", "nama_divisi"]], judul="DAFTAR DIVISI")
+            tabel_rapih(display_tabel, judul="DAFTAR DIVISI")
             
             print("\nPilih yang ingin dihapus")
             pilih = input("Nomor divisi (0 batal): ").strip()

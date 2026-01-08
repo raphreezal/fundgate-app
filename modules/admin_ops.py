@@ -214,6 +214,7 @@ def tambah_user(user_login=None):
 
 def edit_user(user_login=None):
     tabel = baca_data("users")
+    tabel_display = tabel.copy()
 
     if tabel.empty:
         clear_screen()
@@ -232,7 +233,11 @@ def edit_user(user_login=None):
         #     divisi = row['divisi'] if pd.notna(row['divisi']) and row['divisi'] != "" else "-"
         #     print(f"{i+1:<4} {row['id']:<8} {row['username']:<15} {row['role']:<20} {divisi}")
         
-        tabel_rapih(tabel[["id", "username", "role", "divisi"]], judul="DAFTAR USER") 
+        for i in range(len(tabel_display)):
+            tabel_display.at[i, 'No'] = i + 1
+        tabel_display = tabel_display[["No", "id", "username", "role", "divisi"]]
+        
+        tabel_rapih(tabel_display, judul="DAFTAR USER")
 
         pilih = input("\nPilih nomor user (0 kembali): ").strip()
 
@@ -406,6 +411,7 @@ def edit_user(user_login=None):
 
 def hapus_user(user_login=None):
     tabel = baca_data("users")
+    tabel_display = tabel.copy()
 
     if tabel.empty:
         clear_screen()
@@ -419,7 +425,12 @@ def hapus_user(user_login=None):
             clear_screen()
             header(subjudul="hapus user", user=user_login)
             # print("──────────────────────────── DAFTAR USER ─────────────────────────────\n")
-            tabel_rapih(tabel[["id", "username", "role", "divisi"]], judul="DAFTAR USER")
+            
+            for i in range(len(tabel_display)):
+                tabel_display.at[i, 'No'] = i + 1
+            tabel_display = tabel_display[["No", "id", "username", "role", "divisi"]]
+            
+            tabel_rapih(tabel_display, judul="DAFTAR USER")
 
             pilih = input("\nPilih nomor user (0 batal): ").strip()
 
