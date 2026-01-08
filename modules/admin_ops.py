@@ -1,7 +1,7 @@
 import pandas as pd
 from modules.utility import (
     baca_data, simpan_data,
-    clear_screen, header,
+    clear_screen, header, tabel_rapih,
     validasi_username, validasi_password,
     generate_id_user, tampilkan_interaktif
 )
@@ -9,8 +9,8 @@ from modules.utility import (
 def menu_admin(user_login=None):
     while True:
         clear_screen()
-        header()
-        print("────────────── KELOLA USER ──────────────")
+        header(subjudul="kelola user", user=user_login)
+        # print("────────────── KELOLA USER ──────────────")
         print("[1] Lihat User")
         print("[2] Tambah User")
         print("[3] Edit User")
@@ -20,20 +20,20 @@ def menu_admin(user_login=None):
         pilih = input("Pilih: ").strip()
 
         if pilih == "1":
-            lihat_user()
+            lihat_user(user_login)
         elif pilih == "2":
-            tambah_user()
+            tambah_user(user_login)
         elif pilih == "3":
-            edit_user()
+            edit_user(user_login)
         elif pilih == "4":
-            hapus_user()
+            hapus_user(user_login)
         elif pilih == "0":
             break
         else:
             input("⚠️   Input tidak valid!\nTekan Enter untuk input ulang...\n")
 
 
-def lihat_user():
+def lihat_user(user_login=None):
     tabel = baca_data("users")
 
     if tabel.empty:
@@ -50,18 +50,18 @@ def lihat_user():
         df_tampil["divisi"] = df_tampil["divisi"].fillna("-")
 
     clear_screen()
-    header()
-    tampilkan_interaktif(df_tampil, judul="DAFTAR USER", show_judul=True)
+    header(subjudul="daftar user", user=user_login)
+    tampilkan_interaktif(df_tampil, judul="DAFTAR USER", show_judul=False)
 
 
-def tambah_user():
+def tambah_user(user_login=None):
     tabel = baca_data("users")
     tabel_divisi = baca_data("divisi")
 
     while True:
         clear_screen()
-        header()
-        print("────────────── TAMBAH USER ──────────────\n")
+        header(subjudul="tambah user", user=user_login)
+        # print("────────────── TAMBAH USER ──────────────\n")
 
         username = input("Username (0 batal): ").strip()
         if username == "0":
@@ -114,8 +114,8 @@ def tambah_user():
     # pilih role / najwa
     while True:
         clear_screen()
-        header()
-        print("────────────── PILIH ROLE ──────────────")
+        header(subjudul="pilih role", user=user_login)
+        # print("────────────── PILIH ROLE ──────────────")
         print("[1] Direktur")
         print("[2] Manajer Keuangan")
         print("[3] Kepala Divisi")
@@ -145,8 +145,8 @@ def tambah_user():
 
             while True:
                 clear_screen()
-                header()
-                print("────────────── PILIH DIVISI ──────────────\n")
+                header(subjudul="pilih divisi", user=user_login)
+                # print("────────────── PILIH DIVISI ──────────────\n")
                 print(f"{'No':<4} {'ID Divisi':<10} {'Nama Divisi'}")
                 print("-" * 40)
 
@@ -178,8 +178,8 @@ def tambah_user():
     # konfirmasi
     while True:
         clear_screen()
-        header()
-        print("────────────── KONFIRMASI DATA USER ──────────────\n")
+        header(subjudul="konfirmasi data user", user=user_login)
+        # print("────────────── KONFIRMASI DATA USER ──────────────\n")
         print(f"Username : {username}")
         print(f"Password : {(password)}")
         print(f"Role     : {role}")
@@ -212,25 +212,27 @@ def tambah_user():
 
 
 
-def edit_user():
+def edit_user(user_login=None):
     tabel = baca_data("users")
 
     if tabel.empty:
         clear_screen()
-        header()
+        header(subjudul="edit user", user=user_login)
         input("⚠️   Data user kosong.\nTekan Enter untuk kembali...\n")
         return
 
     while True:
         clear_screen()
-        header()
-        print("──────────────────────────── DAFTAR USER ─────────────────────────────\n")
-        print(f"{'No':<4} {'ID':<8} {'Username':<15} {'Role':<20} {'Divisi'}")
-        print("-" * 70)
+        header(subjudul="edit user", user=user_login)
+        # print("──────────────────────────── DAFTAR USER ─────────────────────────────\n")
+        # print(f"{'No':<4} {'ID':<8} {'Username':<15} {'Role':<20} {'Divisi'}")
+        # print("-" * 70)
 
-        for i, row in tabel.iterrows():
-            divisi = row['divisi'] if pd.notna(row['divisi']) and row['divisi'] != "" else "-"
-            print(f"{i+1:<4} {row['id']:<8} {row['username']:<15} {row['role']:<20} {divisi}")
+        # for i, row in tabel.iterrows():
+        #     divisi = row['divisi'] if pd.notna(row['divisi']) and row['divisi'] != "" else "-"
+        #     print(f"{i+1:<4} {row['id']:<8} {row['username']:<15} {row['role']:<20} {divisi}")
+        
+        tabel_rapih(tabel[["id", "username", "role", "divisi"]], judul="DAFTAR USER") 
 
         pilih = input("\nPilih nomor user (0 kembali): ").strip()
 
@@ -245,8 +247,8 @@ def edit_user():
 
         while True:
             clear_screen()
-            header()
-            print("────────────── EDIT USER ──────────────\n")
+            header(subjudul="edit user", user=user_login)
+            # print("────────────── EDIT USER ──────────────\n")
             print("DATA LAMA")
             print(f"ID       : {data['id']}")
             print(f"Username : {data['username']}")
@@ -304,8 +306,8 @@ def edit_user():
 
             while True:
                 clear_screen()
-                header()
-                print("────────────── PILIH ROLE ──────────────")
+                header(subjudul="pilih role", user=user_login)
+                # print("────────────── PILIH ROLE ──────────────")
                 print("[1] Direktur")
                 print("[2] Manajer Keuangan")
                 print("[3] Kepala Divisi")
@@ -344,8 +346,8 @@ def edit_user():
 
                 while True:
                     clear_screen()
-                    header()
-                    print("────────────── PILIH DIVISI ──────────────")
+                    header(subjudul="pilih divisi", user=user_login)
+                    # print("────────────── PILIH DIVISI ──────────────")
                     for i, row in tabel_divisi.iterrows():
                         print(f"[{i+1}] {row['nama_divisi']}")
                     print("[Enter] Lewati (tetap sama)")
@@ -369,8 +371,8 @@ def edit_user():
 
 
             clear_screen()
-            header()
-            print("────────────── KONFIRMASI PERUBAHAN ──────────────\n")
+            header(subjudul="konfirmasi perubahan", user=user_login)
+            # print("────────────── KONFIRMASI PERUBAHAN ──────────────\n")
 
             def status(lama, baru):
                 return " (berubah)" if lama != baru else " (tetap)"
@@ -402,12 +404,12 @@ def edit_user():
                 else:
                     input("⚠️   Input tidak valid!\nTekan Enter untuk kembali...\n")
 
-def hapus_user():
+def hapus_user(user_login=None):
     tabel = baca_data("users")
 
     if tabel.empty:
         clear_screen()
-        header()
+        header(subjudul="hapus user", user=user_login)
         input("⚠️   Data user kosong.\nTekan Enter untuk kembali...\n")
         return
 
@@ -415,13 +417,9 @@ def hapus_user():
         # pilih user
         while True:
             clear_screen()
-            header()
-            print("──────────────────────────── DAFTAR USER ─────────────────────────────\n")
-            print(f"{'No':<4} {'ID':<8} {'Username':<15} {'Role':<20} {'Divisi'}")
-            print("-" * 70)
-
-            for i, row in tabel.iterrows():
-                print(f"{i+1:<4} {row['id']:<8} {row['username']:<15} {row['role']:<20} {row['divisi']}")
+            header(subjudul="hapus user", user=user_login)
+            # print("──────────────────────────── DAFTAR USER ─────────────────────────────\n")
+            tabel_rapih(tabel[["id", "username", "role", "divisi"]], judul="DAFTAR USER")
 
             pilih = input("\nPilih nomor user (0 batal): ").strip()
 
@@ -444,8 +442,8 @@ def hapus_user():
         # konfirmasi hapus
         while True:
             clear_screen()
-            header()
-            print("────────────── HAPUS USER ──────────────")
+            header(subjudul="hapus user", user=user_login)
+            # print("────────────── HAPUS USER ──────────────")
             print("ID       :", data["id"])
             print("Username :", data["username"])
 

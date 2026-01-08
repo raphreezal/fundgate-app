@@ -19,11 +19,11 @@ def main():
     # 1. pastiin database siap dulu sebelum aplikasi mulai /kei
     siapkan_folder_dan_file()
     clear_screen()
-    header()
+    header(subjudul="login")
     print("     Selamat Datang di Aplikasi FundGate!")
     
     while True:
-        print("\n────────────────── LOGIN ────────────────────")
+
         
         # login revisi (max 3 kali percobaan) / najwa
         maks_login = 3
@@ -32,16 +32,15 @@ def main():
 
         while percobaan < maks_login:
             clear_screen()
-            header()
+            header(subjudul="login")
             
             while True:
-                print("────────────────── LOGIN ────────────────────\n")
                 username = input("Username : ").strip()
                 if not username:
                     print("⚠️     Username tidak boleh kosong!")
                     input("Tekan Enter untuk input ulang...\n")
                     clear_screen()
-                    header()
+                    header(subjudul="login")
                     continue
 
                 hasil_username = cek_username(username)
@@ -49,7 +48,7 @@ def main():
                     print("⚠️     Username tidak terdaftar!")
                     input("Tekan Enter untuk input ulang...\n")
                     clear_screen()
-                    header()
+                    header(subjudul="login")
                     continue
                 else:
                     print("✅ Username terdaftar")
@@ -100,9 +99,9 @@ def main():
                     clear_screen()
                     # manajer punya akses spesial ke menu admin juga /kei
 
-                    header()
+                    header(subjudul="menu utama", user=data_user)
                     print(f"Selamat datang, {nama}! \nAnda masuk sebagai {peran}.\n") # nambah info usn sama role / najwa
-                    print("──────────────── MENU UTAMA ─────────────────") # punya manajer keuangan /farah
+                    # print("──────────────── MENU UTAMA ─────────────────") # punya manajer keuangan /farah
                     print("1. 💰 Kelola Keuangan")
                     print("2. 👤 Kelola User")
                     print("3. 👥 Kelola Divisi")

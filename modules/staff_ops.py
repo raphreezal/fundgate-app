@@ -20,9 +20,7 @@ def menu_kepala_divisi(user):
     while True:
         # clear screen & header biar rapih  /farah
         clear_screen()
-        header()
-        print(f"Selamat datang, {user['username']}! \nAnda masuk sebagai {user['role']}.\n") # nambah info usn sama role / najwa
-        print(f"─────── MENU KEPALA DIVISI: {user['divisi']} ───────")
+        header(subjudul="menu kepala divisi", user=user)
         print("1. 💰 Buat Pengajuan Dana")
         print("2. 📊 Riwayat Pengajuan Dana")
         print("0. 🔒 Logout")
@@ -53,8 +51,8 @@ def buat_pengajuan_dana(user):
     while True:
         # clear screen & header biar rapih  /farah
         clear_screen()
-        header()
-        print("──────────── FORM PENGAJUAN DANA ────────────")
+        header(subjudul="form pengajuan dana", user=user)
+        # print("──────────── FORM PENGAJUAN DANA ────────────")
         print("Jenis        :")
         print("1. Operasional")
         print("2. Inventaris")
@@ -95,8 +93,8 @@ def buat_pengajuan_dana(user):
         # tipe pengajuan
         while True:
             clear_screen()
-            header()
-            print("──────────── FORM PENGAJUAN DANA ────────────")
+            header(subjudul="form pengajuan dana", user=user)
+            # print("──────────── FORM PENGAJUAN DANA ────────────")
             print(f"Jenis        : {jenis}")
             print("Tipe         :")
             print("1. Barang")
@@ -125,8 +123,8 @@ def buat_pengajuan_dana(user):
         # nama
         while True:
             clear_screen()
-            header()
-            print("──────────── FORM PENGAJUAN DANA ────────────")
+            header(subjudul="form pengajuan dana", user=user)
+            # print("──────────── FORM PENGAJUAN DANA ────────────")
             print(f"Jenis        : {jenis}")
             print(f"Tipe         : {tipe}")
             nama = input("Nama item    : ").strip()
@@ -138,8 +136,8 @@ def buat_pengajuan_dana(user):
         # jumlah item
         while True:
             clear_screen()
-            header()
-            print("──────────── FORM PENGAJUAN DANA ────────────")
+            header(subjudul="form pengajuan dana", user=user)
+            # print("──────────── FORM PENGAJUAN DANA ────────────")
             print(f"Jenis        : {jenis}")
             print(f"Tipe         : {tipe}")
             print(f"Nama item    : {nama}")
@@ -153,8 +151,8 @@ def buat_pengajuan_dana(user):
         # harga satuan
         while True:
             clear_screen()
-            header()
-            print("──────────── FORM PENGAJUAN DANA ────────────")
+            header(subjudul="form pengajuan dana", user=user)
+            # print("──────────── FORM PENGAJUAN DANA ────────────")
             print(f"Jenis        : {jenis}")
             print(f"Tipe         : {tipe}")
             print(f"Nama item    : {nama}")
@@ -181,8 +179,19 @@ def buat_pengajuan_dana(user):
 
         # tambah item
         clear_screen()
-        header()
-        tabel_rapih(rincian, "RINCIAN SAAT INI")
+        header(subjudul="form pengajuan dana", user=user)
+        # ubah ke format rupiah /kei
+        # info_rincian = [{
+        #     "Nama Item": item["nama_item"],
+        #     "Jumlah": item["jumlah"],
+        #     "Harga Satuan": format_rupiah(item["harga_satuan"]),
+        #     "Subtotal": format_rupiah(item["subtotal"]) } for item in rincian]
+        
+        info_rincian = pd.DataFrame(rincian)
+        info_rincian["harga_satuan"] = info_rincian["harga_satuan"].map(format_rupiah)
+        info_rincian["subtotal"] = info_rincian["subtotal"].map(format_rupiah)
+        
+        tabel_rapih(info_rincian, "RINCIAN SAAT INI")
         print("\n1. Tambah item")
         print("0. Simpan pengajuan")
 
@@ -197,7 +206,7 @@ def buat_pengajuan_dana(user):
     limit = data_keuangan.loc[0, "limit_pengajuan"]
 
     clear_screen()
-    header()
+    header(subjudul="form pengajuan dana", user=user)
     tabel_rapih(rincian, "RINGKASAN PENGAJUAN")
     print(f"\nLimit Pengajuan Dana   : {format_rupiah(limit)}")
     print(f"Total Pengajuan Dana   : {format_rupiah(total)}")
@@ -256,11 +265,9 @@ def buat_pengajuan_dana(user):
 # riwayat
 def riwayat_pengajuan(user):
     clear_screen()
-    print("═══════════════════════════════════════════════════════════════════════════════════")
-    print("|                                 F U N D G A T E                                 |")
-    print("|                       Sistem Pengajuan & Manajemen Keuangan                     |")
-    print("═══════════════════════════════════════════════════════════════════════════════════\n")
-    print("──────────────────────────────── RIWAYAT PENGAJUAN ────────────────────────────────")
+    header(subjudul="riwayat pengajuan dana", user=user)
+    # print("──────────── RIWAYAT PENGAJUAN DANA ────────────\n")
+    
 
     data = baca_data("pengajuan")
     data = data[data["id_kepala_divisi"] == user["id"]]

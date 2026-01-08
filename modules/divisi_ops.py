@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 from modules.utility import (
-    baca_data, simpan_data,
+    baca_data, simpan_data, tabel_rapih,
     tampilkan_interaktif, clear_screen, header
 )
 
@@ -20,8 +20,8 @@ def generate_id_divisi(tabel):
 def menu_divisi(user_sedang_login=None):
     while True:
         clear_screen()
-        header()
-        print("────────────── KELOLA DIVISI ──────────────")
+        header(subjudul="kelola divisi", user=user_sedang_login)
+        # print("────────────── KELOLA DIVISI ──────────────")
         print("[1] Lihat Divisi")
         print("[2] Tambah Divisi")
         print("[3] Edit Divisi")
@@ -31,11 +31,11 @@ def menu_divisi(user_sedang_login=None):
         pilih = input("Pilih: ").strip()
 
         if pilih == "1":
-            lihat_divisi()
+            lihat_divisi(user_sedang_login)
         elif pilih == "2":
-            tambah_divisi()
+            tambah_divisi(user_sedang_login)
         elif pilih == "3":
-            edit_divisi()
+            edit_divisi(user_sedang_login)
         elif pilih == "4":
             hapus_divisi()
         elif pilih == "0":
@@ -45,7 +45,7 @@ def menu_divisi(user_sedang_login=None):
             input("Tekan Enter untuk input ulang...")
 
 # lihat divisi / najwa
-def lihat_divisi():
+def lihat_divisi(user_login=None):
     tabel = baca_data("divisi")
 
     if tabel.empty:
@@ -53,29 +53,32 @@ def lihat_divisi():
         return
 
     clear_screen()
-    header()
+    header(subjudul="lihat divisi", user=user_login)
     tampilkan_interaktif(tabel, judul="DAFTAR DIVISI", show_judul=True)
 
 
 # tambah divisi / najwa
-def tambah_divisi():
+def tambah_divisi(user_login=None):
     tabel = baca_data("divisi")
 
     while True:
         clear_screen()
-        header()
+        header(subjudul="tambah divisi", user=user_login)
 
         # tampilin daftar divisi yang sudah ada / najwa
-        print("──────────────────────────── DAFTAR DIVISI ─────────────────────────────\n")
-        print(f"{'No':<4} {'ID Divisi':<10} {'Nama Divisi'}")
-        print("-" * 50)
+        # print("──────────────────────────── DAFTAR DIVISI ─────────────────────────────\n")
+        # print(f"{'No':<4} {'ID Divisi':<10} {'Nama Divisi'}")
+        # print("-" * 50)
 
-        for i, row in tabel.iterrows():
-            print(f"{i+1:<4} {row['id_divisi']:<10} {row['nama_divisi']}")
+        # for i, row in tabel.iterrows():
+        #     print(f"{i+1:<4} {row['id_divisi']:<10} {row['nama_divisi']}")
+        
+        # ganti ke tabulate / kei
+        tabel_rapih(tabel[["id_divisi", "nama_divisi"]], judul="DAFTAR DIVISI")
 
-        print("\n────────────── TAMBAH DIVISI ──────────────")
+        # print("\n────────────── TAMBAH DIVISI ──────────────")
 
-        nama = input("Nama divisi (0 batal): ").strip()
+        nama = input("\nNama divisi baru (0 batal): ").strip()
 
         if nama == "0":
             return
@@ -118,12 +121,12 @@ def tambah_divisi():
 
 
 # edit divisi / najwa
-def edit_divisi():
+def edit_divisi(user_login=None):
     tabel = baca_data("divisi")
 
     if tabel.empty:
         clear_screen()
-        header()
+        header(subjudul="kelola divisi", user=user_login)
         print("⚠️    Data divisi kosong.")
         input("Tekan Enter untuk kembali...")
         return
@@ -131,15 +134,19 @@ def edit_divisi():
     # pilih divisi / najwa
     while True:
         clear_screen()
-        header()
-        print("──────────────────────────── DAFTAR DIVISI ─────────────────────────────\n")
-        print(f"{'No':<4} {'ID Divisi':<10} {'Nama Divisi'}")
-        print("-" * 50)
+        header(subjudul="edit divisi", user=user_login)
+        # print("──────────────────────────── DAFTAR DIVISI ─────────────────────────────\n")
+        # print(f"{'No':<4} {'ID Divisi':<10} {'Nama Divisi'}")
+        # print("-" * 50)
 
-        for i, row in tabel.iterrows():
-            print(f"{i+1:<4} {row['id_divisi']:<10} {row['nama_divisi']}")
-
-        pilih = input("\nPilih nomor divisi (0 batal): ").strip()
+        # for i, row in tabel.iterrows():
+        #     print(f"{i+1:<4} {row['id_divisi']:<10} {row['nama_divisi']}")
+        
+        # ganti ke tabulate / kei
+        tabel_rapih(tabel[["id_divisi", "nama_divisi"]], judul="DAFTAR DIVISI")
+        
+        print("\nPilih yang ingin diedit")
+        pilih = input("Nomor divisi (0 batal): ").strip()
 
         if not pilih.isdigit():
             input("⚠️   Input harus angka!\nTekan Enter untuk input ulang...")
@@ -159,11 +166,11 @@ def edit_divisi():
         # form edit / najwa
         while True:
             clear_screen()
-            header()
+            header(subjudul="edit divisi", user=user_login)
 
             data_lama = tabel.loc[index]
 
-            print("────────────── EDIT DIVISI ──────────────")
+            # print("────────────── EDIT DIVISI ──────────────")
             print("ID Divisi   :", data_lama["id_divisi"])
             print("Nama Lama   :", data_lama["nama_divisi"])
 
@@ -198,12 +205,12 @@ def edit_divisi():
 
 
 # hapus divisi / najwa
-def hapus_divisi():
+def hapus_divisi(user_login=None):
     tabel = baca_data("divisi")
 
     if tabel.empty:
         clear_screen()
-        header()
+        header(subjudul="daftar divisi", user=user_login)
         print("⚠️    Data divisi kosong.")
         input("Tekan Enter untuk kembali...")
         return
@@ -212,15 +219,19 @@ def hapus_divisi():
         # pilih divisi / najwa
         while True:
             clear_screen()
-            header()
-            print("──────────────────────────── DAFTAR DIVISI ─────────────────────────────\n")
-            print(f"{'No':<4} {'ID Divisi':<10} {'Nama Divisi'}")
-            print("-" * 50)
+            header(subjudul="hapus divisi", user=user_login)
+            # print("──────────────────────────── DAFTAR DIVISI ─────────────────────────────\n")
+            # print(f"{'No':<4} {'ID Divisi':<10} {'Nama Divisi'}")
+            # print("-" * 50)
 
-            for i, row in tabel.iterrows():
-                print(f"{i+1:<4} {row['id_divisi']:<10} {row['nama_divisi']}")
-
-            pilih = input("\nPilih nomor divisi (0 batal): ").strip()
+            # for i, row in tabel.iterrows():
+            #     print(f"{i+1:<4} {row['id_divisi']:<10} {row['nama_divisi']}")
+            
+            # ganti ke tabulate / kei
+            tabel_rapih(tabel[["id_divisi", "nama_divisi"]], judul="DAFTAR DIVISI")
+            
+            print("\nPilih yang ingin dihapus")
+            pilih = input("Nomor divisi (0 batal): ").strip()
 
             if not pilih.isdigit():
                 input("⚠️   Input harus angka!\nTekan Enter untuk input ulang...")
@@ -241,8 +252,8 @@ def hapus_divisi():
         # konfirmasi hapus / najwa
         while True:
             clear_screen()
-            header()
-            print("────────────── HAPUS DIVISI ──────────────")
+            header(subjudul="hapus divisi", user=user_login)
+            # print("────────────── HAPUS DIVISI ──────────────")
             print("ID Divisi   :", data["id_divisi"])
             print("Nama Divisi :", data["nama_divisi"])
 
