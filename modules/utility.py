@@ -106,7 +106,7 @@ def simpan_data(nama_file, data_frame_baru):
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def tampilkan_interaktif(df, judul="DATA", show_judul=False):
+def tampilkan_interaktif(df, judul="DATA", show_judul=False,user = None):
     # fungsi untuk menampilkan data dengan fitur /kei
     # SORTING dan SEARCHING bawaan /kei
     df_tampil = df.copy() # copy biar data asli gak rusak /kei
@@ -216,8 +216,11 @@ def tampilkan_interaktif(df, judul="DATA", show_judul=False):
             pesan_error = "🔄 Data berhasil direset ke kondisi awal."
 
         elif aksi == "0":
-            break
-        
+                role = user["role"] if user else None
+                if role in ["Kepala Divisi", "Manajer Keuangan"]:
+                    return "kembali"
+                else:
+                    return "logout"
         else:
              pesan_error = "⚠️  Pilihan menu tidak valid!"
 

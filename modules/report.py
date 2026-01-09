@@ -35,7 +35,11 @@ def menu_laporan(user_sedang_login):
         print("[2] Rekapitulasi Per DIVISI")
         print("[3] Rekapitulasi Per BULAN")
         print("[4] Rekapitulasi Per TAHUN")
-        print("[0] Logout")
+        if user_sedang_login["role"] in ["Kepala Divisi", "Manajer Keuangan"]:
+            print("[0] Kembali")
+        if user_sedang_login["role"] in ["Direktur", "Auditor"]:
+            print("[0] Logout")
+
         
         pilihan = input("Pilih Menu: ").strip()
         
@@ -102,13 +106,16 @@ def menu_laporan(user_sedang_login):
             tampilkan_interaktif(rekap, judul="TOTAL PENGELUARAN TAHUNAN", show_judul=True)
             
         elif pilihan == "0":
-            jawab = konfirmasi_yn("\nApakah yakin ingin logout? (y/n): ")
+            role = user_sedang_login["role"]
+            if role in ["Kepala Divisi", "Manajer Keuangan"]:
+                return  # kembali ke menu sebelumnya
+            else:
+                jawab = konfirmasi_yn("\nApakah yakin ingin logout? (y/n): ")
             if jawab == "n":
-                continue 
+                continue
             else:
                 print("\n✅  Berhasil logout.")
-                break 
-                        
+                return "logout"           
         else:
             print("\n⚠️      Pilihan tidak valid!")
             input("Tekan Enter untuk input ulang...\n")
