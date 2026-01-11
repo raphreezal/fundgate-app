@@ -249,6 +249,8 @@ def edit_user(user_login=None):
 
         index = tabel.index[int(pilih) - 1]
         data = tabel.loc[index]
+        batal_edit = False
+
 
         while True:
             clear_screen()
@@ -288,6 +290,7 @@ def edit_user(user_login=None):
                 password_baru = input("Password baru (Enter lewati | 0 kembali): ").strip()
 
                 if password_baru == "0":
+                    batal_edit = True
                     break
 
                 if password_baru == "":
@@ -307,8 +310,10 @@ def edit_user(user_login=None):
                     break
 
                 break
+            if batal_edit:
+                break   # kembali ke daftar user, TANPA perubahan
 
-
+            batal_edit = False
             while True:
                 clear_screen()
                 header(subjudul="pilih role", user=user_login)
@@ -323,6 +328,7 @@ def edit_user(user_login=None):
                 pilih_role = input("Pilih role: ").strip()
 
                 if pilih_role == "0":
+                    batal_edit = True
                     break
                 elif pilih_role == "":
                     role_baru = data['role']
@@ -339,6 +345,8 @@ def edit_user(user_login=None):
                     input("⚠️   Role tidak valid!\nTekan Enter untuk input ulang...")
                     continue
 
+                break
+            if batal_edit:
                 break
 
 
@@ -361,6 +369,7 @@ def edit_user(user_login=None):
                     pilih_divisi = input("Pilih divisi: ").strip()
 
                     if pilih_divisi == "0":
+                        batal_edit = True
                         break
                     elif pilih_divisi == "":
                         divisi_baru = data['divisi']
@@ -373,6 +382,8 @@ def edit_user(user_login=None):
                         continue
             else:
                 divisi_baru = "-"
+            if batal_edit:
+                break
 
 
             clear_screen()
