@@ -1,3 +1,7 @@
 id_rincian,id_pengajuan,tipe,nama_item,jumlah,harga_satuan,subtotal,status_item
 RIN-14484564,OPT-14484530,Barang,Komputer,1,1000000,1000000,Disetujui
 RIN-16525515,OPT-16525517,Barang,aa,1,2,2,Disetujui
+RIN-21325627,OPT-21325653,Barang,aa,1,12,12,
+RIN-21330477,OPT-21325653,Barang,bb,1,23,23,
+RIN-21334479,OPT-21334466,Barang,aaa,1,1,1,
+RIN-21335055,OPT-21334466,Barang,bbb,1,1,1,

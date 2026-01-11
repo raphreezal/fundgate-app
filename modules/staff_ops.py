@@ -88,6 +88,7 @@ def buat_pengajuan_dana(user):
     total = 0
 
     # loop rincian
+    goto_simpan=False
     while True:
         
         id_rincian = f"RIN-{datetime.now().strftime('%H%M%S')}{random.randint(10,99)}"
@@ -192,12 +193,34 @@ def buat_pengajuan_dana(user):
         info_rincian = pd.DataFrame(rincian)
         info_rincian["harga_satuan"] = info_rincian["harga_satuan"].map(format_rupiah)
         info_rincian["subtotal"] = info_rincian["subtotal"].map(format_rupiah)
-        
-        tabel_rapih(info_rincian, "RINCIAN SAAT INI")
-        print("\n[1] Tambah item")
-        print("[0] Simpan pengajuan")
+        while True:
+            clear_screen()
+            header(subjudul="form pengajuan dana", user=user)
 
-        if input("Pilih: ").strip() != "1":
+            info_rincian = pd.DataFrame(rincian)
+            info_rincian["harga_satuan"] = info_rincian["harga_satuan"].map(format_rupiah)
+            info_rincian["subtotal"] = info_rincian["subtotal"].map(format_rupiah)
+
+            tabel_rapih(info_rincian, "RINCIAN SAAT INI")
+            print("\n[1] Tambah item")
+            print("[0] Simpan pengajuan")
+
+            plh = input("Pilih: ").strip()#looping biar ga error logika/irfan
+
+            if plh == "1":
+                # balik ke item/fann
+                goto_simpan = False
+                break
+
+            elif plh == "0":
+                # lanjut simpen/fann
+                goto_simpan = True
+                break
+
+            else:
+                input("\n⚠️ Pilihan tidak valid! Harus 1 atau 0.\nTekan Enter untuk ulang...\n")
+
+        if goto_simpan:
             break
 
     if not rincian:
